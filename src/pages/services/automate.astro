@@ -1,0 +1,28 @@
+---
+import GroupDetail from '../../components/services/GroupDetail.astro';
+import { automate, groups, npr, contactHref } from '../../data/services.js';
+
+const chat = npr(automate.services[0].price.from);
+const flow = npr(automate.services[1].price.from);
+const review = { label: 'Book a free process review', href: contactHref('ai-agents') };
+---
+
+<GroupDetail
+  path="/services/automate"
+  crumb="Automate"
+  title="AI Chatbots & Automation in Kathmandu — Nine Technology"
+  description={`AI chat for WhatsApp, Messenger and websites in English and Nepali from NPR ${chat}, workflow automation from NPR ${flow}, custom AI agents. Free review.`}
+  h1="AI chat and business automation in Kathmandu"
+  lead={groups.find((g) => g.id === 'automate').tagline}
+  group={automate}
+  primaryCta={review}
+  cta={{
+    heading: 'Start with a free process review',
+    body: 'A 30 to 60 minute walkthrough of your daily work. You get a written scope and price for what is worth automating — or an honest answer that nothing is.',
+    primary: review,
+  }}
+>
+  <Fragment slot="answer">
+    Nine Technology automates the repetitive work of businesses in Nepal: AI chat that answers WhatsApp, Messenger and website messages in English and Nepali from NPR {chat} setup, workflow automation that connects your orders, sheets, reminders and reports from NPR {flow} setup, and custom AI agents scoped after a free process review.
+  </Fragment>
+</GroupDetail>

@@ -32,10 +32,6 @@ change rather than a file drop.
 
 | Slot | Appears on | What it should be | Supply at least |
 |---|---|---|---|
-| `services-build` | Services, Build | Optional. Something real from the work — a screen being built, a hand-over session. | 800×600 |
-| `services-grow` | Services, Grow | Optional. A shoot in progress, a camera on location. | 800×600 |
-| `services-automate` | Services, Automate | Optional. A screen showing a workflow or dashboard, with no client data visible. | 800×600 |
-| `services-support` | Services, Support | Optional. | 800×600 |
 | `work-01` `work-02` `work-03` | Home and Work | Screenshots or photographs of **real** projects. See the permission rules below. | 1200×800 |
 | `portrait-anis` | About | Anis Raut. Plain background, head and shoulders, looking at the camera. | 800×800 |
 | `portrait-raju` | About | Raju Thapa. Same treatment, taken the same day if possible so the two match. | 800×800 |

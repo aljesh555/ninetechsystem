@@ -4,7 +4,9 @@ import fullLockup from '../../assets/brand/logo-full-navy.svg?raw';
 import wordmark from '../../assets/brand/logo-wordmark-navy.svg?raw';
 
 const { path } = Astro.props;
-const current = (href) => (href === path ? 'page' : undefined);
+// A detail page such as /services/website still marks Services as current.
+const current = (href) =>
+  href === path ? 'page' : href !== '/' && path.startsWith(`${href}/`) ? 'true' : undefined;
 ---
 
 <header class="header">

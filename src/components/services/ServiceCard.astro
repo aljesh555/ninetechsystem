@@ -1,0 +1,17 @@
+---
+/**
+ * A hub card. The whole card is one link (the heading's link is stretched
+ * over it), so it is a single tab stop with a clear accessible name.
+ */
+import { icon } from '../../lib/icons.js';
+import { priceLabel } from '../../data/services.js';
+import Arrow from './Arrow.astro';
+const { service: s } = Astro.props;
+---
+<article class="svc-card">
+  <div class="svc-icon"><Fragment set:html={icon(s.icon)} /></div>
+  <h3><a class="svc-link" href={s.href}>{s.name}</a></h3>
+  <p>{s.short}</p>
+  <p class="svc-price">{priceLabel(s.price, s.priceNote)}</p>
+  <span class="svc-view" aria-hidden="true">View <Arrow /></span>
+</article>

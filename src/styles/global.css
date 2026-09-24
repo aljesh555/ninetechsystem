@@ -222,7 +222,7 @@ a { color: inherit; }
   .nav-desktop { display: flex; align-items: center; gap: var(--s4); margin-left: auto; }
   .nav-desktop a { font-size: 0.9375rem; text-decoration: none; padding-block: var(--s1); }
   .nav-desktop a:hover { color: var(--navy); text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 0.3em; text-decoration-color: var(--amber); }
-  .nav-desktop a[aria-current='page'] { font-weight: 500; }
+  .nav-desktop a[aria-current] { font-weight: 500; }
   .nav-desktop .btn { min-height: 42px; margin-left: var(--s2); }
 }
 
@@ -248,7 +248,7 @@ a { color: inherit; }
 html:not(.js) .menu-toggle { display: none; }
 @media (min-width: 900px) { .nav-mobile, .menu-toggle { display: none !important; } }
 .nav-mobile a { display: block; padding: var(--s2) 0; text-decoration: none; font-size: 1.0625rem; }
-.nav-mobile a[aria-current='page'] { font-weight: 500; }
+.nav-mobile a[aria-current] { font-weight: 500; }
 .nav-mobile .btn { width: 100%; margin-top: var(--s3); }
 
 /* --- hero ---------------------------------------------------------------- */
@@ -327,15 +327,6 @@ html:not(.js) .menu-toggle { display: none; }
 .service-detail .excl li::before { background: var(--rule); }
 .service-detail .excl li { color: var(--grey); }
 .service .btn { margin-top: var(--s4); }
-
-/* --- care plan table ----------------------------------------------------- */
-
-.care { margin-top: var(--s5); overflow-x: auto; }
-.care table { border-collapse: collapse; width: 100%; min-width: 34rem; font-size: 0.9375rem; }
-.care th, .care td { text-align: left; padding: var(--s2) var(--s3) var(--s2) 0; border-bottom: 1px solid var(--rule); vertical-align: top; }
-.care thead th { border-bottom: 2px solid var(--navy); }
-.care tbody th { font-family: var(--sans); font-weight: 400; color: var(--grey); }
-.care .plan-name { font-family: var(--display); font-weight: 600; font-size: 1.0625rem; display: block; }
 
 /* --- commitments --------------------------------------------------------- */
 
@@ -501,7 +492,8 @@ html:not(.js) .menu-toggle { display: none; }
 .footer { background: var(--navy-deep); color: rgba(255, 255, 255, 0.78); padding-block: var(--s7) var(--s5); font-size: 0.9375rem; }
 .footer-grid { display: grid; gap: var(--s5); }
 @media (min-width: 760px) { .footer-grid { grid-template-columns: 1.4fr 1fr 1fr; gap: var(--s6); } }
-.footer img.mark { width: 168px; height: auto; aspect-ratio: 735 / 294; margin-bottom: var(--s4); }
+.footer .mark { display: block; width: 168px; margin-bottom: var(--s4); }
+.footer .mark svg { width: 100%; height: auto; aspect-ratio: 735 / 294; }
 .footer h2 { font-family: var(--sans); font-size: 0.8125rem; font-weight: 500; color: rgba(255, 255, 255, 0.55); letter-spacing: 0; margin-bottom: var(--s3); }
 .footer a { text-decoration: none; }
 .footer a:hover { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 0.25em; text-decoration-color: var(--amber); }
@@ -599,9 +591,156 @@ h1 + .lead, h2 + .lead { margin-top: var(--s3); }
 /* The separators are doing grammatical work, so they have to be legible. */
 .industries .sep { color: #a8b4c6; }
 
-/* An empty, purely decorative slot in the services rail costs a phone user a
-   screenful of scrolling and tells them nothing. It appears once a real
-   photograph exists; the structural slots (people, office, work) always show. */
-@media (max-width: 899px) {
-  .split-head .slot-empty { display: none; }
+
+/* ==========================================================================
+   Services: the hub (/services) and the detail pages (/services/*).
+   ========================================================================== */
+
+.h4 { font-family: var(--sans); font-size: 0.8125rem; font-weight: 500; letter-spacing: 0; color: var(--grey); margin-bottom: var(--s2); }
+.service-detail .h4 { margin-bottom: var(--s2); }
+.narrow { max-width: 52rem; }
+
+/* Breadcrumb: Home / Services / Website */
+.crumbs { margin-bottom: var(--s4); font-size: 0.875rem; color: var(--grey); }
+.crumbs ol { display: flex; flex-wrap: wrap; gap: 0 var(--s1); }
+.crumbs li + li::before { content: '/'; margin-right: var(--s1); color: #a8b4c6; }
+.crumbs a { text-decoration: underline; text-decoration-color: var(--rule); text-underline-offset: 0.22em; }
+.crumbs a:hover { text-decoration-color: var(--amber); }
+
+/* The answer-first block. Sentence one answers the question outright. */
+.quick-answer {
+  margin-top: var(--s4); padding-left: var(--s3); border-left: 3px solid var(--amber);
+  font-size: 1.125rem; line-height: 1.6; max-width: 40rem;
+}
+.page-head .quick-answer + .lead { margin-top: var(--s4); }
+
+/* Jump nav: in-page links to each group or type. */
+.jump { display: flex; flex-wrap: wrap; gap: var(--s2); margin-top: var(--s5); }
+.jump a {
+  display: inline-flex; align-items: center; min-height: 44px; padding: 0 var(--s3);
+  border: 1px solid var(--rule); border-radius: var(--radius);
+  font-size: 0.9375rem; font-weight: 500; text-decoration: none;
+  transition: border-color 0.15s ease;
+}
+.jump a:hover { border-color: var(--navy); }
+.section[id], .offer[id], .service[id] { scroll-margin-top: 80px; }
+@media (min-width: 900px) { .section[id], .offer[id], .service[id] { scroll-margin-top: 104px; } }
+
+/* --- hub cards ------------------------------------------------------------
+   Depth comes from transform alone: the card tilts at most 6 degrees toward
+   the pointer (set by a few lines of script) and the icon lifts 8px. */
+
+.svc-grid { display: grid; gap: var(--s4); margin-top: var(--s5); }
+@media (min-width: 640px) { .svc-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1000px) { .svc-grid { grid-template-columns: repeat(auto-fit, minmax(0, 1fr)); } }
+
+.svc-card {
+  position: relative; display: flex; flex-direction: column;
+  padding: var(--s4); background: var(--white);
+  border: 1px solid var(--rule); border-radius: var(--radius);
+  transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  transform-style: preserve-3d;
+  transition: transform 0.25s var(--ease), border-color 0.15s ease;
+}
+.svc-card:hover, .svc-card:focus-within { border-color: var(--navy); }
+.svc-card:focus-within { --rx: 2deg; }
+.svc-icon { position: relative; width: 80px; height: 80px; margin-bottom: var(--s3); }
+.svc-icon svg { position: relative; z-index: 1; transition: transform 0.35s var(--ease); }
+.svc-icon::after {
+  content: ''; position: absolute; left: 14px; right: 14px; bottom: 2px; height: 10px;
+  border-radius: 50%; background: var(--navy); opacity: 0.1;
+  transition: transform 0.35s var(--ease), opacity 0.35s var(--ease);
+}
+.svc-card:hover .svc-icon svg, .svc-card:focus-within .svc-icon svg { transform: translate3d(0, -8px, 20px); }
+.svc-card:hover .svc-icon::after, .svc-card:focus-within .svc-icon::after { transform: scale(0.75); opacity: 0.06; }
+.svc-card h3 { font-size: 1.1875rem; }
+.svc-card p { color: var(--grey); font-size: 0.9375rem; margin-top: var(--s2); }
+.svc-card .svc-price { color: var(--navy); font-family: var(--display); font-weight: 600; font-size: 1rem; white-space: nowrap; margin-top: auto; padding-top: var(--s3); }
+.svc-link { text-decoration: none; }
+.svc-link::after { content: ''; position: absolute; inset: 0; border-radius: var(--radius); }
+.svc-link:focus-visible { outline: none; }
+.svc-card:has(.svc-link:focus-visible) { outline: 3px solid var(--navy); outline-offset: 2px; }
+.svc-view { display: inline-flex; align-items: center; gap: 6px; margin-top: var(--s2); font-size: 0.9375rem; font-weight: 500; }
+.arrow { transition: transform 0.2s var(--ease); }
+.svc-card:hover .arrow { transform: translateX(3px); }
+
+.vat-note { margin-top: var(--s4); font-size: 0.875rem; color: var(--grey); }
+
+/* How to choose, popular requests, steps */
+.choose div { padding-block: var(--s3); border-top: 1px solid var(--rule); }
+.choose div:first-child { border-top: 0; padding-top: 0; }
+.choose dt { font-family: var(--display); font-weight: 600; font-size: 1.125rem; }
+.choose dd { margin: 4px 0 0; }
+.plain-list li { padding-block: var(--s2); border-top: 1px solid var(--rule); }
+.plain-list li:first-child { border-top: 0; padding-top: 0; }
+.steps-list { counter-reset: s; }
+.steps-list li { counter-increment: s; position: relative; padding: var(--s3) 0 var(--s3) 2.5rem; border-top: 1px solid var(--rule); }
+.steps-list li:first-child { border-top: 0; padding-top: 0; }
+.steps-list li::before {
+  content: counter(s); position: absolute; left: 0;
+  font-family: var(--display); font-weight: 600; color: var(--grey);
+}
+.steps-list strong { font-weight: 500; }
+
+/* --- detail pages -------------------------------------------------------- */
+
+.price-table { margin-top: var(--s4); overflow-x: auto; }
+.price-table table { border-collapse: collapse; width: 100%; font-size: 0.9375rem; }
+.price-table th, .price-table td { text-align: left; padding: var(--s3) var(--s3) var(--s3) 0; border-bottom: 1px solid var(--rule); vertical-align: top; }
+.price-table thead th { font-size: 0.8125rem; font-weight: 500; color: var(--grey); border-bottom: 2px solid var(--navy); }
+.price-table tbody th { font-weight: 500; }
+.price-table td:nth-child(2) { font-family: var(--display); font-weight: 600; white-space: nowrap; }
+@media (max-width: 519px) {
+  .price-table thead { display: none; }
+  .price-table tr { display: grid; grid-template-columns: 1fr auto; gap: 2px var(--s3); padding-block: var(--s3); border-bottom: 1px solid var(--rule); }
+  .price-table th, .price-table td { padding: 0; border: 0; }
+  .price-table tbody th { grid-column: 1 / -1; }
+  .price-table td:nth-child(3) { color: var(--grey); text-align: right; }
+}
+
+.offer-price { font-family: var(--display); font-weight: 600; font-size: 1.5rem; letter-spacing: -0.02em; color: var(--navy) !important; }
+.offer-time { margin-top: 2px; }
+.offer-intro { font-size: 1.125rem; line-height: 1.6; }
+.offer-lead { margin-top: var(--s5); font-weight: 500; }
+.split-head .btn { display: inline-flex; }
+
+.checks { margin-top: var(--s4); display: grid; gap: 6px var(--s5); }
+@media (min-width: 720px) { .checks { grid-template-columns: 1fr 1fr; } }
+.checks li { position: relative; padding-left: 1.6rem; font-size: 0.9875rem; line-height: 1.5; max-width: 34em; }
+.checks li::before {
+  content: ''; position: absolute; left: 2px; top: 0.35em;
+  width: 11px; height: 6px; border: solid var(--amber-press); border-width: 0 0 2px 2px;
+  transform: rotate(-45deg);
+}
+.clusters { display: grid; gap: var(--s5); margin-top: var(--s4); }
+@media (min-width: 720px) { .clusters { grid-template-columns: 1fr 1fr; } }
+.clusters .checks { grid-template-columns: 1fr; margin-top: 0; }
+.addons { margin-top: var(--s5); }
+.price-movers { margin-top: var(--s3); font-size: 0.9375rem; color: var(--grey); max-width: var(--measure); }
+.systems div { padding-block: var(--s3); border-top: 1px solid var(--rule); }
+.systems div:first-child { border-top: 0; padding-top: 0; }
+.systems dt { font-family: var(--display); font-weight: 600; font-size: 1.125rem; }
+.systems dd { margin: 4px 0 0; color: var(--grey); }
+
+/* Care plans: three tiers side by side, stacked on phones. */
+.plans { display: grid; gap: var(--s4); margin-top: var(--s5); }
+@media (min-width: 760px) { .plans { grid-template-columns: repeat(3, 1fr); align-items: start; } }
+.plan { position: relative; padding: var(--s4); background: var(--white); border: 1px solid var(--rule); border-radius: var(--radius); }
+.plan-featured { border: 2px solid var(--navy); }
+.plan-flag {
+  position: absolute; top: -0.8rem; left: var(--s4); padding: 2px var(--s2);
+  background: var(--amber); color: var(--navy); border-radius: var(--radius);
+  font-size: 0.8125rem; font-weight: 500;
+}
+.plan h3 { font-size: 1.25rem; }
+.plan-price { font-family: var(--display); font-weight: 600; font-size: 1.5rem; letter-spacing: -0.02em; margin-top: var(--s1); }
+.plan dl { margin-top: var(--s3); }
+.plan dl div { display: flex; justify-content: space-between; gap: var(--s3); padding-block: var(--s2); border-top: 1px solid var(--rule); font-size: 0.9375rem; }
+.plan dt { color: var(--grey); }
+.plan dd { margin: 0; text-align: right; font-weight: 500; }
+
+@media (prefers-reduced-motion: reduce) {
+  .svc-card, .svc-card:focus-within { transform: none; --rx: 0deg; --ry: 0deg; }
+  .svc-card:hover .svc-icon svg, .svc-card:focus-within .svc-icon svg { transform: none; }
+  .svc-card:hover .svc-icon::after, .svc-card:focus-within .svc-icon::after { transform: none; opacity: 0.1; }
 }

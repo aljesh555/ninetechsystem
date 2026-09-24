@@ -392,6 +392,9 @@ logo rather than the logo to the bar is the right way round.
 
 ## Prices removed at the founder's instruction
 
+*Superseded in September 2026 by the services rebuild below, which publishes
+prices. Kept for the record.*
+
 Pricing had not been finalised, so publishing figures would have broken the
 brief's own rule against publishing anything that cannot be stood behind. Every
 "From NPR …" figure is gone — from the pages, the care-plan table, the FAQ
@@ -417,6 +420,59 @@ What replaced them:
 `README.md` has the steps to put prices back when they are settled.
 
 ---
+
+## The services rebuild (September 2026)
+
+Built from `SERVICES_REDESIGN.md`, supplied by the founder. The single long
+`/services` page became a **hub** that routes, plus six **detail pages**
+(`/services/website`, `/software`, `/app`, `/grow`, `/automate`, `/support`).
+
+**One data file.** Every service name, price, feature and FAQ is in
+`src/data/services.js`. The hub, detail pages, contact form, JSON-LD and
+`llms.txt` all read from it, so a price changes in one place. Prices are stored
+as numbers and formatted with Nepali grouping (`1,20,000`), so the display
+string and the schema `Offer` can never disagree.
+
+**Old links still work.** `/services#build`, `#grow`, `#automate` and `#support`
+land on the matching group on the hub, because each group keeps that id. (A
+fragment never reaches the server, so no server redirect could do this anyway.)
+Old contact links with `?need=portfolio` or `?need=business-software` map to
+`landing` and `software`.
+
+**Contact form gained a "Service" list.** The spec requires every `?need=` value
+to exist as an option and be pre-selected. The server validates it against the
+same list, and the enquiry email names the service.
+
+**The 14-day support conflict.** The spec gives landing pages 14 days of support
+while the site-wide commitment said "30 days support on every project". Both
+cannot be true, so the commitment now states the real figures: 30 days on
+websites and stores, 60 on software and apps, 14 on a landing page.
+
+**Icons: drawn by code, not by hand.** The thirteen isometric icons are built at
+build time by `src/lib/icons.js` from boxes on one isometric grid, so the
+perspective and depth are identical across all of them by construction. About
+1 KB of inline SVG each; no image requests.
+
+**3D motion: CSS tilt, and no Three.js.** Cards tilt up to 6 degrees toward the
+pointer (about 20 lines of inline script setting two CSS variables; mouse and
+trackpad only) and the icon lifts 8px over a shadow that shrinks. Transform and
+opacity only. The optional Three.js hero was **dropped**: the smallest useful
+Three.js build is well over the ~40 KB ceiling the spec set for it, and it would
+compete with the LCP element on the hub. Thirteen consistent isometric icons with
+a restrained tilt read as more finished than a heavy canvas. Reduced motion turns
+off the tilt, the lift and the scroll settle.
+
+**Checked:** Lighthouse mobile 100/100/100/100 on the hub and all six detail
+pages (LCP 1.5–1.7s, CLS 0, TBT 0 ms; the accessibility score is axe-core);
+every internal link and anchor resolves; every `?need=` has a matching option;
+every title is at most 60 characters and every description at most 155; every
+character on the pages is inside the subset fonts.
+
+**Not in the project:** the spec refers to `CLAUDE.md` and to `logo-header-*`
+brand files. Neither exists here, so the budgets in the spec itself were used, and
+the footer now inlines the same generated `logo-full-white.svg` lockup the header
+system uses (the stray copy in `public/brand/` was deleted). The footer email bug
+in §0 had already been fixed.
 
 ## Two bugs found after the first deploy
 

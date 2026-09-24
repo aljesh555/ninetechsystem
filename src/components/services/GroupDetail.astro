@@ -1,0 +1,64 @@
+---
+/**
+ * Shared layout for /services/grow, /automate and /support: breadcrumb, H1,
+ * quick answer, jump nav, one block per service, then anything slotted in
+ * (the care plans), the FAQ and the closing strip.
+ */
+import Base from '../../layouts/Base.astro';
+import Breadcrumb from './Breadcrumb.astro';
+import QuickAnswer from './QuickAnswer.astro';
+import ServiceBlock from './ServiceBlock.astro';
+import Faq from './Faq.astro';
+import CtaStrip from './CtaStrip.astro';
+import { VAT_NOTE } from '../../data/services.js';
+import { breadcrumbList, faqPage, service } from '../../lib/schema.js';
+
+const { path, crumb, title, description, h1, lead, group, extraSchema = [], extraJump = [], cta, primaryCta } = Astro.props;
+const crumbs = [
+  { name: 'Home', path: '/' },
+  { name: 'Services', path: '/services' },
+  { name: crumb, path },
+];
+
+const schema = [
+  ...group.services.map((s) =>
+    service({ name: s.name, description: s.answer, path: `${path}#${s.id}`, price: s.price, serviceType: crumb }),
+  ),
+  ...extraSchema,
+  faqPage(path, group.faqs),
+  breadcrumbList(crumbs),
+];
+const jump = [...group.services.map((s) => ({ id: s.id, name: s.name.replace(/ \(.*\)$/, '') })), ...extraJump];
+---
+
+<Base title={title} description={description} path={path} schema={schema}>
+  <section class="page-head">
+    <div class="wrap">
+      <Breadcrumb crumbs={crumbs} />
+      <h1>{h1}</h1>
+      <QuickAnswer><slot name="answer" /></QuickAnswer>
+      <p class="lead">{lead}</p>
+      {primaryCta && (
+        <div class="btn-row section-body">
+          <a class="btn btn-primary" href={primaryCta.href}>{primaryCta.label}</a>
+        </div>
+      )}
+      <nav class="jump" aria-label={`${crumb} services`}>
+        {jump.map((j) => <a href={`#${j.id}`}>{j.name}</a>)}
+      </nav>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap narrow">
+      {group.services.map((s) => <ServiceBlock s={s} />)}
+      <p class="vat-note">{VAT_NOTE}</p>
+    </div>
+  </section>
+
+  <slot />
+
+  <Faq faqs={group.faqs} heading={`${crumb} questions`} />
+
+  <CtaStrip {...cta} />
+</Base>

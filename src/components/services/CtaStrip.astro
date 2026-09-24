@@ -1,0 +1,18 @@
+---
+import { site } from '../../data/site.js';
+const {
+  heading = 'Not sure which you need?',
+  body = 'Tell us what the business does and where the work piles up. We\'ll tell you what would actually help — and what would be a waste of your money.',
+  primary = { label: 'Get a quote', href: '/contact' },
+} = Astro.props;
+---
+<section class="section section-navy on-navy">
+  <div class="wrap">
+    <h2>{heading}</h2>
+    <p class="lead">{body}</p>
+    <div class="strip-actions">
+      <a class="btn btn-primary" href={primary.href}>{primary.label}</a>
+      <a class="btn btn-secondary" href={site.whatsapp} rel="noopener">Message us on WhatsApp</a>
+    </div>
+  </div>
+</section>

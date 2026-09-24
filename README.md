@@ -39,7 +39,8 @@ The build prints page weights against the performance budget every time it runs.
 src/data/site.js        Every published fact. Change a phone number here and it
                         changes on every page, in the schema, and in llms.txt.
 src/data/projects.js    Real projects. Empty until a client gives permission.
-src/pages/              The five pages, plus sitemap.xml and llms.txt endpoints.
+src/data/services.js    Every service, price, feature and FAQ.
+src/pages/              Five main pages, the /services/* detail pages, sitemap.xml, llms.txt.
 src/styles/global.css   The whole stylesheet. One file.
 functions/api/contact.js  The form handler (Cloudflare Pages Function).
 assets/brand/source/    The supplied logo files, exactly as delivered. Never edited.
@@ -97,32 +98,24 @@ of how much difference they make.
    every slot renders a clean placeholder, and the services placeholders are
    hidden on phones so they cost nothing.
 
-### Putting prices back, when they are settled
+### Changing a price, a feature or an FAQ
 
-Everything is in `src/data/site.js`. For each service, add `price` (the display
-string) and `priceValue` (the number, for schema) back alongside `timeline`, and
-add `from` to each of the four groups. Then:
+Everything on the Services pages lives in **`src/data/services.js`**: every
+service name, price, feature list and FAQ. The hub, the six detail pages, the
+contact form's Service list, the JSON-LD and `llms.txt` all read from it.
 
-1. `src/pages/services.astro` — put the `offers` block back on the `Service`
-   schema, and swap `<p class="fact">{s.timeline}</p>` for the price.
-2. `src/pages/index.astro` — restore the third column in the overview rows.
-3. `src/pages/llms.txt.js` — put the figures back in the service lines.
-4. `carePlans.plans` — add `price` back and restore `.plan-price` in the table.
-5. Rewrite the first FAQ answer and the Services page intro, and restore the
-   "Prices exclude 13% VAT" line the brief asks for.
-6. `src/pages/services.astro` — the `<title>` is "Services — Nine Technology,
-   Kathmandu" while there are no prices. Change it back to "Services & Prices —
-   Nine Technology, Kathmandu" once the figures are on the page.
-
-The `.fact` CSS class is the slot that used to hold the price; it is styled for
-exactly that job and is currently holding the timeline.
+- **Change a price:** edit the number, e.g. `price: { from: 20000, to: 35000 }`.
+  Write plain numbers; the site adds the Nepali commas (`1,20,000`) itself.
+- **Monthly / yearly / per shoot / setup:** `per: 'month' | 'year' | 'shoot' | 'setup'`.
+- **Take a price off:** `price: null` plus `priceNote: 'Quoted'`.
+- Then `npm run build` and deploy. Nothing else needs touching.
 
 ### Worth knowing
 
-- **No prices are published anywhere**, at the founder's instruction, because
-  pricing is not settled. The Services page says every project is quoted after a
-  free scoping call, each service shows its **timeline** instead of a figure, and
-  the JSON-LD carries no `Offer`. See "Putting prices back" below.
+- **Prices are published where the scope is standard** (websites, Grow, Automate
+  set-up fees, Support). Custom software, apps, booking systems and AI agents
+  show a "from" figure or "Quoted". All prices exclude 13% VAT and are the
+  founder's working figures as of September 2026.
 - **Everything factual lives in one place:** `src/data/site.js`. Change a phone
   number or a timeline there and it updates the page, the structured data and
   `llms.txt` together.

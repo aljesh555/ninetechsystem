@@ -19,6 +19,7 @@ const valid = {
   name: 'Sita Gurung',
   phone: '+977 9812345678',
   business: 'Restaurant or café',
+  need: 'store',
   message: 'We need online ordering with eSewa for our restaurant in Thamel.',
   extra: '',
   ts: String(Date.now() - 20000),
@@ -57,6 +58,10 @@ await run('valid submission is delivered', {}, {}, 200, true);
 check('  email goes to info@ninetechsystem.com', sent?.to?.[0] === 'info@ninetechsystem.com');
 check('  subject names the sender', sent?.subject?.includes('Sita Gurung'));
 check('  body carries the phone number', sent?.text?.includes('+977 9812345678'));
+check('  body names the service asked about', sent?.text?.includes('Service:       E-commerce / online store'));
+
+await run('service off the list is rejected', { need: 'crypto-mining' }, {}, 422, false);
+await run('no service given counts as "not sure yet"', { need: undefined }, {}, 200, true);
 
 await run('honeypot filled is silently dropped', { extra: 'http://spam.example' }, {}, 200, false);
 await run('old honeypot name is now just ignored', { website: 'https://my-shop.com.np' }, {}, 200, true);

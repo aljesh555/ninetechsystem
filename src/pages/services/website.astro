@@ -1,0 +1,120 @@
+---
+import Base from '../../layouts/Base.astro';
+import Breadcrumb from '../../components/services/Breadcrumb.astro';
+import QuickAnswer from '../../components/services/QuickAnswer.astro';
+import Faq from '../../components/services/Faq.astro';
+import CtaStrip from '../../components/services/CtaStrip.astro';
+import { website, priceLabel, npr, contactHref } from '../../data/services.js';
+import { breadcrumbList, faqPage, service } from '../../lib/schema.js';
+
+const path = '/services/website';
+const crumbs = [
+  { name: 'Home', path: '/' },
+  { name: 'Services', path: '/services' },
+  { name: 'Website', path },
+];
+const [landing, business, store] = website.offers;
+
+const schema = [
+  ...website.offers.map((o) =>
+    service({ name: o.name, description: o.intro, path: `${path}#${o.id}`, price: o.price, serviceType: 'Website design and development' }),
+  ),
+  faqPage(path, website.faqs),
+  breadcrumbList(crumbs),
+];
+---
+
+<Base
+  title="Website Design & Prices in Kathmandu — Nine Technology"
+  description={`Custom websites in Kathmandu: landing pages from NPR ${npr(landing.price.from)}, business sites from NPR ${npr(business.price.from)}, online stores from NPR ${npr(store.price.from)}. Fast, found on Google, yours.`}
+  path={path}
+  schema={schema}
+>
+  <section class="page-head">
+    <div class="wrap">
+      <Breadcrumb crumbs={crumbs} />
+      <h1>Website design and development in Kathmandu</h1>
+      <QuickAnswer>
+        Nine Technology builds custom websites for businesses in Nepal — landing pages from NPR {npr(landing.price.from)}, business websites from NPR {npr(business.price.from)} and online stores from NPR {npr(store.price.from)}. Every site is custom-designed, fast on Nepali mobile networks, built to be found on Google and AI search, and handed over in your name with a CMS and training.
+      </QuickAnswer>
+      <nav class="jump" aria-label="Website types">
+        {website.offers.map((o) => <a href={`#${o.id}`}>{o.short}</a>)}
+      </nav>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <h2>Prices at a glance</h2>
+      <div class="price-table">
+        <table>
+          <caption class="sr-only">Website types, prices and timelines</caption>
+          <thead>
+            <tr><th scope="col">Type</th><th scope="col">Price</th><th scope="col">Time</th></tr>
+          </thead>
+          <tbody>
+            {website.offers.map((o) => (
+              <tr>
+                <th scope="row"><a class="link" href={`#${o.id}`}>{o.tableName ?? o.name}</a></th>
+                <td>{priceLabel(o.price, o.priceNote)}</td>
+                <td>{o.time}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p class="vat-note">{website.priceFootnote}</p>
+    </div>
+  </section>
+
+  {website.offers.map((o, i) => (
+    <section class={`section offer${i % 2 === 0 ? ' section-tint' : ''}`} id={o.id}>
+      <div class="wrap split">
+        <div class="split-head">
+          <h2>{o.name}</h2>
+          <p class="offer-price">{priceLabel(o.price, o.priceNote)}</p>
+          <p class="offer-time">{o.time}</p>
+          <a class="btn btn-primary section-body" href={contactHref(o.cta.need)}>{o.cta.label}</a>
+        </div>
+        <div>
+          <p class="offer-intro">{o.intro}</p>
+
+          {o.features && (
+            <ul class="checks">{o.features.map((f) => <li>{f}</li>)}</ul>
+          )}
+
+          {o.clusters && (
+            <>
+              <p class="offer-lead">{o.lead}</p>
+              <div class="clusters">
+                {o.clusters.map((c) => (
+                  <div>
+                    <h3 class="h4">{c.name}</h3>
+                    <ul class="checks">{c.items.map((f) => <li>{f}</li>)}</ul>
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
+
+          {o.addons && (
+            <div class="addons">
+              <h3 class="h4">Optional add-ons (quoted)</h3>
+              <ul class="plain-list">{o.addons.map((a) => <li>{a}</li>)}</ul>
+            </div>
+          )}
+
+          {o.scope?.map((line) => <p class="service-note">{line}</p>)}
+          {o.note && <p class="price-movers">{o.note}</p>}
+        </div>
+      </div>
+    </section>
+  ))}
+
+  <Faq faqs={website.faqs} heading="Website questions" intro="What business owners ask us before they sign anything." />
+
+  <CtaStrip
+    heading="Tell us about the site you need"
+    body="What the business does, who it is for, and whether you already have a site. We will come back with the right type and a fixed price in writing."
+  />
+</Base>

@@ -65,16 +65,18 @@ external profiles can, which is what this file is for.
 Use the same names everywhere. A service called "Web Design" on Facebook and
 "Business website" on the site is two services to a machine.
 
-**Build** — Business website · Online store · Booking and management systems ·
-Business software · Portfolio and personal sites · Mobile apps
+**Build** — Website (Landing page · Business website · E-commerce store ·
+Booking & web systems) · Software · App
 
-**Grow** — Search visibility (SEO, AEO, GEO) · Social media management ·
-Content and video production · Paid advertising
+**Grow** — Search visibility · Social media · Content & video · Paid ads
 
-**Automate** — AI chat and enquiry handling · Workflow automation ·
-AI agents and internal tools
+**Automate** — AI chat & enquiries · Workflow automation · AI agents & tools
 
-**Support** — Domain and hosting · Maintenance and updates · Monthly care plans
+**Support** — Domain & hosting · Maintenance · Care plans (Essential ·
+Standard · Complete)
+
+These match the cards on https://ninetechsystem.com/services exactly, and come
+from `src/data/services.js`.
 
 ---
 

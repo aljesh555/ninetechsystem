@@ -4,6 +4,7 @@ import { Picture } from 'astro:assets';
 import Slot from '../components/Slot.astro';
 import mapImage from '../images/map-lazimpat.png';
 import { site, businessTypes } from '../data/site.js';
+import { needs, needAliases } from '../data/services.js';
 import { PHONE_CHARS, MIN_FILL_MS } from '../../functions/api/contact.js';
 
 const schema = [
@@ -55,7 +56,7 @@ const schema = [
         <h2>Send a message</h2>
         <p class="lead">Tell us what the business does and what you need. The more specific you are, the more useful our first reply will be.</p>
 
-        <form class="form" id="contact-form" method="post" action="/api/contact" data-phone={site.phoneDisplay} data-phone-chars={PHONE_CHARS.source} data-min-ms={MIN_FILL_MS} novalidate>
+        <form class="form" id="contact-form" method="post" action="/api/contact" data-phone={site.phoneDisplay} data-phone-chars={PHONE_CHARS.source} data-min-ms={MIN_FILL_MS} data-need-aliases={JSON.stringify(needAliases)} novalidate>
           <div class="field">
             <label for="name">Your name</label>
             <input id="name" name="name" type="text" autocomplete="name" required maxlength="80" />
@@ -75,7 +76,14 @@ const schema = [
           </div>
 
           <div class="field">
-            <label for="message">What do you need?<span class="hint">A website, an online store, automation, or something you are not sure how to describe yet.</span></label>
+            <label for="need">Service<span class="hint">The closest match. "Not sure yet" is fine.</span></label>
+            <select id="need" name="need">
+              {needs.map((n) => <option value={n.value} selected={n.value === 'not-sure'}>{n.label}</option>)}
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="message">Tell us about it<span class="hint">What the business does and what you need. The more specific, the more useful our first reply.</span></label>
             <textarea id="message" name="message" required minlength="10" maxlength="2000"></textarea>
           </div>
 
@@ -152,21 +160,13 @@ const schema = [
       const minMs = Number(form.dataset.minMs);
       const phoneChars = new RegExp(form.dataset.phoneChars);
 
-      // Service pages link here with ?need=..., so the message starts written.
-      const need = new URLSearchParams(location.search).get('need');
-      const labels = {
-        website: 'a business website', store: 'an online store',
-        'booking-system': 'a booking or management system',
-        'business-software': 'business software', portfolio: 'a one-page portfolio site',
-        'mobile-app': 'a mobile app', seo: 'search visibility (SEO)',
-        social: 'social media management', video: 'a video shoot',
-        ads: 'paid advertising', 'ai-chat': 'AI chat and enquiry handling',
-        automation: 'workflow automation', 'ai-agents': 'AI agents or internal tools',
-        hosting: 'domain and hosting', maintenance: 'maintenance and updates',
-        'care-plan': 'a monthly care plan',
-      };
-      if (need && labels[need]) {
-        form.elements.message.value = `I am interested in ${labels[need]}. `;
+      // Service pages link here with ?need=..., so the right service is
+      // already chosen. Old links (?need=portfolio) map to their new values.
+      const aliases = JSON.parse(form.dataset.needAliases);
+      let need = new URLSearchParams(location.search).get('need');
+      need = aliases[need] || need;
+      if (need && [...form.elements.need.options].some((o) => o.value === need)) {
+        form.elements.need.value = need;
       }
 
       const setError = (field, msg) => {

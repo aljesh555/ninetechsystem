@@ -1,0 +1,19 @@
+---
+const { faqs, heading = 'Common questions', intro } = Astro.props;
+---
+<section class="section section-tint" id="faq">
+  <div class="wrap split">
+    <div class="split-head">
+      <h2>{heading}</h2>
+      {intro && <p>{intro}</p>}
+    </div>
+    <div class="faq">
+      {faqs.map((f) => (
+        <article class="faq-item">
+          <h3>{f.q}</h3>
+          <p>{f.a}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

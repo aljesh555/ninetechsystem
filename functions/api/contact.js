@@ -15,6 +15,7 @@
  * as-is, so what they read always matches what actually went wrong.
  */
 import { site, businessTypes } from '../../src/data/site.js';
+import { needs } from '../../src/data/services.js';
 
 const RECIPIENT = site.email;
 const SENDER = `${site.name} website <website@ninetechsystem.com>`;
@@ -101,12 +102,14 @@ export async function onRequestPost({ request, env }) {
   const phone = clean(data.phone, 24);
   const business = clean(data.business, 60);
   const message = clean(data.message, 2000);
+  const need = needs.find((n) => n.value === (clean(data.need, 40) || 'not-sure'));
   const digits = phone.replace(/\D/g, '');
 
   const fields = [];
   if (name.length < 2) fields.push('name');
   if (digits.length < 7 || digits.length > 15 || !PHONE_CHARS.test(phone)) fields.push('phone');
   if (!businessTypes.includes(business)) fields.push('business');
+  if (!need) fields.push('need');
   if (message.length < 10) fields.push('message');
   if (fields.length) {
     return fail(422, 'Some fields need fixing',
@@ -135,6 +138,7 @@ export async function onRequestPost({ request, env }) {
     `Name:          ${name}`,
     `Phone:         ${phone}`,
     `Business type: ${business}`,
+    `Service:       ${need?.label}`,
     '',
     'What they need:',
     message,
@@ -156,7 +160,7 @@ export async function onRequestPost({ request, env }) {
       body: JSON.stringify({
         from: SENDER,
         to: [RECIPIENT],
-        subject: `Website enquiry — ${name} (${business})`,
+        subject: `Website enquiry — ${name} (${business}) — ${need?.label}`,
         text,
       }),
     });

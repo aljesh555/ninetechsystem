@@ -1,0 +1,68 @@
+---
+import GroupDetail from '../../components/services/GroupDetail.astro';
+import { support, carePlans, groups, npr, priceLabel, contactHref } from '../../data/services.js';
+import { offer, orgRef, abs } from '../../lib/schema.js';
+
+const path = '/services/support';
+const [hosting, maintenance] = support.services.map((s) => npr(s.price.from));
+const plan = Object.fromEntries(carePlans.plans.map((p) => [p.name, npr(p.price.from)]));
+
+const careSchema = {
+  '@type': 'Service',
+  name: 'Monthly care plans',
+  serviceType: 'Support',
+  description: 'Three levels of monthly website and software cover: hosting, updates, backups, small changes and a guaranteed response time.',
+  provider: orgRef,
+  url: abs(`${path}#care-plans`),
+  offers: carePlans.plans.map((p) => ({ ...offer(p.price, `${path}#care-plans`), name: p.name })),
+};
+---
+
+<GroupDetail
+  path={path}
+  crumb="Support"
+  title="Hosting, Maintenance & Care Plans — Nine Technology"
+  description={`Domain and hosting from NPR ${hosting}/year, maintenance from NPR ${maintenance}/month, and care plans from NPR ${plan.Essential}/month. Everything in your name.`}
+  h1="Hosting, maintenance and care plans in Kathmandu"
+  lead={groups.find((g) => g.id === 'support').tagline}
+  group={support}
+  extraSchema={[careSchema]}
+  extraJump={[{ id: 'care-plans', name: 'Care plans' }]}
+  cta={{
+    heading: 'Already have a site that needs looking after?',
+    body: 'Tell us what it runs on and what keeps going wrong. We will tell you which plan fits, or whether you need one at all.',
+    primary: { label: 'Ask about a care plan', href: contactHref('care-plan') },
+  }}
+>
+  <Fragment slot="answer">
+    Nine Technology keeps business websites and software in Nepal running: domain and hosting from NPR {hosting} a year, maintenance from NPR {maintenance} a month, and three monthly care plans — Essential NPR {plan.Essential}, Standard NPR {plan.Standard} and Complete NPR {plan.Complete}. Everything is registered in your name, not ours.
+  </Fragment>
+
+  <section class="section section-tint" id="care-plans">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Monthly care plans</h2>
+        <p class="lead">Three levels of monthly cover, so you know exactly what is handled and how fast we answer.</p>
+      </div>
+      <div class="plans">
+        {carePlans.plans.map((p) => (
+          <article class={`plan${p.featured ? ' plan-featured' : ''}`}>
+            {p.featured && <p class="plan-flag">{p.featured}</p>}
+            <h3>{p.name}</h3>
+            <p class="plan-price">{priceLabel(p.price)}</p>
+            <dl>
+              {carePlans.rows.map((row, i) => (
+                <div>
+                  <dt>{row}</dt>
+                  <dd>{p.values[i]}</dd>
+                </div>
+              ))}
+            </dl>
+          </article>
+        ))}
+      </div>
+      <p class="vat-note">Prices exclude 13% VAT. Plans are billed monthly.</p>
+      <a class="btn btn-primary section-body" href={contactHref('care-plan')}>Ask about a care plan</a>
+    </div>
+  </section>
+</GroupDetail>

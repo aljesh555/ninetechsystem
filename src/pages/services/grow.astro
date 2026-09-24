@@ -1,0 +1,24 @@
+---
+import GroupDetail from '../../components/services/GroupDetail.astro';
+import { grow, groups, npr } from '../../data/services.js';
+
+const [seo, social, video, ads] = grow.services.map((s) => npr(s.price.from));
+---
+
+<GroupDetail
+  path="/services/grow"
+  crumb="Grow"
+  title="SEO, Social Media & Ads in Kathmandu — Nine Technology"
+  description={`SEO and AI search from NPR ${seo}/month, social media from NPR ${social}/month, video shoots and paid ads for businesses in Kathmandu. Reported in enquiries.`}
+  h1="SEO, social media, video and ads in Kathmandu"
+  lead={groups.find((g) => g.id === 'grow').tagline}
+  group={grow}
+  cta={{
+    heading: 'Tell us where your customers come from now',
+    body: 'Walk-ins, word of mouth, Facebook, Google? We will tell you which channel would bring you more of them, and which would waste your money.',
+  }}
+>
+  <Fragment slot="answer">
+    Nine Technology brings customers to businesses in Nepal: search visibility on Google and AI tools (SEO, AEO and GEO) from NPR {seo} a month, social media management from NPR {social} a month, video shoots from NPR {video} a shoot, and paid ads management from NPR {ads} a month. Everything is reported in enquiries, not likes, and ad spend is always paid by you directly to the platform.
+  </Fragment>
+</GroupDetail>

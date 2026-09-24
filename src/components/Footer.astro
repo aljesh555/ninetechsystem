@@ -1,12 +1,14 @@
 ---
 import { site, nav } from '../data/site.js';
+// The same generated lockup as the header, inlined: no copy in public/ to drift.
+import fullLockup from '../../assets/brand/logo-full-white.svg?raw';
 ---
 
 <footer class="footer">
   <div class="wrap">
     <div class="footer-grid">
       <div>
-        <img class="mark" src="/brand/logo-full-white.svg" alt="Nine Technology" width="735" height="294" loading="lazy" decoding="async" />
+        <span class="mark" role="img" aria-label="Nine Technology"><Fragment set:html={fullLockup} /></span>
         <p>We build websites, software and AI automation for businesses in Nepal — then we market it, automate it and keep it running.</p>
         <p class="np" lang="ne">{site.nepaliName}</p>
       </div>

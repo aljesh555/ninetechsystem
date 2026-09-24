@@ -1,0 +1,92 @@
+---
+import Base from '../../layouts/Base.astro';
+import Breadcrumb from '../../components/services/Breadcrumb.astro';
+import QuickAnswer from '../../components/services/QuickAnswer.astro';
+import Faq from '../../components/services/Faq.astro';
+import CtaStrip from '../../components/services/CtaStrip.astro';
+import { app, npr, contactHref, VAT_NOTE } from '../../data/services.js';
+import { breadcrumbList, faqPage, service } from '../../lib/schema.js';
+
+const path = '/services/app';
+const crumbs = [
+  { name: 'Home', path: '/' },
+  { name: 'Services', path: '/services' },
+  { name: 'App', path },
+];
+const from = npr(app.price.from);
+
+const schema = [
+  service({
+    name: 'Mobile app development',
+    description: 'Android and iPhone apps for businesses in Nepal, built to feel fast on mid-range phones and weak connections.',
+    path,
+    price: app.price,
+    serviceType: 'Mobile app development',
+  }),
+  faqPage(path, app.faqs),
+  breadcrumbList(crumbs),
+];
+---
+
+<Base
+  title="Mobile App Development in Kathmandu — Nine Technology"
+  description={`Android and iPhone apps for businesses in Nepal, fast on mid-range phones. Native apps from NPR ${from}; we tell you when a web app will do instead.`}
+  path={path}
+  schema={schema}
+>
+  <section class="page-head">
+    <div class="wrap">
+      <Breadcrumb crumbs={crumbs} />
+      <h1>Mobile app development in Kathmandu</h1>
+      <QuickAnswer>
+        Nine Technology builds Android and iPhone apps for businesses in Nepal, built to feel fast on mid-range phones and weak connections. Native apps start from NPR {from}; we'll tell you honestly when a progressive web app does the job for far less.
+      </QuickAnswer>
+      <p class="lead">Android and iPhone apps, built to feel fast on the mid-range phones your customers actually own — and to keep working when the connection doesn't.</p>
+    </div>
+  </section>
+
+  <section class="section section-tint">
+    <div class="wrap split">
+      <div class="split-head">
+        <h2>Most businesses don't need a native app</h2>
+      </div>
+      <div class="prose">
+        <p class="offer-intro">A well-built mobile website or a progressive web app often does the same job, works on every phone, costs far less, and needs no app-store approval. We'll tell you which you need before you spend on the expensive option.</p>
+        <h3 class="h4">A real app makes sense when</h3>
+        <ul class="checks">{app.whenReal.map((w) => <li>{w}</li>)}</ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap split">
+      <div class="split-head">
+        <h2>What you get with a native app</h2>
+      </div>
+      <ul class="checks">{app.features.map((f) => <li>{f}</li>)}</ul>
+    </div>
+  </section>
+
+  <section class="section section-tint">
+    <div class="wrap split">
+      <div class="split-head">
+        <h2>Price</h2>
+        <p class="offer-price">From NPR {from}</p>
+        <p class="offer-time">{app.time}</p>
+      </div>
+      <div>
+        <p class="offer-intro">Quoted per project after a free call. Native apps start from NPR {from} and take {app.time}. A progressive web app costs far less and ships in weeks.</p>
+        <p class="vat-note">{VAT_NOTE}</p>
+        <a class="btn btn-primary section-body" href={contactHref('mobile-app')}>Ask about an app</a>
+      </div>
+    </div>
+  </section>
+
+  <Faq faqs={app.faqs} heading="App questions" />
+
+  <CtaStrip
+    heading="Not sure if you need an app?"
+    body="Tell us what your customers would use it for. If a web app does the job, we will say so — before you spend on the expensive option."
+    primary={{ label: 'Ask about an app', href: contactHref('mobile-app') }}
+  />
+</Base>

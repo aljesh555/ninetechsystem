@@ -1,13 +1,15 @@
 import { site, nav } from '../data/site.js';
+import { servicePages } from '../data/services.js';
 
 /**
- * Five pages, one URL form. No <lastmod>: stamping every page with the build
- * date on every build teaches Google to ignore the field. <priority> and
- * <changefreq> are left out too; Google ignores both.
+ * Every public page, one URL form. No <lastmod>: stamping every page with the
+ * build date on every build teaches Google to ignore the field. <priority>
+ * and <changefreq> are left out too; Google ignores both.
  */
 export async function GET() {
-  const urls = nav
-    .map((page) => `  <url>\n    <loc>${site.url}${page.href === '/' ? '' : page.href}</loc>\n  </url>`)
+  const paths = [...new Set([...nav.map((p) => p.href), ...servicePages.map((p) => p.path)])];
+  const urls = paths
+    .map((path) => `  <url>\n    <loc>${site.url}${path === '/' ? '' : path}</loc>\n  </url>`)
     .join('\n');
 
   return new Response(
