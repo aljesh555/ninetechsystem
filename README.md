@@ -108,6 +108,9 @@ add `from` to each of the four groups. Then:
 4. `carePlans.plans` — add `price` back and restore `.plan-price` in the table.
 5. Rewrite the first FAQ answer and the Services page intro, and restore the
    "Prices exclude 13% VAT" line the brief asks for.
+6. `src/pages/services.astro` — the `<title>` is "Services — Nine Technology,
+   Kathmandu" while there are no prices. Change it back to "Services & Prices —
+   Nine Technology, Kathmandu" once the figures are on the page.
 
 The `.fact` CSS class is the slot that used to hold the price; it is styled for
 exactly that job and is currently holding the timeline.
