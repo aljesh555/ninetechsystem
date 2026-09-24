@@ -20,6 +20,8 @@ const crumbs = [
   { name: 'Website', path },
 ];
 const [landing, business, store] = website.offers;
+const newSite = website.offers.filter((o) => !o.forExisting);
+const redesign = website.offers.find((o) => o.id === 'redesign');
 const proposal = { label: 'Request a proposal', href: contactHref('website') };
 
 const schema = [
@@ -46,17 +48,17 @@ const schema = [
     secondary={{ label: 'Compare formats', href: '#formats' }}
     facts={website.facts}
   >
-    Nine Technology builds custom websites for businesses in Nepal — landing pages from NPR {npr(landing.price.from)}, business websites from NPR {npr(business.price.from)} and online stores from NPR {npr(store.price.from)}. Every site is custom-designed, fast on Nepali mobile networks, built to be found on Google and AI search, and handed over in your name with a CMS and training.
+    Nine Technology builds custom websites for businesses in Nepal — landing pages from NPR {npr(landing.price.from)}, business websites from NPR {npr(business.price.from)} and online stores from NPR {npr(store.price.from)}, with redesigns of existing sites from NPR {npr(redesign.price.from)}. Every site is custom-designed, fast on Nepali mobile networks, built to be found on Google and AI search, and handed over in your name with a CMS and training.
   </BuildHero>
 
   <section class="section" id="formats">
     <div class="wrap">
       <div class="section-head">
-        <FallHeading text="Four formats, one standard" />
-        <p class="lead">Choose the format that matches what the website has to do. Every format is built to the same standard of design, performance and ownership.</p>
+        <FallHeading text="Five formats, one standard" />
+        <p class="lead">Four formats for a new website, and one for improving the site you already have. Every format is built to the same standard of design, performance and ownership.</p>
       </div>
       <div class="formats stagger reveal">
-        {website.offers.map((o) => (
+        {newSite.map((o) => (
           <article class="format">
             <h3>{o.name}</h3>
             <p class="format-price">{priceLabel(o.price, o.priceNote)}</p>
@@ -66,6 +68,24 @@ const schema = [
           </article>
         ))}
       </div>
+      <article class="format format-wide reveal">
+        <div class="format-wide-head">
+          <p class="kicker">Already have a website?</p>
+          <h3>{redesign.name}</h3>
+          <p class="format-price">{priceLabel(redesign.price)}</p>
+          <p class="format-time">{redesign.time}</p>
+        </div>
+        <div class="format-tiers">
+          {redesign.tiers.map((t) => (
+            <div>
+              <h4>{t.name}</h4>
+              <p class="format-tier-price">{priceLabel(t.price)}</p>
+              <p>{t.body}</p>
+            </div>
+          ))}
+        </div>
+        <a class="svc-view" href="#redesign">Full specification <Arrow /></a>
+      </article>
       <p class="vat-note">{website.priceFootnote}</p>
     </div>
   </section>
@@ -84,7 +104,7 @@ const schema = [
     <section class={`section offer${i % 2 ? ' section-tint' : ''}`} id={o.id}>
       <div class="wrap split">
         <div class="split-head">
-          <div class="offer-icon"><Fragment set:html={icon(['website', 'website', 'store', 'calendar'][i], 64)} /></div>
+          <div class="offer-icon"><Fragment set:html={icon(o.icon, 64)} /></div>
           <h2>{o.name}</h2>
           <p class="offer-price">{priceLabel(o.price, o.priceNote)}</p>
           <p class="offer-time">Delivery: {o.time}</p>
@@ -93,9 +113,29 @@ const schema = [
         <div>
           <p class="offer-intro">{o.intro}</p>
           {o.lead && <p class="offer-lead">{o.lead}</p>}
-          <div class="section-body">
-            <Groups groups={o.groups ?? o.clusters} />
-          </div>
+          {o.tiers && (
+            <div class="tier-cards section-body">
+              {o.tiers.map((t) => (
+                <div class="tier-card">
+                  <h3>{t.name}</h3>
+                  <p class="format-tier-price">{priceLabel(t.price)}</p>
+                  <p>{t.body}</p>
+                </div>
+              ))}
+            </div>
+          )}
+          {(o.groups || o.clusters) && (
+            <div class="section-body">
+              <Groups groups={o.groups ?? o.clusters} />
+            </div>
+          )}
+          {o.included && (
+            <div class="section-body">
+              <h3 class="group-head">{o.tiers ? 'Included in both' : 'Included'}</h3>
+              <ul class="checks">{o.included.map((i) => <li>{i}</li>)}</ul>
+            </div>
+          )}
+          {o.audit && <p class="service-note">{o.audit}</p>}
 
           {o.addons && (
             <div class="addons">
@@ -111,7 +151,7 @@ const schema = [
     </section>
   ))}
 
-  <section class="section" id="process">
+  <section class="section section-tint" id="process">
     <div class="wrap">
       <div class="section-head">
         <FallHeading text="How a website project runs" />
@@ -121,9 +161,9 @@ const schema = [
     </div>
   </section>
 
-  <DeliveryModels page="website" tint />
+  <DeliveryModels page="website" />
 
-  <Faq tint={false} faqs={website.faqs} heading="Website questions" intro="What business owners ask before they commit to a project." />
+  <Faq faqs={website.faqs} heading="Website questions" intro="What business owners ask before they commit to a project." />
 
   <CtaStrip
     heading="Discuss your website with our team"

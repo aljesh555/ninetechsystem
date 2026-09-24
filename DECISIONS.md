@@ -554,6 +554,23 @@ page gained a "Which development model do you use?" FAQ, which is also in the
 FAQPage schema. The accordion keeps every model's text in the page, so it is
 indexable while the page stays short.
 
+### Website redesign & rescue (founder's content)
+
+Added as the fifth website format, NPR 30,000–90,000, 1–3 weeks, in two tiers:
+Refresh (from NPR 30,000) and Full rebuild (from NPR 50,000). It is presented as a
+separate, full-width "Already have a website?" card under the four new-site
+formats, because it serves a different visitor, and has its own `#redesign`
+section, two FAQs (rankings after a redesign; redesigning another company's
+site), a contact-form option (`?need=redesign`) and the hub's "slow or out of
+date?" link.
+
+Three wording adjustments to the founder's copy, for consistency: "free audit"
+became "an audit of your current site, at no cost" (company voice); "without
+losing your Google rankings" became "built to keep the Google rankings you already
+have", because the site states elsewhere that nobody can guarantee rankings — the
+method (URL mapping, 301 redirects, metadata and schema migrated) is what makes the
+promise credible; "then quote the rebuild" became "a written proposal follows".
+
 ## Two bugs found after the first deploy
 
 **Unknown URLs returned the home page with HTTP 200.** Cloudflare Pages falls

@@ -49,7 +49,7 @@ export const howWeWork = [
 export const services = {
   website: {
     name: 'Website',
-    short: 'Landing pages, business sites and online stores. Custom design, fast on Nepali networks, found on Google and AI search.',
+    short: 'Landing pages, business sites, online stores and redesigns. Custom design, fast on Nepali networks, found on Google and AI search.',
     price: { from: 20000 },
     href: '/services/website',
     icon: 'website',
@@ -194,7 +194,7 @@ export const howToChoose = [
   { q: 'Need customers?', a: 'Website + Search visibility', links: ['/services/website', '/services/grow#seo'] },
   { q: 'Need a system?', a: 'Software', links: ['/services/software'] },
   { q: 'More messages than your team can answer?', a: 'AI chat & Workflow automation', links: ['/services/automate'] },
-  { q: 'A website that is slow or out of date?', a: 'Redesign and rebuild, without losing your search rankings', links: ['/contact?need=website'] },
+  { q: 'A website that is slow or out of date?', a: 'Website redesign & rescue, built to keep your search rankings', links: ['/services/website#redesign'] },
 ];
 
 /* --------------------------------------------------------------------------
@@ -205,6 +205,7 @@ export const website = {
   offers: [
     {
       id: 'landing',
+      icon: 'launch',
       highlights: ['Custom single-scroll design', 'Contact form and WhatsApp', 'Google Business Profile setup'],
       name: 'Landing / single page',
       short: 'Landing page',
@@ -222,6 +223,7 @@ export const website = {
     },
     {
       id: 'business',
+      icon: 'website',
       highlights: ['5–8 custom-designed pages', 'CMS, blog and gallery', 'Full SEO, AEO and GEO'],
       name: 'Business website',
       short: 'Business website',
@@ -239,6 +241,7 @@ export const website = {
     },
     {
       id: 'ecommerce',
+      icon: 'store',
       highlights: ['eSewa, Khalti and Fonepay', 'Order dashboard on your phone', 'Stock and delivery zones'],
       name: 'E-commerce / online store',
       short: 'E-commerce',
@@ -278,6 +281,7 @@ export const website = {
     },
     {
       id: 'booking',
+      icon: 'calendar',
       highlights: ['Booking and enquiry flows', 'Staff logins and calendar', 'Email and WhatsApp alerts'],
       name: 'Booking & web systems',
       short: 'Booking & web systems',
@@ -290,6 +294,31 @@ export const website = {
         { name: 'Included', icon: 'calendar', items: ['Booking / enquiry flows', 'Calendar & availability', 'Staff logins', 'Notifications (email/WhatsApp)', 'Dashboard', 'Training', '30 days support'] },
       ],
       cta: { label: 'Request a proposal', need: 'booking-system' },
+    },
+    {
+      id: 'redesign',
+      icon: 'maintenance',
+      name: 'Website redesign & rescue',
+      short: 'Redesign & rescue',
+      price: { from: 30000, to: 90000 },
+      time: '1–3 weeks',
+      forExisting: true,
+      intro: "Have a site that's slow, outdated, or doesn't work on phones? We rebuild it — faster, modern and mobile-first — with your content carried over and built to keep the Google rankings you already have.",
+      highlights: ['Refresh from NPR 30,000', 'Full rebuild from NPR 50,000', 'Rankings protected with 301 redirects'],
+      tiers: [
+        { name: 'Refresh', price: { from: 30000 }, body: 'A new, modern look, mobile-responsive, with speed fixes. The existing structure stays.' },
+        { name: 'Full rebuild', price: { from: 50000 }, body: 'A new design on new, fast technology, restructured, with your content migrated.' },
+      ],
+      included: [
+        'Mobile-first custom redesign (no templates)',
+        'Google rankings protected — proper URL mapping and 301 redirects, metadata and schema migrated',
+        'Speed & Core Web Vitals fixes',
+        'Your content migrated from the old site',
+        'CMS — a simple dashboard to update it yourself',
+        '30 days support',
+      ],
+      audit: 'Every redesign begins with an audit of your current site, at no cost: what is slowing it down and what is costing you visitors. A written proposal for the rebuild follows.',
+      cta: { label: 'Request a site audit', need: 'redesign' },
     },
   ],
   facts: [
@@ -342,6 +371,14 @@ export const website = {
     {
       q: 'What happens after launch?',
       a: 'Support is included: 30 days on business websites and stores, 14 days on a landing page. After that you can move to a monthly care plan, or simply call us when you need something. There is no obligation to keep paying us.',
+    },
+    {
+      q: 'Will a redesign affect my Google rankings?',
+      a: 'A redesign is built to keep the rankings you already have. Every old address is mapped to its new page with a permanent (301) redirect, and your page titles, descriptions and structured data are carried over, so search engines treat the new site as the same site. Most ranking losses after a redesign come from skipping these steps.',
+    },
+    {
+      q: 'Can you redesign a website another company built?',
+      a: 'Yes. We start with an audit of the current site, at no cost, then either refresh the design on the existing structure or rebuild it on new technology. Your content is migrated either way, and the new site is registered in your name.',
     },
     {
       q: 'Which development model do you use for websites?',
@@ -827,6 +864,7 @@ export const needs = [
   { value: 'website', label: 'Business website' },
   { value: 'store', label: 'E-commerce / online store' },
   { value: 'booking-system', label: 'Booking or web system' },
+  { value: 'redesign', label: 'Website redesign or rescue' },
   { value: 'software', label: 'Custom software' },
   { value: 'mobile-app', label: 'Mobile app' },
   { value: 'seo', label: 'Search visibility (SEO, AEO, GEO)' },
