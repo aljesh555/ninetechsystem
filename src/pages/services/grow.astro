@@ -1,16 +1,20 @@
 ---
+/**
+ * The Grow category overview. Each service has its own page; this one
+ * introduces the four and how they work together. Old links to
+ * /services/grow#seo etc. land on the matching card.
+ */
 import Base from '../../layouts/Base.astro';
 import BuildHero from '../../components/services/BuildHero.astro';
 import FallHeading from '../../components/services/FallHeading.astro';
 import Tiles from '../../components/services/Tiles.astro';
-import TermList from '../../components/services/TermList.astro';
 import Flow from '../../components/services/Flow.astro';
 import Faq from '../../components/services/Faq.astro';
 import CtaStrip from '../../components/services/CtaStrip.astro';
 import Arrow from '../../components/services/Arrow.astro';
 import { icon } from '../../lib/icons.js';
-import { grow, priceLabel, npr, contactHref, VAT_NOTE } from '../../data/services.js';
-import { breadcrumbList, faqPage, service, offer, orgRef, abs } from '../../lib/schema.js';
+import { grow, priceLabel, npr, VAT_NOTE } from '../../data/services.js';
+import { breadcrumbList, faqPage, service, abs } from '../../lib/schema.js';
 
 const path = '/services/grow';
 const crumbs = [
@@ -22,19 +26,16 @@ const [seo, social, video, ads] = grow.services;
 const proposal = { label: 'Request a proposal', href: '/contact' };
 
 const schema = [
-  ...grow.services.map((s) =>
-    s.tiers
-      ? {
-          '@type': 'Service',
-          name: s.name,
-          serviceType: 'Digital marketing',
-          description: s.intro,
-          provider: orgRef,
-          url: abs(`${path}#${s.id}`),
-          offers: s.tiers.map((t) => ({ ...offer(t.price, `${path}#${s.id}`), name: t.name })),
-        }
-      : service({ name: s.name, description: s.intro, path: `${path}#${s.id}`, price: s.price, serviceType: 'Digital marketing' }),
-  ),
+  {
+    '@type': 'ItemList',
+    '@id': `${abs(path)}#services`,
+    name: 'Digital marketing services from Nine Technology',
+    itemListElement: grow.services.map((s, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      item: service({ name: s.name, description: s.intro, path: `/services/${s.slug}`, serviceType: 'Digital marketing' }),
+    })),
+  },
   faqPage(path, grow.faqs),
   breadcrumbList(crumbs),
 ];
@@ -52,7 +53,7 @@ const schema = [
     h1="Digital marketing in Kathmandu"
     sceneName="grow"
     primary={proposal}
-    secondary={{ label: 'Compare services', href: '#services' }}
+    secondary={{ label: 'The four services', href: '#services' }}
     facts={grow.facts}
   >
     Nine Technology brings customers to businesses in Nepal: search and AI visibility from NPR {npr(seo.price.from)} a month, social media marketing from NPR {npr(social.price.from)} a month, video production from NPR {npr(video.price.from)}, and paid advertising management from NPR {npr(ads.price.from)} a month plus your own ad budget. Every channel is reported in enquiries, not likes.
@@ -66,13 +67,13 @@ const schema = [
       </div>
       <div class="formats stagger reveal">
         {grow.services.map((s) => (
-          <article class="format">
+          <article class="format" id={s.id}>
             <Fragment set:html={icon(s.icon, 52)} />
             <h3>{s.name}</h3>
             <p class="format-price">{priceLabel(s.price)}</p>
             <p class="format-time">{s.priceSuffix ?? (s.tiers ? `or NPR ${npr(s.tiers[1].price.from)}/mo monthly` : 'Scoped to your goals')}</p>
             <ul>{s.highlights.map((h) => <li>{h}</li>)}</ul>
-            <a class="svc-view" href={`#${s.id}`}>Full details <Arrow /></a>
+            <a class="svc-view" href={`/services/${s.slug}`}>View the service <Arrow /></a>
           </article>
         ))}
       </div>
@@ -89,78 +90,6 @@ const schema = [
       <Tiles items={grow.standards} />
     </div>
   </section>
-
-  {grow.services.map((s, i) => (
-    <section class={`section offer${i % 2 ? ' section-tint' : ''}`} id={s.id}>
-      <div class="wrap split">
-        <div class="split-head">
-          <div class="offer-icon"><Fragment set:html={icon(s.icon, 64)} /></div>
-          <h2>{s.name}</h2>
-          <p class="offer-price">{priceLabel(s.price)}</p>
-          {s.priceSuffix && <p class="offer-time">{s.priceSuffix}</p>}
-          {s.tiers && <p class="offer-time">One-time or monthly</p>}
-          <a class="btn btn-primary section-body" href={contactHref(s.cta.need)}>{s.cta.label}</a>
-          {s.ctaNote && <p class="cta-note">{s.ctaNote}</p>}
-        </div>
-        <div>
-          <p class="offer-intro">{s.intro}</p>
-
-          {s.features && (
-            <div class="section-body">
-              <h3 class="group-head">{s.id === 'ads' ? 'What we do' : 'What you get'}</h3>
-              <TermList items={s.features} />
-            </div>
-          )}
-
-          {s.makes && (
-            <div class="section-body">
-              <h3 class="group-head">What we make</h3>
-              <ul class="chips">{s.makes.map((m) => <li>{m}</li>)}</ul>
-              <p class="price-movers">{s.makesNote}</p>
-            </div>
-          )}
-
-          {s.tiers && (
-            <div class="section-body">
-              <h3 class="group-head">Two ways to work with us</h3>
-              <div class="tier-cards section-body">
-                {s.tiers.map((t) => (
-                  <div class="tier-card">
-                    <h3>{t.name}</h3>
-                    <p class="format-tier-price">{priceLabel(t.price)}</p>
-                    <p>{t.body}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {s.money && (
-            <div class="section-body">
-              <h3 class="group-head">How the money works</h3>
-              <div class="tier-cards section-body money">
-                {s.money.map((m) => (
-                  <div class="tier-card">
-                    <h3>{m.name}</h3>
-                    <p class="format-tier-price">{m.value}</p>
-                    <p>{m.body}</p>
-                  </div>
-                ))}
-              </div>
-              <table class="fee-rule section-body">
-                <caption class="sr-only">How the management fee is set</caption>
-                <tbody>
-                  {s.feeRule.map(([when, fee]) => <tr><th scope="row">{when}</th><td>{fee}</td></tr>)}
-                </tbody>
-              </table>
-            </div>
-          )}
-
-          {s.note && <p class="service-note">{s.note}</p>}
-        </div>
-      </div>
-    </section>
-  ))}
 
   <section class="section" id="process">
     <div class="wrap">

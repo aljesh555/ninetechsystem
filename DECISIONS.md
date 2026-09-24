@@ -589,6 +589,23 @@ Wording adjusted to the company voice ("free call" → consultation, "free
 AI-search audit" → "an AI-search audit, at no cost"), and "thousands of the right
 people" was dropped as a figure that cannot yet be evidenced.
 
+### One page per Grow service
+
+At the founder's request each Grow service has its own page, like Website,
+Software and App: `/services/seo`, `/services/social-media`,
+`/services/video-production` and `/services/paid-ads`, generated from one
+template (`src/pages/services/[growService].astro`) and the per-service content in
+`grow.services`. Each has its own scene, facts, H1 aimed at the local search
+("SEO and AI search visibility in Kathmandu" and so on), service-specific sections
+(four kinds of visibility; two ways to work; how the money works), a process,
+the engagement standards, "Often combined with" links and five FAQs.
+Breadcrumbs run Home › Services › Grow › service. `/services/grow` is now the
+category overview; its cards keep the old `#seo`/`#social`/`#video`/`#ads` ids,
+so old links still land on the right card, which links on to the new page.
+
+Automate and Support still share one page each; they will be split the same way
+when the founder's new content for them arrives, to avoid building them twice.
+
 ## Two bugs found after the first deploy
 
 **Unknown URLs returned the home page with HTTP 200.** Cloudflare Pages falls

@@ -365,6 +365,66 @@ scenes.grow = () => {
   );
 };
 
+scenes.seo = () => {
+  const card = (z) => B(1, 3.4, z, 4.6, 3.6, 0.5);
+  const top = card(4.2);
+  return (
+    part(box(0.2, 0.2, 0, 9.6, 9.6, 0.6, PLATFORM)) +
+    part(box(7, 0.8, 0.6, 1.3, 1.3, 4.8, AMBER) + box(7, 2.2, 0.6, 1.3, 1.3, 3.4) + box(7, 3.6, 0.6, 1.3, 1.3, 2)) +
+    part(box(...card(0.6)) + on('top', card(0.6), 0.5, 0.6, 3.2, 1.1, LIGHT_DIM)) +
+    part(box(...card(2.4)) + on('top', card(2.4), 0.5, 0.6, 3.2, 1.1, LIGHT_DIM)) +
+    part(box(...top, AMBER) + on('top', top, 0.5, 0.6, 3.6, 1.2, '#fff3dc') + on('top', top, 0.5, 1.8, 2.4, 2.3, '#ffe0a8'))
+  );
+};
+
+scenes.social = () => {
+  const phone = B(3.4, 4.2, 0.6, 3.6, 0.8, 7);
+  const tile = (x, y, z, col) => box(x, y, z, 2, 2, 0.5, col);
+  return (
+    part(box(0.2, 0.2, 0, 9.6, 9.6, 0.6, PLATFORM)) +
+    part(
+      box(...phone) +
+      on('left', phone, 0.3, 0.8, 3.3, 6.4, LIGHT) +
+      on('left', phone, 0.55, 3.8, 1.8, 5.8, AMBER.left) +
+      on('left', phone, 2, 3.8, 3.05, 5.8, LIGHT_DIM) +
+      on('left', phone, 0.55, 1.2, 1.8, 3.4, LIGHT_DIM) +
+      on('left', phone, 2, 1.2, 3.05, 3.4, AMBER.left),
+    ) +
+    part(tile(0.4, 4.4, 5.2) + tile(1, 6.8, 2.4, AMBER)) +
+    part(box(7.4, 1.6, 5, 2.2, 1.6, 1.2) + on('left', B(7.4, 1.6, 5, 2.2, 1.6, 1.2), 0.4, 0.4, 0.8, 0.8, AMBER.left) + on('left', B(7.4, 1.6, 5, 2.2, 1.6, 1.2), 1, 0.4, 1.4, 0.8, AMBER.left))
+  );
+};
+
+scenes.video = () => {
+  const body = B(3, 3.4, 2.2, 3.6, 3, 2.6);
+  const lens = B(6.6, 4.1, 2.8, 1.4, 1.6, 1.4);
+  const panel = B(1, 1, 3.6, 2.4, 0.5, 2.6);
+  return (
+    part(box(0.2, 0.2, 0, 9.6, 9.6, 0.6, PLATFORM)) +
+    part(box(1.9, 1.1, 0.6, 0.5, 0.5, 3) + box(...panel, AMBER) + on('left', panel, 0.3, 0.3, 2.1, 2.3, '#ffd28a')) +
+    part(box(4.4, 4.6, 0.6, 0.6, 0.6, 1.6) + box(3.8, 4, 0.6, 1.8, 1.8, 0.3)) +
+    part(box(...body) + on('left', body, 0.4, 1.2, 1.4, 2, LIGHT_DIM) + box(...lens) + on('right', lens, 0.3, 0.3, 1.3, 1.1, LIGHT) + box(3.5, 3.9, 4.8, 0.9, 0.9, 0.4, AMBER))
+  );
+};
+
+scenes.ads = () => {
+  const board = B(1, 1.2, 3.4, 5.8, 0.6, 3.8);
+  const coin = (z, col) => box(6.6, 5.6, z, 2.4, 2.4, 0.8, col);
+  return (
+    part(box(0.2, 0.2, 0, 9.6, 9.6, 0.6, PLATFORM)) +
+    part(
+      box(1.8, 1.4, 0.6, 0.5, 0.5, 2.8) + box(5.4, 1.4, 0.6, 0.5, 0.5, 2.8) +
+      box(...board) +
+      on('left', board, 0.4, 0.5, 2.8, 3.2, AMBER.left) +
+      on('left', board, 3.3, 2.3, 5.4, 2.8, LIGHT) +
+      on('left', board, 3.3, 1.4, 5.4, 1.9, LIGHT_DIM) +
+      on('left', board, 3.3, 0.5, 4.5, 1, LIGHT_DIM),
+    ) +
+    part(box(1.6, 5.6, 0.6, 3.4, 2.6, 0.5) + on('top', B(1.6, 5.6, 0.6, 3.4, 2.6, 0.5), 0.4, 0.5, 2.6, 1, LIGHT)) +
+    part(coin(0.6, NAVY) + coin(1.5, NAVY) + coin(2.4, AMBER))
+  );
+};
+
 /** Inline SVG for a service or concept icon. Decorative: its heading names it. */
 export function icon(name, size = 80) {
   const body = draw[name]?.();

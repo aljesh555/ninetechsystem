@@ -1,0 +1,223 @@
+---
+/**
+ * One page per Grow service: /services/seo, /social-media, /video-production
+ * and /paid-ads. Content lives in `grow.services` in src/data/services.js;
+ * each page shows only the sections its service has.
+ */
+import Base from '../../layouts/Base.astro';
+import BuildHero from '../../components/services/BuildHero.astro';
+import FallHeading from '../../components/services/FallHeading.astro';
+import Tiles from '../../components/services/Tiles.astro';
+import TermList from '../../components/services/TermList.astro';
+import Flow from '../../components/services/Flow.astro';
+import Faq from '../../components/services/Faq.astro';
+import CtaStrip from '../../components/services/CtaStrip.astro';
+import Arrow from '../../components/services/Arrow.astro';
+import { icon } from '../../lib/icons.js';
+import { grow, services, priceLabel, npr, contactHref, VAT_NOTE } from '../../data/services.js';
+import { breadcrumbList, faqPage, service, offer, orgRef, abs } from '../../lib/schema.js';
+
+export function getStaticPaths() {
+  return grow.services.map((s) => ({ params: { growService: s.slug }, props: { s } }));
+}
+
+const { s } = Astro.props;
+const path = `/services/${s.slug}`;
+const crumbs = [
+  { name: 'Home', path: '/' },
+  { name: 'Services', path: '/services' },
+  { name: 'Grow', path: '/services/grow' },
+  { name: s.name, path },
+];
+const cta = { label: s.cta.label, href: contactHref(s.cta.need) };
+const related = s.related.map((id) => services[id]);
+
+const ctaHeading = {
+  seo: 'Find out how visible you are today',
+  social: 'Discuss your social media with our team',
+  video: 'Plan your next video with our team',
+  ads: 'Discuss your advertising with our team',
+}[s.id];
+
+const flowHeading = {
+  seo: 'How the work runs',
+  social: 'What a month looks like',
+  video: 'From brief to delivery',
+  ads: 'How a campaign runs',
+}[s.id];
+
+// Sections in page order; backgrounds alternate white / grey through them.
+const order = ['what', s.pillars && 'pillars', s.tiers && 'tiers', s.money && 'money', 'flow', 'standards', 'related', 'faq'].filter(Boolean);
+const bg = (key) => (order.indexOf(key) % 2 ? ' section-tint' : '');
+
+const schema = [
+  s.tiers
+    ? {
+        '@type': 'Service',
+        name: s.name,
+        serviceType: 'Digital marketing',
+        description: s.intro,
+        provider: orgRef,
+        url: abs(path),
+        offers: s.tiers.map((t) => ({ ...offer(t.price, path), name: t.name })),
+      }
+    : service({ name: s.name, description: s.intro, path, price: s.price, serviceType: 'Digital marketing' }),
+  faqPage(path, s.faqs),
+  breadcrumbList(crumbs),
+];
+---
+
+<Base title={s.title} description={s.description} path={path} schema={schema}>
+  <BuildHero
+    crumbs={crumbs}
+    kicker={s.kicker}
+    h1={s.h1}
+    sceneName={s.scene}
+    primary={cta}
+    secondary={{ label: 'What you get', href: '#what' }}
+    facts={s.facts}
+  >
+    {s.answer}
+  </BuildHero>
+
+  <section class={`section${bg('what')}`} id="what">
+    <div class="wrap split">
+      <div class="split-head">
+        <div class="offer-icon"><Fragment set:html={icon(s.icon, 64)} /></div>
+        <FallHeading text={s.makes ? 'What we make' : 'What you get'} />
+        <p class="offer-price">{priceLabel(s.price)}</p>
+        {s.priceSuffix && <p class="offer-time">{s.priceSuffix}</p>}
+        {s.tiers && <p class="offer-time">One-time, or from NPR {npr(s.tiers[1].price.from)}/mo monthly</p>}
+        <a class="btn btn-primary section-body" href={cta.href}>{cta.label}</a>
+        {s.ctaNote && <p class="cta-note">{s.ctaNote}</p>}
+      </div>
+      <div>
+        <p class="offer-intro">{s.intro}</p>
+        {s.features && (
+          <div class="section-body"><TermList items={s.features} /></div>
+        )}
+        {s.makes && (
+          <div class="section-body">
+            <ul class="chips">{s.makes.map((m) => <li>{m}</li>)}</ul>
+            <p class="price-movers">{s.makesNote}</p>
+          </div>
+        )}
+        {s.note && !s.money && <p class="service-note">{s.note}</p>}
+        <p class="vat-note">{VAT_NOTE}{s.money && ' Ad budgets are separate and paid directly to the platform.'}</p>
+      </div>
+    </div>
+  </section>
+
+  {s.pillars && (
+    <section class={`section${bg('pillars')}`}>
+      <div class="wrap">
+        <div class="section-head">
+          <FallHeading text={s.pillars.heading} />
+          <p class="lead">{s.pillars.lead}</p>
+        </div>
+        <Tiles items={s.pillars.items} cols={2} />
+      </div>
+    </section>
+  )}
+
+  {s.tiers && (
+    <section class={`section${bg('tiers')}`}>
+      <div class="wrap">
+        <div class="section-head">
+          <FallHeading text="Two ways to work with us" />
+          <p class="lead">A single production when you need a specific video, or regular content every month.</p>
+        </div>
+        <div class="tier-cards section-body">
+          {s.tiers.map((t) => (
+            <div class="tier-card">
+              <h3>{t.name}</h3>
+              <p class="format-tier-price">{priceLabel(t.price)}</p>
+              <p>{t.body}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  {s.money && (
+    <section class={`section${bg('money')}`}>
+      <div class="wrap split">
+        <div class="split-head">
+          <FallHeading text="How the money works" />
+          <p>Two separate amounts, so you always know what is our fee and what is your advertising.</p>
+        </div>
+        <div>
+          <div class="tier-cards money">
+            {s.money.map((m) => (
+              <div class="tier-card">
+                <h3>{m.name}</h3>
+                <p class="format-tier-price">{m.value}</p>
+                <p>{m.body}</p>
+              </div>
+            ))}
+          </div>
+          <table class="fee-rule section-body">
+            <caption class="sr-only">How the management fee is set</caption>
+            <tbody>
+              {s.feeRule.map(([when, fee]) => <tr><th scope="row">{when}</th><td>{fee}</td></tr>)}
+            </tbody>
+          </table>
+          <p class="price-movers">{s.note}</p>
+        </div>
+      </div>
+    </section>
+  )}
+
+  <section class={`section${bg('flow')}`}>
+    <div class="wrap">
+      <div class="section-head">
+        <FallHeading text={flowHeading} />
+      </div>
+      <Flow steps={s.flow} />
+    </div>
+  </section>
+
+  <section class={`section${bg('standards')}`}>
+    <div class="wrap">
+      <div class="section-head">
+        <FallHeading text="What every engagement includes" />
+        <p class="lead">The standard we hold every marketing engagement to.</p>
+      </div>
+      <Tiles items={grow.standards} />
+    </div>
+  </section>
+
+  <section class={`section${bg('related')}`}>
+    <div class="wrap">
+      <div class="section-head">
+        <FallHeading text="Often combined with" />
+        <p class="lead">Each service reports in the same measure, so they work best together.</p>
+      </div>
+      <div class="svc-grid related stagger reveal">
+        {related.map((r) => (
+          <article class="svc-card">
+            <div class="svc-icon"><Fragment set:html={icon(r.icon)} /></div>
+            <h3><a class="svc-link" href={r.href}>{r.name}</a></h3>
+            <p>{r.short}</p>
+            <span class="svc-view" aria-hidden="true">View <Arrow /></span>
+          </article>
+        ))}
+        <article class="svc-card">
+          <div class="svc-icon"><Fragment set:html={icon('gauge')} /></div>
+          <h3><a class="svc-link" href="/services/grow">All digital marketing</a></h3>
+          <p>Search, social, video and ads — how the four services work together.</p>
+          <span class="svc-view" aria-hidden="true">View <Arrow /></span>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <Faq faqs={s.faqs} heading={`${s.name} questions`} tint={bg('faq') !== ''} />
+
+  <CtaStrip
+    heading={ctaHeading}
+    body="Tell us about the business and where your customers come from today. We will recommend what would bring you more of them, and send a written proposal."
+    primary={cta}
+  />
+</Base>
