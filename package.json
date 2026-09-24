@@ -1,0 +1,17 @@
+{
+  "name": "ninetechsystem",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "prebuild": "node scripts/generate-brand-assets.mjs",
+    "build": "astro build && node scripts/postbuild.mjs",
+    "dev": "astro dev",
+    "preview": "astro preview"
+  },
+  "devDependencies": {
+    "astro": "^5.15.0",
+    "sharp": "^0.34.4",
+    "svgo": "^4.1.0"
+  }
+}

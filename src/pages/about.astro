@@ -1,0 +1,139 @@
+---
+import Base from '../layouts/Base.astro';
+import Slot from '../components/Slot.astro';
+import { site, people, commitments, steps } from '../data/site.js';
+
+const schema = [
+  ...people.map((p) => ({
+    '@type': 'Person',
+    name: p.name,
+    jobTitle: p.title,
+    worksFor: { '@id': `${site.url}/#organization` },
+  })),
+  {
+    '@type': 'AboutPage',
+    '@id': `${site.url}/about#page`,
+    url: `${site.url}/about`,
+    name: 'About Nine Technology',
+    about: { '@id': `${site.url}/#organization` },
+  },
+  {
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: site.url },
+      { '@type': 'ListItem', position: 2, name: 'About', item: `${site.url}/about` },
+    ],
+  },
+];
+---
+
+<Base
+  title="About Nine Technology — IT Company in Lazimpat, Kathmandu"
+  description="Nine Technology is an IT company on Lazimpat Road, Kathmandu, founded in 2026. Meet the two directors and see how we scope, build and support every project."
+  path="/about"
+  schema={schema}
+>
+  <section class="page-head">
+    <div class="wrap">
+      <h1>An IT company in Lazimpat, built to stay</h1>
+      <p class="lead">Nine Technology builds websites, software and AI automation for businesses in Kathmandu, and then keeps them running. We were founded in 2026 because most businesses here are still running on paper and WhatsApp, and the companies that built their websites stopped answering the phone.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap split">
+      <div class="split-head">
+        <h2>Why “Nine”</h2>
+      </div>
+      <div class="nava">
+        <div class="nine" aria-hidden="true">
+          <span></span><span></span><span></span>
+          <span></span><span></span><span></span>
+          <span></span><span></span><span></span>
+        </div>
+        <div class="prose">
+          <p>In Sanskrit, <i lang="sa">nava</i> means both <i>nine</i> and <i>new</i>. Nine is completion — the last number before a new cycle begins.</p>
+          <p>In Nepal it is Navadurga, and the nine nights of Dashain. Rooted in the old, built for the new, and finished properly.</p>
+          <p>That is also why the full stop in our logo is a solid square. A job is either finished or it is not.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-tint">
+    <div class="wrap split">
+      <div class="split-head">
+        <h2>How we work</h2>
+        <p>Five steps, in this order, on every project. Open any one to see what it involves.</p>
+      </div>
+      <div class="accordion">
+        {steps.map((step, i) => (
+          <details class="acc" open={i === 0}>
+            <summary>
+              <span class="acc-num" aria-hidden="true">{i + 1}</span>
+              <span class="acc-title">{step.title}</span>
+              <svg class="acc-chev" width="14" height="9" viewBox="0 0 14 9" fill="none" aria-hidden="true" focusable="false">
+                <path d="M1 1.5L7 7.5L13 1.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </summary>
+            <p>{step.body}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap split">
+      <div class="split-head">
+        <h2>What we commit to</h2>
+        <p>These four are in every contract we write, not just on this page.</p>
+      </div>
+      <div class="commitments one-col">
+        {commitments.map((c) => (
+          <div class="commitment">
+            <h3>{c.title}</h3>
+            <p>{c.body}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-tint">
+    <div class="wrap split">
+      <div class="split-head">
+        <h2>The people</h2>
+        <p>Two directors. You will deal with one of them directly, not an account manager.</p>
+      </div>
+      <div class="people">
+        {people.map((p) => (
+          <div class="person">
+            <Slot name={p.slot} alt={`${p.name}, ${p.title} at Nine Technology`} ratio="1-1" sizes="200px" />
+            <h3>{p.name}</h3>
+            <p class="title">{p.title}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap split">
+      <div class="split-head">
+        <h2>The company</h2>
+      </div>
+      <div class="prose">
+        <p>{site.legalName}</p>
+        <p>{site.address.display}</p>
+        <p>Founded {site.founded}</p>
+        <Slot name="office-exterior" alt="The Nine Technology office on Lazimpat Road, Kathmandu" ratio="3-2" class="section-body" sizes="(min-width: 900px) 640px, 100vw" />
+        <Slot name="office-interior" alt="Inside the Nine Technology office" ratio="3-2" class="section-body" sizes="(min-width: 900px) 640px, 100vw" />
+        <div class="btn-row section-body">
+          <a class="btn btn-primary" href="/contact">Get a quote</a>
+          <a class="btn btn-secondary" href={site.whatsapp} rel="noopener">Message us on WhatsApp</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>

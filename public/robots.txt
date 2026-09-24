@@ -1,0 +1,45 @@
+# Nine Technology Pvt. Ltd. — https://ninetechsystem.com
+# Everything here is public and meant to be read, by people and by machines.
+
+User-agent: *
+Allow: /
+
+# AI search and answer engines are allowed on purpose: people now ask these
+# tools to recommend a company, and we would like to be one of the answers.
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+Sitemap: https://ninetechsystem.com/sitemap.xml

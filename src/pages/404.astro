@@ -1,0 +1,49 @@
+---
+import Base from '../layouts/Base.astro';
+import { site, nav } from '../data/site.js';
+---
+
+<Base
+  title="Page not found — Nine Technology"
+  description="That page does not exist. Here is everything on the site, and how to reach us."
+  path="/404"
+  noindex={true}
+>
+  <section class="page-head">
+    <div class="wrap">
+      <h1>That page does not exist</h1>
+      <p class="lead">The link was probably mistyped, or it pointed at something we have since moved. Everything on the site is listed below.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap split">
+      <div class="split-head">
+        <h2>Where to go</h2>
+        <p>Five pages, that is the whole site.</p>
+      </div>
+      <div>
+        <div class="overview">
+          {nav.map((item) => (
+            <div class="overview-row">
+              <h3><a class="link" href={item.href}>{item.label}</a></h3>
+            </div>
+          ))}
+        </div>
+        <p class="section-body">Looking for what we do? It is all on <a class="link" href="/services">the services page</a>.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-navy on-navy">
+    <div class="wrap">
+      <h2>Or just ask us</h2>
+      <p class="lead">Tell us what you were looking for and we will point you at it. {site.replyPromise}</p>
+      <div class="strip-actions">
+        <a class="btn btn-primary" href="/contact">Get a quote</a>
+        <a class="btn btn-secondary" href={site.whatsapp} rel="noopener">Message us on WhatsApp</a>
+      </div>
+      <p class="strip-detail"><a href={site.phoneHref}>{site.phoneDisplay}</a></p>
+    </div>
+  </section>
+</Base>

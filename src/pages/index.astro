@@ -1,0 +1,160 @@
+---
+import Base from '../layouts/Base.astro';
+import { site, groups, commitments, industries, email } from '../data/site.js';
+import { projects } from '../data/projects.js';
+
+const schema = [
+  {
+    '@type': 'WebSite',
+    '@id': `${site.url}/#website`,
+    url: site.url,
+    name: site.name,
+    publisher: { '@id': `${site.url}/#organization` },
+    inLanguage: 'en',
+  },
+];
+---
+
+<Base
+  title="Nine Technology — Websites, Software & AI Automation in Kathmandu"
+  description="We build websites, online stores, business software and AI automation for businesses in Kathmandu. Prices in writing, 30 days support, one team."
+  path="/"
+  preloadDisplay={true}
+  schema={schema}
+>
+  <section class="hero on-navy">
+    <div class="wrap hero-seq">
+      <p class="display">Your ambition,<br />our engineering<span class="stop" aria-hidden="true"></span><span class="sr-only">.</span></p>
+      <h1>Websites, software and AI automation for businesses in Kathmandu.</h1>
+      <div class="btn-row">
+        <a class="btn btn-primary" href="/contact">Get a quote</a>
+        <a class="btn btn-secondary" href={site.whatsapp} rel="noopener">Message us on WhatsApp</a>
+      </div>
+      <p class="hero-note">{site.replyPromise}</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <h2>For businesses still running on paper, Excel and WhatsApp</h2>
+        <p class="lead">Most companies here build you a website and disappear. We build it, market it, and automate the work behind it — one team, one invoice, and we are still there after launch.</p>
+      </div>
+      <ul class="problem-list stagger reveal">
+        <li>Enquiries arrive at 9pm. Nobody answers them until morning.</li>
+        <li>Orders live in a notebook, and the notebook goes home with one person.</li>
+        <li>The monthly report gets typed by hand, out of three different files.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section section-tint">
+    <div class="wrap">
+      <div class="reveal">
+        <h2 class="bundle-head">Build it<span class="stop" aria-hidden="true"></span><span class="sr-only">.</span> Grow it<span class="stop" aria-hidden="true"></span><span class="sr-only">.</span> Automate it<span class="stop" aria-hidden="true"></span><span class="sr-only">.</span></h2>
+        <p class="lead">Three parts, one team, one invoice. Take all three or take one.</p>
+      </div>
+      <div class="bundle-grid stagger reveal">
+        <div class="bundle-part">
+          <h3>Build</h3>
+          <p>The website, store or system your business actually needs — and full admin access to it on day one.</p>
+        </div>
+        <div class="bundle-part">
+          <h3>Grow</h3>
+          <p>Search, social, video and ads that bring customers to it. Reported in enquiries, not likes.</p>
+        </div>
+        <div class="bundle-part">
+          <h3>Automate</h3>
+          <p>The replies, orders, reminders and reports your staff do by hand, handled by software instead.</p>
+        </div>
+      </div>
+      <p class="section-body"><a class="link" href="/services">See what is in each part</a></p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <h2>What we do</h2>
+        <p class="lead">Four groups of work. Every one of them is scoped and priced in writing before anything begins.</p>
+      </div>
+      <div class="overview">
+        {groups.map((g) => (
+          <div class="overview-row">
+            <h3><a class="link" href={`/services#${g.id}`}>{g.name}</a></h3>
+            <p>{g.summary}</p>
+          </div>
+        ))}
+      </div>
+      <p class="section-body"><a class="link" href="/services">See all services</a></p>
+    </div>
+  </section>
+
+  <section class="section section-tint">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <h2>Our work</h2>
+      </div>
+      {projects.length === 0 ? (
+        <div class="empty">
+          <h3>We are a new company</h3>
+          <p>Our first projects are being documented here. Message us and we will show you the work directly — screens, links and what each one changed for the business.</p>
+          <div class="btn-row">
+            <a class="btn btn-primary" href={site.whatsapp} rel="noopener">Message us on WhatsApp</a>
+            <a class="btn btn-secondary" href="/work">See the Work page</a>
+          </div>
+        </div>
+      ) : (
+        <p class="section-body"><a class="link" href="/work">See our work</a></p>
+      )}
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <h2>Why Nine</h2>
+        <p class="lead">Four things you can hold us to. They are in every contract we write.</p>
+      </div>
+      <div class="commitments">
+        {commitments.map((c) => (
+          <div class="commitment">
+            <h3>{c.title}</h3>
+            <p>{c.body}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-tint">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <h2>Who we work with</h2>
+        <p class="lead">Businesses with real customers and too much manual work.</p>
+      </div>
+      <ul class="industries">
+        {industries.map((name) => (
+          <li>{name}<span class="sep">.</span> </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section section-navy on-navy">
+    <div class="wrap">
+      <h2>Tell us what you need</h2>
+      <p class="lead">Send a message and we will reply within 2 hours, {site.hoursShort}. No charge for a scoping call, and no obligation after it.</p>
+      <div class="strip-actions">
+        <a class="btn btn-primary" href="/contact">Get a quote</a>
+        <a class="btn btn-secondary" href={site.whatsapp} rel="noopener">Message us on WhatsApp</a>
+      </div>
+      <p class="strip-detail">
+        <a href={site.phoneHref}>{site.phoneDisplay}</a><br />
+        <a href="/contact" data-mail={`${site.emailUser}|${site.emailDomain}`}>{site.emailUser} [at] {site.emailDomain}</a><br />
+        {site.address.display}<br />
+        {site.hours}
+      </p>
+    </div>
+  </section>
+</Base>

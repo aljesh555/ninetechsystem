@@ -1,0 +1,16 @@
+Fonts used on ninetechsystem.com
+================================
+
+Poppins — Copyright 2020 The Poppins Project Authors
+  https://github.com/itfoundry/Poppins
+
+Inter — Copyright 2016 The Inter Project Authors
+  https://github.com/rsms/inter
+
+Both are licensed under the SIL Open Font License, Version 1.1,
+which permits commercial use, embedding and subsetting.
+Full licence text: https://openfontlicense.org
+
+The files in this directory are subsets, produced by
+scripts/build-fonts.py. Subsetting is expressly permitted by the OFL.
+

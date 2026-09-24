@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run:*)",
+      "Bash(npm install:*)",
+      "Bash(npx astro:*)",
+      "Bash(node scripts/:*)",
+      "Bash(node -e:*)",
+      "Bash(node --check:*)",
+      "Bash(python3:*)",
+      "Bash(pyftsubset:*)",
+      "Bash(fonttools:*)",
+      "Bash(google-chrome:*)",
+      "Bash(npx lighthouse:*)",
+      "Bash(curl:*)",
+      "Bash(grep:*)",
+      "Bash(sed:*)",
+      "Bash(cat:*)",
+      "Bash(ls:*)",
+      "Bash(pkill -f serve:*)"
+    ]
+  }
+}

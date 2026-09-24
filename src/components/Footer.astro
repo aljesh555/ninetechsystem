@@ -1,0 +1,45 @@
+---
+import { site, nav, email } from '../data/site.js';
+---
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <img class="mark" src="/brand/logo-full-white.svg" alt="Nine Technology" width="735" height="294" loading="lazy" decoding="async" />
+        <p>We build websites, software and AI automation for businesses in Nepal — then we market it, automate it and keep it running.</p>
+        <p class="np" lang="ne">{site.nepaliName}</p>
+      </div>
+
+      <div>
+        <h2>Contact</h2>
+        <ul>
+          <li><a href={site.phoneHref}>{site.phoneDisplay}</a></li>
+          <li><a href={site.whatsapp} rel="noopener">WhatsApp</a></li>
+          <li>
+            <!-- Assembled by the browser, so the address is not a plain scrapable string. -->
+            <a href="/contact" data-mail={`${site.emailUser}|${site.emailDomain}`}>{site.emailUser}<span aria-hidden="true"> [at] </span><span class="sr-only">@</span>{site.emailDomain}</a>
+          </li>
+          <li>{site.address.display}</li>
+          <li>{site.hours}</li>
+        </ul>
+      </div>
+
+      <div>
+        <h2>Pages</h2>
+        <ul>
+          {nav.map((item) => <li><a href={item.href}>{item.label}</a></li>)}
+        </ul>
+        <h2 class="footer-h2-gap">Follow</h2>
+        <ul>
+          {site.social.map((s) => <li><a href={s.url} rel="noopener me">{s.name}</a></li>)}
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>© {site.founded} {site.legalName}</span>
+      <span>{site.tagline}</span>
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,226 @@
+---
+import Base from '../layouts/Base.astro';
+import { Picture } from 'astro:assets';
+import mapImage from '../images/map-lazimpat.png';
+import { site, businessTypes } from '../data/site.js';
+
+const schema = [
+  {
+    '@type': 'ContactPage',
+    '@id': `${site.url}/contact#page`,
+    url: `${site.url}/contact`,
+    name: 'Contact Nine Technology',
+    about: { '@id': `${site.url}/#business` },
+  },
+  {
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: site.url },
+      { '@type': 'ListItem', position: 2, name: 'Contact', item: `${site.url}/contact` },
+    ],
+  },
+];
+---
+
+<Base
+  title="Contact Nine Technology — Lazimpat, Kathmandu"
+  description="Call +977 9843325804, message us on WhatsApp or send the form. Lazimpat Road, Kathmandu. Open Sunday to Friday, 10am to 6pm. We reply within 2 hours."
+  path="/contact"
+  schema={schema}
+>
+  <section class="page-head">
+    <div class="wrap">
+      <h1>Talk to us</h1>
+      <p class="lead">Call, message on WhatsApp, or send the form below. {site.replyPromise} A scoping call is free and there is no obligation afterwards.</p>
+
+      <div class="contact-direct">
+        <a class="contact-big" href={site.phoneHref}>
+          <span class="label">Call us</span>
+          <span class="value">{site.phoneDisplay}</span>
+        </a>
+        <a class="contact-big" href={site.whatsapp} rel="noopener">
+          <span class="label">WhatsApp</span>
+          <span class="value">Message us</span>
+        </a>
+      </div>
+      <p class="np contact-nepali" lang="ne">नेपालीमा कुरा गर्न चाहनुहुन्छ? फोन गर्नुहोस् वा WhatsApp गर्नुहोस्।</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap contact-grid">
+      <div>
+        <h2>Send a message</h2>
+        <p class="lead">Tell us what the business does and what you need. The more specific you are, the more useful our first reply will be.</p>
+
+        <form class="form" id="contact-form" method="post" action="/api/contact" data-phone={site.phoneDisplay} novalidate>
+          <div class="field">
+            <label for="name">Your name</label>
+            <input id="name" name="name" type="text" autocomplete="name" required maxlength="80" />
+          </div>
+
+          <div class="field">
+            <label for="phone">Phone number<span class="hint">So we can call or WhatsApp you back.</span></label>
+            <input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" required maxlength="24" />
+          </div>
+
+          <div class="field">
+            <label for="business">Business type</label>
+            <select id="business" name="business" required>
+              <option value="">Choose one</option>
+              {businessTypes.map((t) => <option value={t}>{t}</option>)}
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="message">What do you need?<span class="hint">A website, an online store, automation, or something you are not sure how to describe yet.</span></label>
+            <textarea id="message" name="message" required minlength="10" maxlength="2000"></textarea>
+          </div>
+
+          <!-- Left empty by people, filled in by bots. -->
+          <div class="hp" aria-hidden="true">
+            <label for="website">Website</label>
+            <input id="website" name="website" type="text" tabindex="-1" autocomplete="off" />
+          </div>
+          <input type="hidden" name="ts" value="" />
+
+          <div class="form-foot">
+            <button class="btn btn-primary" type="submit">Send message</button>
+            <p class="form-status" role="status" aria-live="polite"></p>
+          </div>
+        </form>
+
+        <div class="form-success" id="form-success" hidden>
+          <h3>Message sent</h3>
+          <p>Thank you. We have your message and we will call or WhatsApp you on the number you gave, usually within 2 hours during {site.hoursShort}. If you sent it outside those hours, you will hear from us first thing on the next working day.</p>
+          <p class="section-body">In a hurry? <a class="link" href={site.whatsapp} rel="noopener">Message us on WhatsApp</a> and we will see it sooner.</p>
+        </div>
+      </div>
+
+      <div>
+        <h2>Where we are</h2>
+        <a class="map" href={site.mapLink} rel="noopener" aria-label="Open Nine Technology’s location in Google Maps">
+          <Picture src={mapImage} alt="Map showing Nine Technology on Lazimpat Road, Kathmandu" widths={[400, 800, 1200]} sizes="(min-width: 900px) 520px, 100vw" formats={['avif', 'webp']} loading="lazy" decoding="async" />
+        </a>
+        <p class="slot-caption">Map data © OpenStreetMap contributors. Tap the map to open directions.</p>
+
+        <dl class="detail-list">
+          <div>
+            <dt>Address</dt>
+            <dd>{site.address.display}</dd>
+          </div>
+          <div>
+            <dt>Phone and WhatsApp</dt>
+            <dd><a class="link" href={site.phoneHref}>{site.phoneDisplay}</a></dd>
+          </div>
+          <div>
+            <dt>Email</dt>
+            <dd><a class="link" href="#contact-form" data-mail={`${site.emailUser}|${site.emailDomain}`}>{site.emailUser} [at] {site.emailDomain}</a></dd>
+          </div>
+          <div>
+            <dt>Opening hours</dt>
+            <dd>{site.hours}</dd>
+          </div>
+          <div>
+            <dt>How fast we reply</dt>
+            <dd>{site.replyPromise}</dd>
+          </div>
+          <div>
+            <dt>Areas we serve</dt>
+            <dd>Kathmandu, Lalitpur and Bhaktapur in person, and remote work anywhere in Nepal.</dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <script is:inline>
+    (() => {
+      const form = document.getElementById('contact-form');
+      if (!form) return;
+      const status = form.querySelector('.form-status');
+      const success = document.getElementById('form-success');
+
+      // Bots post instantly; people take longer than three seconds to type.
+      form.elements.ts.value = String(Date.now());
+
+      // Service pages link here with ?need=..., so the message starts written.
+      const need = new URLSearchParams(location.search).get('need');
+      const labels = {
+        website: 'a business website', store: 'an online store',
+        'booking-system': 'a booking or management system',
+        'business-software': 'business software', portfolio: 'a one-page portfolio site',
+        'mobile-app': 'a mobile app', seo: 'search visibility (SEO)',
+        social: 'social media management', video: 'a video shoot',
+        ads: 'paid advertising', 'ai-chat': 'AI chat and enquiry handling',
+        automation: 'workflow automation', 'ai-agents': 'AI agents or internal tools',
+        hosting: 'domain and hosting', maintenance: 'maintenance and updates',
+        'care-plan': 'a monthly care plan',
+      };
+      if (need && labels[need]) {
+        form.elements.message.value = `I am interested in ${labels[need]}. `;
+      }
+
+      const setError = (field, msg) => {
+        const wrap = field.closest('.field');
+        let el = wrap.querySelector('.error');
+        if (!msg) { field.removeAttribute('aria-invalid'); el?.remove(); return false; }
+        field.setAttribute('aria-invalid', 'true');
+        if (!el) {
+          el = document.createElement('span');
+          el.className = 'error';
+          el.id = field.id + '-error';
+          wrap.appendChild(el);
+        }
+        el.textContent = msg;
+        field.setAttribute('aria-describedby', el.id);
+        return true;
+      };
+
+      const check = (field) => {
+        const v = field.value.trim();
+        if (field.name === 'name') return setError(field, v.length < 2 ? 'Please tell us your name.' : '');
+        if (field.name === 'phone') return setError(field, v.replace(/\D/g, '').length < 7 ? 'Please give a phone number we can reach you on.' : '');
+        if (field.name === 'business') return setError(field, v ? '' : 'Please choose the closest match.');
+        if (field.name === 'message') return setError(field, v.length < 10 ? 'A sentence or two is enough.' : '');
+        return false;
+      };
+
+      for (const f of ['name', 'phone', 'business', 'message']) {
+        form.elements[f].addEventListener('blur', () => check(form.elements[f]));
+      }
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        let bad = null;
+        for (const f of ['name', 'phone', 'business', 'message']) {
+          if (check(form.elements[f]) && !bad) bad = form.elements[f];
+        }
+        if (bad) { bad.focus(); status.dataset.state = 'error'; status.textContent = 'Please fix the fields marked above.'; return; }
+
+        const button = form.querySelector('button[type=submit]');
+        button.disabled = true;
+        status.dataset.state = '';
+        status.textContent = 'Sending…';
+
+        try {
+          const res = await fetch(form.action, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+            body: JSON.stringify(Object.fromEntries(new FormData(form))),
+          });
+          const data = await res.json().catch(() => ({}));
+          if (!res.ok || !data.ok) throw new Error(data.error || 'Could not send');
+          form.hidden = true;
+          success.hidden = false;
+          success.setAttribute('tabindex', '-1');
+          success.focus();
+        } catch (err) {
+          button.disabled = false;
+          status.dataset.state = 'error';
+          status.textContent = 'That did not send. Please call or WhatsApp us on ' + form.dataset.phone + ' instead, or try again in a moment.';
+        }
+      });
+    })();
+  </script>
+</Base>

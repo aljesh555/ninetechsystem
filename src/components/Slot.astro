@@ -1,0 +1,50 @@
+---
+/**
+ * A named image slot the founder can fill later.
+ *
+ * Drop a file at src/images/slots/<name>.(jpg|png|webp) and the build produces
+ * AVIF and WebP variants at 400/800/1200/1600w with width and height set.
+ * Until then the slot renders a navy block with the 9 mark — never a broken
+ * image, never a stock photo. See IMAGES.md.
+ */
+import { Picture } from 'astro:assets';
+import nineGlyph from '../../assets/brand/logo-symbol-mono.svg?raw';
+
+const {
+  name,
+  alt,
+  ratio = '3-2',
+  priority = false,
+  sizes = '(min-width: 900px) 50vw, 100vw',
+  caption,
+  class: className = '',
+} = Astro.props;
+
+const files = import.meta.glob('/src/images/slots/*.{jpg,jpeg,png,webp}', {
+  eager: true,
+  import: 'default',
+});
+const found = Object.entries(files).find(([path]) =>
+  path.slice(path.lastIndexOf('/') + 1).replace(/\.[^.]+$/, '') === name,
+);
+---
+
+{found ? (
+  <figure class={`slot ${className}`}>
+    <Picture
+      src={found[1]}
+      formats={['avif', 'webp']}
+      widths={[400, 800, 1200, 1600]}
+      sizes={sizes}
+      alt={alt}
+      loading={priority ? 'eager' : 'lazy'}
+      decoding={priority ? 'sync' : 'async'}
+      fetchpriority={priority ? 'high' : 'auto'}
+    />
+    {caption && <figcaption class="slot-caption">{caption}</figcaption>}
+  </figure>
+) : (
+  <div class={`slot slot-empty ratio-${ratio} ${className}`} role="img" aria-label={alt}>
+    <Fragment set:html={nineGlyph} />
+  </div>
+)}

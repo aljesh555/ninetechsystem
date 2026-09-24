@@ -1,0 +1,72 @@
+---
+import Base from '../layouts/Base.astro';
+import Slot from '../components/Slot.astro';
+import { site } from '../data/site.js';
+import { projects } from '../data/projects.js';
+
+const schema = [
+  {
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: site.url },
+      { '@type': 'ListItem', position: 2, name: 'Work', item: `${site.url}/work` },
+    ],
+  },
+];
+---
+
+<Base
+  title="Our Work — Nine Technology"
+  description="Our first projects are being documented here. Message us and we will show you the work we have built for businesses in Kathmandu directly."
+  path="/work"
+  schema={schema}
+>
+  <section class="page-head">
+    <div class="wrap">
+      <h1>Our work</h1>
+      <p class="lead">We publish a project here once the client has given written permission and we can show a result they would repeat out loud. Until then this page stays honest and short.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      {projects.length === 0 ? (
+        <div class="empty">
+          <h2>We are a new company, founded in 2026</h2>
+          <p>Our first projects are being documented here. Message us and we will show you the work directly — the live sites, the systems behind them, and what each one changed for the business.</p>
+          <p>We do not put invented case studies or other companies’ screenshots on this page.</p>
+          <div class="btn-row">
+            <a class="btn btn-primary" href={site.whatsapp} rel="noopener">Message us on WhatsApp</a>
+            <a class="btn btn-secondary" href="/contact">Get a quote</a>
+          </div>
+        </div>
+      ) : (
+        <div class="projects">
+          {projects.map((p) => (
+            <article class="project">
+              <Slot name={p.image} alt={`${p.what} — ${p.client}`} ratio="3-2" sizes="(min-width: 760px) 33vw, 100vw" />
+              <h3>{p.client}</h3>
+              <p>{p.what}</p>
+              <p><strong>{p.outcome}</strong></p>
+            </article>
+          ))}
+        </div>
+      )}
+    </div>
+  </section>
+
+  <section class="section section-tint">
+    <div class="wrap split">
+      <div class="split-head">
+        <h2>What we would show you</h2>
+        <p>Ask and we will walk you through it on a call or in person.</p>
+      </div>
+      <div class="prose">
+        <p>The live site or system, opened on a phone, so you can see how fast it loads on mobile data.</p>
+        <p>The admin side — the part you would actually use every day to change prices, add products or answer enquiries.</p>
+        <p>What it cost, how long it took, and what changed for the business afterwards.</p>
+        <p class="section-body"><a class="link" href="/services">See what we do</a></p>
+      </div>
+    </div>
+  </section>
+</Base>

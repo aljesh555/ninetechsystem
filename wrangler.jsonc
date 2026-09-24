@@ -1,0 +1,7 @@
+{
+  // Cloudflare Pages project config. Present mainly so Wrangler stops walking
+  // up the directory tree and finding an unrelated wrangler.toml.
+  "name": "ninetechsystem",
+  "pages_build_output_dir": "dist",
+  "compatibility_date": "2026-09-01"
+}
