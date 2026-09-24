@@ -1,0 +1,13 @@
+---
+/** A numbered process, left to right on wide screens. A real sequence. */
+const { steps } = Astro.props;
+---
+<ol class="flow">
+  {steps.map((s, i) => (
+    <li>
+      <span class="flow-num" aria-hidden="true">{i + 1}</span>
+      <h3>{s.name}</h3>
+      <p>{s.body}</p>
+    </li>
+  ))}
+</ol>

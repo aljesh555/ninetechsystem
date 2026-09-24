@@ -744,3 +744,20 @@ h1 + .lead, h2 + .lead { margin-top: var(--s3); }
   .svc-card:hover .svc-icon svg, .svc-card:focus-within .svc-icon svg { transform: none; }
   .svc-card:hover .svc-icon::after, .svc-card:focus-within .svc-icon::after { transform: none; opacity: 0.1; }
 }
+
+/* Tiles: short titled items in a grid (systems, integrations, pillars). */
+.tiles { display: grid; gap: var(--s4); margin-top: var(--s5); }
+@media (min-width: 640px) { .tiles { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 960px) { .tiles-3 { grid-template-columns: repeat(3, 1fr); } }
+.tiles li { padding: var(--s4); background: var(--white); border: 1px solid var(--rule); border-radius: var(--radius); border-top: 2px solid var(--navy); }
+.tiles h3 { font-size: 1.125rem; }
+.tiles p { margin-top: var(--s1); color: var(--grey); font-size: 0.9875rem; }
+
+/* Flow: a numbered process, in a row on wide screens. */
+.flow { display: grid; gap: var(--s4); margin-top: var(--s5); }
+@media (min-width: 760px) { .flow { grid-template-columns: repeat(auto-fit, minmax(0, 1fr)); } }
+.flow li { position: relative; padding-top: var(--s5); border-top: 2px solid var(--navy); }
+.flow-num { position: absolute; top: var(--s2); left: 0; font-family: var(--display); font-weight: 600; color: var(--grey); }
+.flow li:last-child { border-top-color: var(--amber); }
+.flow h3 { font-size: 1.125rem; }
+.flow p { margin-top: var(--s1); color: var(--grey); font-size: 0.9875rem; }

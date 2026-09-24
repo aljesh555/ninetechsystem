@@ -474,6 +474,26 @@ the footer now inlines the same generated `logo-full-white.svg` lockup the heade
 system uses (the stray copy in `public/brand/` was deleted). The footer email bug
 in §0 had already been fixed.
 
+### Software and App: prices taken off (founder's instruction)
+
+The spec's "from NPR 2,00,000" (software) and "from NPR 5,00,000" (apps) were
+removed everywhere — pages, hub cards, FAQ answers, JSON-LD `Offer`s and
+`llms.txt`. Both pages were restructured on the model of bitmicrosys.com/software
+and /apps, which explain the work instead of pricing it:
+
+- **Software:** what we build · systems we build most often · integrations and
+  payments · how it is engineered (security, performance, maintainability) · why
+  custom · what you get · hosting and running it · how we deliver (4 stages) ·
+  how we quote it · 8 FAQs.
+- **App:** what we build · the honest PWA-first section · where apps usually go
+  wrong · payments and subscriptions (local wallets for physical goods, store
+  billing for digital) · built for Nepali phones and networks · how we release
+  (4 stages) · what you get · common add-ons · how we quote it · 7 FAQs.
+
+The references also list a technology stack. That was left out on purpose: the
+stack is not recorded anywhere in this project, and the site's rules keep the
+internal tool stack off the public site.
+
 ## Two bugs found after the first deploy
 
 **Unknown URLs returned the home page with HTTP 200.** Cloudflare Pages falls

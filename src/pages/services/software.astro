@@ -2,9 +2,12 @@
 import Base from '../../layouts/Base.astro';
 import Breadcrumb from '../../components/services/Breadcrumb.astro';
 import QuickAnswer from '../../components/services/QuickAnswer.astro';
+import Tiles from '../../components/services/Tiles.astro';
+import Flow from '../../components/services/Flow.astro';
 import Faq from '../../components/services/Faq.astro';
 import CtaStrip from '../../components/services/CtaStrip.astro';
-import { software, howWeWork, npr, contactHref, VAT_NOTE } from '../../data/services.js';
+import { site } from '../../data/site.js';
+import { software, contactHref } from '../../data/services.js';
 import { breadcrumbList, faqPage, service } from '../../lib/schema.js';
 
 const path = '/services/software';
@@ -13,14 +16,13 @@ const crumbs = [
   { name: 'Services', path: '/services' },
   { name: 'Software', path },
 ];
-const from = npr(software.price.from);
+const scoping = { label: 'Book a free scoping call', href: contactHref('software') };
 
 const schema = [
   service({
     name: 'Custom software development',
     description: 'Custom business software built around how your business works: billing, inventory, CRM, portals and dashboards.',
     path,
-    price: software.price,
     serviceType: 'Custom software development',
   }),
   faqPage(path, software.faqs),
@@ -30,7 +32,7 @@ const schema = [
 
 <Base
   title="Custom Software Development in Kathmandu — Nine Technology"
-  description={`Custom software in Nepal: billing, inventory, CRM, portals and dashboards, built around how you work. From NPR ${from}, priced in writing.`}
+  description="Custom business software in Nepal: billing, inventory, CRM, portals and dashboards, built around how you work and scoped in writing after a free call."
   path={path}
   schema={schema}
 >
@@ -39,11 +41,12 @@ const schema = [
       <Breadcrumb crumbs={crumbs} />
       <h1>Custom software development in Kathmandu</h1>
       <QuickAnswer>
-        Nine Technology builds custom business software in Nepal — billing, inventory, CRM, portals and dashboards — around how your business actually works. Projects start from NPR {from} and are scoped and priced in writing after a free call.
+        Nine Technology builds custom business software in Nepal — billing, inventory, CRM, portals and dashboards — around how your business actually works. Every system is scoped and priced in writing after a free call, and handed over in your name.
       </QuickAnswer>
       <p class="lead">Custom software built around how your business actually works — replacing Excel files, WhatsApp threads and paper registers with one system your team can rely on.</p>
       <div class="btn-row section-body">
-        <a class="btn btn-primary" href={contactHref('software')}>Book a free scoping call</a>
+        <a class="btn btn-primary" href={scoping.href}>{scoping.label}</a>
+        <a class="btn btn-secondary" href={site.whatsapp} rel="noopener">Message us on WhatsApp</a>
       </div>
     </div>
   </section>
@@ -51,35 +54,56 @@ const schema = [
   <section class="section">
     <div class="wrap split">
       <div class="split-head">
-        <h2>Systems we build most often</h2>
-        <p>Software should remove operational friction. We focus on clarity, roles, predictable data, and a baseline that is easy to maintain.</p>
+        <h2>What we build</h2>
+        <p>The systems businesses in Kathmandu ask us for most.</p>
       </div>
-      <div>
-        <dl class="systems">
-          {software.systems.map((s) => (
-            <div>
-              <dt>{s.name}</dt>
-              <dd>{s.body}</dd>
-            </div>
-          ))}
-        </dl>
-        <p class="price-movers">Common uses: billing, inventory, POS, CRM, school and clinic management, HR, cooperative systems, and booking.</p>
-      </div>
+      <ul class="checks">{software.typicalBuilds.map((b) => <li>{b}</li>)}</ul>
     </div>
   </section>
 
   <section class="section section-tint">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Systems we build most often</h2>
+        <p class="lead">Software should remove operational friction. We focus on clarity, roles, predictable data, and a baseline that is easy to maintain.</p>
+      </div>
+      <Tiles items={software.systems} />
+      <p class="price-movers section-body">Common uses: billing, inventory, POS, CRM, school and clinic management, HR, cooperative systems, and booking.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Integrations and payments</h2>
+        <p class="lead">{software.integrationsIntro}</p>
+      </div>
+      <Tiles items={software.integrations} cols={2} />
+    </div>
+  </section>
+
+  <section class="section section-tint">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>How it is engineered</h2>
+        <p class="lead">Three things we do not trade away to finish faster.</p>
+      </div>
+      <Tiles items={software.pillars} />
+    </div>
+  </section>
+
+  <section class="section">
     <div class="wrap split">
       <div class="split-head">
         <h2>Why custom, not off-the-shelf</h2>
       </div>
       <div class="prose">
-        <p>Ready-made software makes you change how you work to fit it. Custom software fits how you already work. You own it, we build only what you need, and it grows with you.</p>
+        <p class="offer-intro">Ready-made software makes you change how you work to fit it. Custom software fits how you already work. You own it, we build only what you need, and it grows with you.</p>
       </div>
     </div>
   </section>
 
-  <section class="section">
+  <section class="section section-tint">
     <div class="wrap split">
       <div class="split-head">
         <h2>What you get</h2>
@@ -88,30 +112,36 @@ const schema = [
     </div>
   </section>
 
-  <section class="section section-tint">
+  <section class="section">
     <div class="wrap split">
       <div class="split-head">
-        <h2>How we work</h2>
-        <p>Five steps, in this order.</p>
+        <h2>Hosting and running it</h2>
+        <p>Software has to keep working after launch day.</p>
       </div>
-      <ol class="steps-list">
-        {howWeWork.map((s) => <li><strong>{s.title}</strong> — {s.body}</li>)}
-      </ol>
+      <ul class="plain-list">{software.operations.map((o) => <li>{o}</li>)}</ul>
+    </div>
+  </section>
+
+  <section class="section section-tint">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>How we deliver it</h2>
+        <p class="lead">Four stages, in this order, with your approval at each one.</p>
+      </div>
+      <Flow steps={software.delivery} />
     </div>
   </section>
 
   <section class="section">
     <div class="wrap split">
       <div class="split-head">
-        <h2>Price</h2>
-        <p class="offer-price">From NPR {from}</p>
+        <h2>How we quote it</h2>
       </div>
       <div>
-        <p class="offer-intro">Quoted per project after a free scoping call. Most custom software starts from NPR {from}.</p>
+        <p class="offer-intro">{software.quote}</p>
         <h3 class="h4 section-body">What moves the price</h3>
         <ul class="plain-list">{software.priceMovers.map((m) => <li>{m}</li>)}</ul>
-        <p class="vat-note">{VAT_NOTE}</p>
-        <a class="btn btn-primary section-body" href={contactHref('software')}>Book a free scoping call</a>
+        <a class="btn btn-primary section-body" href={scoping.href}>{scoping.label}</a>
       </div>
     </div>
   </section>
@@ -119,8 +149,8 @@ const schema = [
   <Faq faqs={software.faqs} heading="Software questions" />
 
   <CtaStrip
-    heading="Tell us where the work piles up"
-    body="Which files, registers or WhatsApp threads your team spends the day in. We will tell you what a system would replace, and what it would cost."
-    primary={{ label: 'Book a free scoping call', href: contactHref('software') }}
+    heading="Tell us about the system you need"
+    body="Which files, registers or WhatsApp threads your team spends the day in. We will tell you what a system would replace, and what it would cost, in writing."
+    primary={scoping}
   />
 </Base>

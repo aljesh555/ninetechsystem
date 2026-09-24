@@ -57,7 +57,8 @@ export const services = {
   software: {
     name: 'Software',
     short: 'Custom systems that replace the Excel files and paper registers — portals, dashboards, automation, integrations.',
-    price: { from: 200000 },
+    price: null,
+    priceNote: 'Quoted',
     href: '/services/software',
     icon: 'software',
   },
@@ -345,11 +346,20 @@ export const website = {
 };
 
 /* --------------------------------------------------------------------------
-   /services/software
+   /services/software  — no published price: every system is quoted.
    -------------------------------------------------------------------------- */
 
 export const software = {
-  price: { from: 200000 },
+  typicalBuilds: [
+    'Admin dashboards and back offices',
+    'Customer and partner portals',
+    'Billing, inventory and POS systems',
+    'School, clinic and cooperative management systems',
+    'Booking and scheduling systems',
+    'Payment and invoicing workflows',
+    'APIs that connect your systems to each other',
+    'Reports and exports that replace spreadsheet work',
+  ],
   systems: [
     { name: 'Portals', body: 'Customer or partner portals with role-based access.' },
     { name: 'Dashboards', body: 'Operational views for sales, support, inventory, or admissions.' },
@@ -357,6 +367,31 @@ export const software = {
     { name: 'Integrations', body: 'Payments, email, CRM, spreadsheets, and external APIs.' },
     { name: 'Data systems', body: 'Search, filtering, exports, and clean admin UX.' },
     { name: 'Reliability upgrades', body: 'Refactors, caching, indexing, and performance fixes.' },
+  ],
+  integrationsIntro: 'Business software is only as useful as what it connects to. We wire it to the providers you already use and test every connection end to end before launch.',
+  integrations: [
+    { name: 'Payments', body: 'eSewa, Khalti, Fonepay and bank transfers, with payment status updated automatically and a record of every transaction.' },
+    { name: 'SMS, WhatsApp and email', body: 'Confirmations, reminders and alerts sent by the system, not typed out by your staff.' },
+    { name: 'Spreadsheets and existing tools', body: 'Import from and export to Excel and Google Sheets, so nothing your team relies on today is thrown away.' },
+    { name: 'APIs and webhooks', body: 'Connections to couriers, accounting and other services, with a log of what was sent and received.' },
+  ],
+  pillars: [
+    { name: 'Security', body: 'Each person sees only what their role allows. Every connection is encrypted, and important changes are logged with who made them.' },
+    { name: 'Performance', body: 'Fast on ordinary office computers and phones, with the database organised for the reports you actually run.' },
+    { name: 'Maintainability', body: 'Clean, documented code and written handover notes, so any capable developer can work on it later — not only us.' },
+  ],
+  operations: [
+    'Hosting set up and registered in your name',
+    'Automatic backups',
+    'A separate test version, so changes are tried before your team sees them',
+    'Updates and security patches',
+    'Monitoring, so we hear about a problem before your staff do',
+  ],
+  delivery: [
+    { name: 'Scope', body: 'We walk through how the business runs. You get the modules, the price and the timeline in writing.' },
+    { name: 'Design', body: 'Screens and data structure agreed before building, so you can see how it will work.' },
+    { name: 'Build', body: 'In stages. Each part is usable as it is finished, so you try it while it is built.' },
+    { name: 'Harden and hand over', body: 'Tested with your real data, fixed, then handed over in your name with training.' },
   ],
   features: [
     'Roles and permissions that actually hold — each person sees only what they should',
@@ -370,11 +405,12 @@ export const software = {
     '60 days support after launch',
     'Everything in your name',
   ],
+  quote: 'Every system is different, so each one is quoted on its own after a free scoping call. You get a fixed price in writing before any work starts, and it does not change unless you change the scope.',
   priceMovers: ['Modules and features', 'Number of users', 'Integrations', 'Complexity of reports and workflows'],
   faqs: [
     {
       q: 'How much does custom software cost in Nepal?',
-      a: 'Most custom software we build starts from NPR 2,00,000, excluding 13% VAT. The final price depends on the number of modules, the number of users, the integrations it needs and how complex the reports and workflows are. After a free scoping call you get a fixed price in writing.',
+      a: 'It depends on what the system has to do, so we quote each one individually after a free scoping call. The price is set by the number of modules, the number of users, the integrations it needs and how complex the reports and workflows are. You get a fixed price in writing before anything starts.',
     },
     {
       q: 'How long does custom software take?',
@@ -389,8 +425,16 @@ export const software = {
       a: 'Yes, that is the most common reason people come to us. One round of migration from your existing Excel files or records is included, so you start with your real data rather than an empty system.',
     },
     {
-      q: 'Can it grow with my business?',
-      a: 'Yes. The database is designed for where the business is going, not just where it is, so new modules and users can be added later without starting again. Each addition is quoted in writing first.',
+      q: 'Can it connect to eSewa, Khalti and the tools we already use?',
+      a: 'Yes. We connect it to eSewa, Khalti, Fonepay, SMS, WhatsApp, email, Excel and Google Sheets, and to other services through their APIs. Every connection is tested end to end before launch.',
+    },
+    {
+      q: 'Can you fix or take over an existing system?',
+      a: 'Often, yes. We review the code and the data first, then tell you honestly whether it is worth fixing or cheaper to rebuild, with a written price for either.',
+    },
+    {
+      q: 'Is our data safe?',
+      a: 'Each person sees only what their role allows, every connection is encrypted, backups run automatically, and the data is stored on hosting registered in your name.',
     },
     {
       q: 'Do you support it after launch?',
@@ -400,13 +444,40 @@ export const software = {
 };
 
 /* --------------------------------------------------------------------------
-   /services/app
+   /services/app  — no published price: every app is quoted.
    -------------------------------------------------------------------------- */
 
 export const app = {
-  price: { from: 500000 },
   time: '8–16 weeks',
+  whatWeBuild: [
+    { name: 'Customer apps', body: 'Ordering, booking, loyalty and customer accounts.' },
+    { name: 'Staff and field apps', body: 'Orders, deliveries, attendance and stock checks on the move.' },
+    { name: 'Apps that take payment', body: 'eSewa, Khalti and Fonepay, and store billing for subscriptions.' },
+    { name: 'Logins and accounts', body: 'Phone-number sign-in with a one-time code, profiles and roles.' },
+    { name: 'Apps on your existing system', body: 'Connected to the software or website you already run.' },
+    { name: 'An admin dashboard', body: 'Manage content, users and orders without a developer.' },
+  ],
   whenReal: ['Your customers use it daily', 'You need push notifications', 'It must work offline', 'You need in-app payments', "You're building a product, not a brochure"],
+  failPoints: [
+    'Rejected by the App Store or Play Store over missing privacy details or store rules',
+    'Payments and subscriptions set up against the store rules, then blocked',
+    'Slow on a weak connection because every screen waits for the server',
+    'A first screen that asks for too much before showing anything useful',
+  ],
+  payments: 'Physical goods and services — food, bookings, deliveries — can be paid with eSewa, Khalti or Fonepay inside the app. Digital content and subscriptions usually have to use Apple\'s and Google\'s own billing. We set up whichever the store rules require for your app, so it is not rejected at review.',
+  builtForNepal: [
+    'Tested on mid-range Android phones, not only flagships',
+    'Loads what it can while the connection catches up',
+    'Keeps working offline where your app needs it',
+    'Clear type and large tap targets',
+    'Nepali and English interface where you need it',
+  ],
+  release: [
+    { name: 'Plan', body: 'Screens, features and store requirements agreed in writing.' },
+    { name: 'Build', body: 'In stages, with test versions on your own phone as it takes shape.' },
+    { name: 'Test', body: 'On real mid-range phones and weak connections, not only a simulator.' },
+    { name: 'Ship', body: 'Store listings, screenshots and approval handled; crash tracking on from day one.' },
+  ],
   features: [
     'One app, both stores — Android and iPhone',
     'Tested on the phones your customers actually own, not just a flagship',
@@ -417,6 +488,9 @@ export const app = {
     'Crash tracking after launch, so we find problems before your users tell you',
     '60 days support',
   ],
+  addons: ['Admin dashboard', 'Push notification campaigns', 'Content management', 'Sales and usage reports', 'AI chat inside the app', 'Payment integrations', 'Delivery and order tracking', 'Analytics'],
+  quote: 'Every app is quoted on its own after a free call, because two apps that sound alike can need very different amounts of work behind them. You get a fixed price in writing before anything starts. A progressive web app costs far less and ships in weeks.',
+  priceMovers: ['Number of screens and features', 'Android, iPhone or both', 'Whether it needs its own backend and admin dashboard', 'Payments, logins and other integrations'],
   faqs: [
     {
       q: 'Do I need an app or a website?',
@@ -424,15 +498,23 @@ export const app = {
     },
     {
       q: 'How much does an app cost in Nepal?',
-      a: 'Native Android and iPhone apps start from NPR 5,00,000 with us, excluding 13% VAT, and are quoted per project after a free call. A progressive web app costs far less, and for many businesses it does the same job.',
+      a: 'It depends on the number of screens and features, whether it is for Android, iPhone or both, and whether it needs its own backend and admin dashboard. We quote each app after a free call, with a fixed price in writing. A progressive web app costs far less, and for many businesses it does the same job.',
     },
     {
       q: 'How long does an app take?',
-      a: 'A native app takes 8 to 16 weeks, depending on the features. A progressive web app usually ships in a few weeks.',
+      a: 'A native app usually takes 8 to 16 weeks, depending on the features. A progressive web app usually ships in a few weeks.',
     },
     {
       q: 'Will it work on cheap phones?',
       a: 'Yes. We test on the mid-range Android phones your customers actually own, not just a flagship, and build it to keep working on a weak connection.',
+    },
+    {
+      q: 'Can the app take eSewa and Khalti payments?',
+      a: 'Yes, for physical goods and services such as food, bookings and deliveries. Digital content and subscriptions usually have to go through Apple\'s and Google\'s own billing; we set up whichever the store rules require.',
+    },
+    {
+      q: 'Can the app be in Nepali?',
+      a: 'Yes. The app can have a Nepali interface, an English one, or both with a switch. Tell us on the first call so it is part of the scope.',
     },
     {
       q: 'Do you handle the Play Store and App Store?',

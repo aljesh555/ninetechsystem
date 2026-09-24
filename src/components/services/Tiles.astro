@@ -1,0 +1,12 @@
+---
+/** A grid of short titled items: systems, integrations, pillars. */
+const { items, cols = 3 } = Astro.props;
+---
+<ul class={`tiles tiles-${cols}`}>
+  {items.map((t) => (
+    <li>
+      <h3>{t.name}</h3>
+      <p>{t.body}</p>
+    </li>
+  ))}
+</ul>

@@ -2,9 +2,12 @@
 import Base from '../../layouts/Base.astro';
 import Breadcrumb from '../../components/services/Breadcrumb.astro';
 import QuickAnswer from '../../components/services/QuickAnswer.astro';
+import Tiles from '../../components/services/Tiles.astro';
+import Flow from '../../components/services/Flow.astro';
 import Faq from '../../components/services/Faq.astro';
 import CtaStrip from '../../components/services/CtaStrip.astro';
-import { app, npr, contactHref, VAT_NOTE } from '../../data/services.js';
+import { site } from '../../data/site.js';
+import { app, contactHref } from '../../data/services.js';
 import { breadcrumbList, faqPage, service } from '../../lib/schema.js';
 
 const path = '/services/app';
@@ -13,14 +16,13 @@ const crumbs = [
   { name: 'Services', path: '/services' },
   { name: 'App', path },
 ];
-const from = npr(app.price.from);
+const ask = { label: 'Ask about an app', href: contactHref('mobile-app') };
 
 const schema = [
   service({
     name: 'Mobile app development',
     description: 'Android and iPhone apps for businesses in Nepal, built to feel fast on mid-range phones and weak connections.',
     path,
-    price: app.price,
     serviceType: 'Mobile app development',
   }),
   faqPage(path, app.faqs),
@@ -30,7 +32,7 @@ const schema = [
 
 <Base
   title="Mobile App Development in Kathmandu — Nine Technology"
-  description={`Android and iPhone apps for businesses in Nepal, fast on mid-range phones. Native apps from NPR ${from}; we tell you when a web app will do instead.`}
+  description="Android and iPhone apps for businesses in Nepal, fast on mid-range phones and weak connections. We tell you honestly when a web app will do instead."
   path={path}
   schema={schema}
 >
@@ -39,9 +41,23 @@ const schema = [
       <Breadcrumb crumbs={crumbs} />
       <h1>Mobile app development in Kathmandu</h1>
       <QuickAnswer>
-        Nine Technology builds Android and iPhone apps for businesses in Nepal, built to feel fast on mid-range phones and weak connections. Native apps start from NPR {from}; we'll tell you honestly when a progressive web app does the job for far less.
+        Nine Technology builds Android and iPhone apps for businesses in Nepal, built to feel fast on mid-range phones and weak connections. Every app is quoted after a free call — and we'll tell you honestly when a progressive web app does the job for far less.
       </QuickAnswer>
       <p class="lead">Android and iPhone apps, built to feel fast on the mid-range phones your customers actually own — and to keep working when the connection doesn't.</p>
+      <div class="btn-row section-body">
+        <a class="btn btn-primary" href={ask.href}>{ask.label}</a>
+        <a class="btn btn-secondary" href={site.whatsapp} rel="noopener">Message us on WhatsApp</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>What we build</h2>
+        <p class="lead">One app for both stores, and the dashboard behind it.</p>
+      </div>
+      <Tiles items={app.whatWeBuild} />
     </div>
   </section>
 
@@ -61,6 +77,46 @@ const schema = [
   <section class="section">
     <div class="wrap split">
       <div class="split-head">
+        <h2>Where apps usually go wrong</h2>
+        <p>We plan for all four before we build, not after launch.</p>
+      </div>
+      <ul class="plain-list">{app.failPoints.map((f) => <li>{f}</li>)}</ul>
+    </div>
+  </section>
+
+  <section class="section section-tint">
+    <div class="wrap split">
+      <div class="split-head">
+        <h2>Payments and subscriptions</h2>
+      </div>
+      <div class="prose">
+        <p class="offer-intro">{app.payments}</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap split">
+      <div class="split-head">
+        <h2>Built for the phones and networks in Nepal</h2>
+      </div>
+      <ul class="checks">{app.builtForNepal.map((b) => <li>{b}</li>)}</ul>
+    </div>
+  </section>
+
+  <section class="section section-tint">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>How we release it</h2>
+        <p class="lead">Four stages, from plan to the store. A native app usually takes {app.time}.</p>
+      </div>
+      <Flow steps={app.release} />
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap split">
+      <div class="split-head">
         <h2>What you get with a native app</h2>
       </div>
       <ul class="checks">{app.features.map((f) => <li>{f}</li>)}</ul>
@@ -70,14 +126,23 @@ const schema = [
   <section class="section section-tint">
     <div class="wrap split">
       <div class="split-head">
-        <h2>Price</h2>
-        <p class="offer-price">From NPR {from}</p>
-        <p class="offer-time">{app.time}</p>
+        <h2>Common add-ons</h2>
+        <p>Added when your app needs them, and quoted with it.</p>
+      </div>
+      <ul class="checks">{app.addons.map((a) => <li>{a}</li>)}</ul>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap split">
+      <div class="split-head">
+        <h2>How we quote it</h2>
       </div>
       <div>
-        <p class="offer-intro">Quoted per project after a free call. Native apps start from NPR {from} and take {app.time}. A progressive web app costs far less and ships in weeks.</p>
-        <p class="vat-note">{VAT_NOTE}</p>
-        <a class="btn btn-primary section-body" href={contactHref('mobile-app')}>Ask about an app</a>
+        <p class="offer-intro">{app.quote}</p>
+        <h3 class="h4 section-body">What moves the price</h3>
+        <ul class="plain-list">{app.priceMovers.map((m) => <li>{m}</li>)}</ul>
+        <a class="btn btn-primary section-body" href={ask.href}>{ask.label}</a>
       </div>
     </div>
   </section>
@@ -85,8 +150,8 @@ const schema = [
   <Faq faqs={app.faqs} heading="App questions" />
 
   <CtaStrip
-    heading="Not sure if you need an app?"
+    heading="Ready to plan your app?"
     body="Tell us what your customers would use it for. If a web app does the job, we will say so — before you spend on the expensive option."
-    primary={{ label: 'Ask about an app', href: contactHref('mobile-app') }}
+    primary={ask}
   />
 </Base>

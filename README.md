@@ -113,8 +113,8 @@ contact form's Service list, the JSON-LD and `llms.txt` all read from it.
 ### Worth knowing
 
 - **Prices are published where the scope is standard** (websites, Grow, Automate
-  set-up fees, Support). Custom software, apps, booking systems and AI agents
-  show a "from" figure or "Quoted". All prices exclude 13% VAT and are the
+  set-up fees, Support). **Software, apps, booking systems and AI agents show no
+  price** — they are quoted after a free call, at the founder's instruction. All prices exclude 13% VAT and are the
   founder's working figures as of September 2026.
 - **Everything factual lives in one place:** `src/data/site.js`. Change a phone
   number or a timeline there and it updates the page, the structured data and
