@@ -30,7 +30,7 @@ const organization = {
   contactPoint: {
     '@type': 'ContactPoint',
     telephone: site.phoneDisplay,
-    email: `${site.emailUser}@${site.emailDomain}`,
+    email: site.email,
     contactType: 'sales',
     areaServed: 'NP',
     availableLanguage: ['en', 'ne'],
@@ -46,7 +46,7 @@ const localBusiness = {
   url: site.url,
   image: ogImage,
   telephone: site.phoneDisplay,
-  email: `${site.emailUser}@${site.emailDomain}`,
+  email: site.email,
   priceRange: 'NPR',
   currenciesAccepted: 'NPR',
   slogan: site.tagline,
@@ -140,13 +140,6 @@ const graph = { '@context': 'https://schema.org', '@graph': [organization, local
           toggle.setAttribute('aria-expanded', String(open));
           toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
         });
-
-        // Upgrade the obfuscated address to a real mailto only in a browser.
-        for (const el of document.querySelectorAll('[data-mail]')) {
-          const [user, domain] = el.dataset.mail.split('|');
-          el.href = 'mailto:' + user + '@' + domain;
-          el.textContent = user + '@' + domain;
-        }
 
         // Things settling into place. Once each, never replayed.
         const items = document.querySelectorAll('.reveal');

@@ -24,7 +24,7 @@ work behind it — one team, one invoice, and we are still there after launch.
 
 ## Contact
 - Phone and WhatsApp: ${site.phoneDisplay}
-- Email: ${site.emailUser}@${site.emailDomain}
+- Email: ${site.email}
 - Address: ${site.address.display}
 - Coordinates: ${site.geo.lat}, ${site.geo.lng}
 - Opening hours: ${site.hours}

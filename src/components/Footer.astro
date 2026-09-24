@@ -1,5 +1,5 @@
 ---
-import { site, nav, email } from '../data/site.js';
+import { site, nav } from '../data/site.js';
 ---
 
 <footer class="footer">
@@ -17,8 +17,7 @@ import { site, nav, email } from '../data/site.js';
           <li><a href={site.phoneHref}>{site.phoneDisplay}</a></li>
           <li><a href={site.whatsapp} rel="noopener">WhatsApp</a></li>
           <li>
-            <!-- Assembled by the browser, so the address is not a plain scrapable string. -->
-            <a href="/contact" data-mail={`${site.emailUser}|${site.emailDomain}`}>{site.emailUser}<span aria-hidden="true"> [at] </span><span class="sr-only">@</span>{site.emailDomain}</a>
+            <a href={site.emailHref}>{site.email}</a>
           </li>
           <li>{site.address.display}</li>
           <li>{site.hours}</li>

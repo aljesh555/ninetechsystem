@@ -22,9 +22,8 @@ export const site = {
   phoneDisplay: '+977 9843325804',
   phoneHref: 'tel:+9779843325804',
   whatsapp: 'https://wa.me/9779843325804?text=Hi%20Nine%20Technology',
-  // Split so the address never ships as one scrapable mailto string.
-  emailUser: 'info',
-  emailDomain: 'ninetechsystem.com',
+  email: 'info@ninetechsystem.com',
+  emailHref: 'mailto:info@ninetechsystem.com',
   address: {
     street: 'Lazimpat Road, Ward No. 2',
     city: 'Kathmandu',
@@ -325,5 +324,3 @@ export const steps = [
   { title: 'We launch it', body: 'We hand over admin access and train your team on it. Everything is registered in your name.' },
   { title: 'We support it monthly', body: '30 days included on every project. After that, a care plan or call us when you need us.' },
 ];
-
-export const email = () => `${site.emailUser}@${site.emailDomain}`;

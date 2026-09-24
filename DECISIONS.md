@@ -209,10 +209,12 @@ The policy also sets `frame-ancestors 'none'`, `base-uri 'none'`,
 setting it in two places invites them to disagree. `DEPLOY.md` has the dashboard
 step to confirm it is on.
 
-**The email address is never a plain `mailto:`.** It renders as
-`info [at] ninetechsystem.com` with a screen-reader-only `@`, links to the contact
-form, and is upgraded to a real `mailto:` by JavaScript. Scrapers that do not run
-JS see no harvestable address.
+**The email address is published plainly, as a normal `mailto:` link.** An
+earlier build disguised it as `info [at] ninetechsystem.com`, but the same address
+was already in plain text in the JSON-LD on every page and in `llms.txt`, so the
+disguise protected nothing and only made it harder for people to use. The founder
+decided it does not need hiding. It is a role address (`info@`), not a person's,
+and spam is left to the mail provider's filter.
 
 **`scripts/security-check.mjs` greps the build output** for registration numbers,
 PAN/VAT, bank and merchant details, the internal tool stack, banned marketing

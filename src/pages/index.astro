@@ -1,6 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
-import { site, groups, commitments, industries, email } from '../data/site.js';
+import { site, groups, commitments, industries } from '../data/site.js';
 import { projects } from '../data/projects.js';
 
 const schema = [
@@ -151,7 +151,7 @@ const schema = [
       </div>
       <p class="strip-detail">
         <a href={site.phoneHref}>{site.phoneDisplay}</a><br />
-        <a href="/contact" data-mail={`${site.emailUser}|${site.emailDomain}`}>{site.emailUser} [at] {site.emailDomain}</a><br />
+        <a href={site.emailHref}>{site.email}</a><br />
         {site.address.display}<br />
         {site.hours}
       </p>
