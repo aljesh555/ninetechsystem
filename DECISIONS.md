@@ -464,7 +464,7 @@ off the tilt, the lift and the scroll settle.
 
 **Checked:** Lighthouse mobile 100/100/100/100 on the hub and all six detail
 pages (LCP 1.5–1.7s, CLS 0, TBT 0 ms; the accessibility score is axe-core);
-every internal link and anchor resolves; every `?need=` has a matching option;
+every internal link and anchor resolves; every `?need=` has a matching option; Google's Rich Results Test on the deployed preview found valid Breadcrumbs, Local business and Organisation (its one optional warning, `priceRange`, is now set from the price list);
 every title is at most 60 characters and every description at most 155; every
 character on the pages is inside the subset fonts.
 
