@@ -419,6 +419,10 @@ a { color: inherit; }
 
 .slot { position: relative; overflow: hidden; border-radius: var(--radius); background: var(--off-white); }
 .slot img { width: 100%; height: auto; }
+/* A real photo fills its slot's ratio and is cropped to it, so portraits of
+   different shapes still line up. */
+.slot-frame picture { height: 100%; }
+.slot-frame img { width: 100%; height: 100%; object-fit: cover; }
 .slot-empty {
   background: var(--off-white); color: #c3cbd8;
   border: 1px solid var(--rule); display: grid; place-items: center;

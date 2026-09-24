@@ -19,7 +19,7 @@ npx wrangler pages deploy --project-name ninetechsystem --branch main
 | `DECISIONS.md` | Every judgement call made during the build and why. |
 | `DESIGN_PLAN.md` | The design system, and the revisions made against it. |
 | `NAP.md` | The canonical name/address/phone strings. Paste from here into every external profile. |
-| `IMAGES.md` | The ten image slots and how to fill them. |
+| `IMAGES.md` | The image slots and how to fill them. |
 
 ## Checks
 

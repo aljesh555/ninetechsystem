@@ -2,10 +2,15 @@
 /**
  * A named image slot the founder can fill later.
  *
- * Drop a file at src/images/slots/<name>.(jpg|png|webp) and the build produces
- * AVIF and WebP variants at 400/800/1200/1600w with width and height set.
- * Until then the slot renders a navy block with the 9 mark — never a broken
- * image, never a stock photo. See IMAGES.md.
+ * Drop a file at src/images/slots/<name>.(jpg|jpeg|png|webp) — any letter case,
+ * so a phone's IMG_1234.JPG renamed to office-exterior.JPG works — and the build
+ * produces AVIF and WebP variants at 400/800/1200/1600w with width and height
+ * set. The photo is cropped to the slot's ratio, so two portraits of different
+ * shapes still line up.
+ *
+ * Until then the slot renders a quiet placeholder with the 9 mark — never a
+ * broken image, never a stock photo — or nothing at all if `optional` is set.
+ * See IMAGES.md.
  */
 import { Picture } from 'astro:assets';
 import nineGlyph from '../../assets/brand/logo-symbol-mono.svg?raw';
@@ -15,12 +20,13 @@ const {
   alt,
   ratio = '3-2',
   priority = false,
+  optional = false,
   sizes = '(min-width: 900px) 50vw, 100vw',
   caption,
   class: className = '',
 } = Astro.props;
 
-const files = import.meta.glob('/src/images/slots/*.{jpg,jpeg,png,webp}', {
+const files = import.meta.glob('/src/images/slots/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}', {
   eager: true,
   import: 'default',
 });
@@ -31,20 +37,22 @@ const found = Object.entries(files).find(([path]) =>
 
 {found ? (
   <figure class={`slot ${className}`}>
-    <Picture
-      src={found[1]}
-      formats={['avif', 'webp']}
-      widths={[400, 800, 1200, 1600]}
-      sizes={sizes}
-      alt={alt}
-      loading={priority ? 'eager' : 'lazy'}
-      decoding={priority ? 'sync' : 'async'}
-      fetchpriority={priority ? 'high' : 'auto'}
-    />
+    <div class={`slot-frame ratio-${ratio}`}>
+      <Picture
+        src={found[1]}
+        formats={['avif', 'webp']}
+        widths={[400, 800, 1200, 1600]}
+        sizes={sizes}
+        alt={alt}
+        loading={priority ? 'eager' : 'lazy'}
+        decoding={priority ? 'sync' : 'async'}
+        fetchpriority={priority ? 'high' : 'auto'}
+      />
+    </div>
     {caption && <figcaption class="slot-caption">{caption}</figcaption>}
   </figure>
-) : (
-  <div class={`slot slot-empty ratio-${ratio} ${className}`} role="img" aria-label={alt}>
+) : !optional && (
+  <div class={`slot slot-empty ratio-${ratio} ${className}`} aria-hidden="true">
     <Fragment set:html={nineGlyph} />
   </div>
 )}

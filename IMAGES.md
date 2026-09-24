@@ -6,14 +6,18 @@ stock photo. Add them when you have them, one at a time, in any order.
 
 ## How to add one
 
-1. Name the file exactly as the **Slot** column says, with a `.jpg`, `.png` or
-   `.webp` extension.
+1. Name the file exactly as the **Slot** column says (lower case, with the
+   hyphen), with a `.jpg`, `.jpeg`, `.png` or `.webp` extension. Upper-case
+   extensions from a phone (`.JPG`) are fine. iPhone `.HEIC` files are not
+   supported: export them as JPEG first.
 2. Drop it in `src/images/slots/`.
 3. Run `npm run build`.
 
 That is all. The build generates AVIF and WebP at 400/800/1200/1600 wide, writes
 the `width` and `height` onto the tag so nothing jumps while the page loads, sets
 lazy loading below the fold, and strips EXIF and GPS data from every variant.
+The photo is cropped to the slot's shape (square for portraits, 3:2 for the
+office, and so on), so keep the subject near the middle of the frame.
 
 Supply the **largest** version you have. Downscaling is automatic; upscaling is
 not possible. Do not resize or compress them first.
@@ -22,9 +26,12 @@ not possible. Do not resize or compress them first.
 
 ## The slots
 
+The Home hero has no image slot. It is designed as type on navy and looks
+finished without a photograph. If you later want a photo there, that is a design
+change rather than a file drop.
+
 | Slot | Appears on | What it should be | Supply at least |
 |---|---|---|---|
-| `hero` | Home | Optional. A real workspace shot, dark enough that white text stays readable over it. The hero is designed to look finished with no image, so only add one if it is genuinely good. | 1600×900 |
 | `services-build` | Services, Build | Optional. Something real from the work — a screen being built, a hand-over session. | 800×600 |
 | `services-grow` | Services, Grow | Optional. A shoot in progress, a camera on location. | 800×600 |
 | `services-automate` | Services, Automate | Optional. A screen showing a workflow or dashboard, with no client data visible. | 800×600 |
@@ -32,15 +39,15 @@ not possible. Do not resize or compress them first.
 | `work-01` `work-02` `work-03` | Home and Work | Screenshots or photographs of **real** projects. See the permission rules below. | 1200×800 |
 | `portrait-anis` | About | Anis Raut. Plain background, head and shoulders, looking at the camera. | 800×800 |
 | `portrait-raju` | About | Raju Thapa. Same treatment, taken the same day if possible so the two match. | 800×800 |
-| `office-exterior` | About and Contact | The building with the Nine Technology signboard visible. This is the photograph that proves the company is real and findable — it is worth more than the other seven put together. | 1200×800 |
+| `office-exterior` | About, and Contact (on Contact it only appears once supplied) | The building with the Nine Technology signboard visible. This is the photograph that proves the company is real and findable — it is worth more than all the others put together. | 1200×800 |
 | `office-interior` | About | The workspace, in use. | 1200×800 |
 
 Generated automatically, nothing to supply:
 
 | File | What it is |
 |---|---|
-| `og.png` | The 1200×630 share card. Composed from `wordmark-white.svg` and `symbol-white.svg` by `scripts/build-og.py`, rasterised on every build. |
-| Favicons and app icons | `favicon.svg`, `favicon-32.png`, `apple-touch-icon-180.png`, `icon-192.png`, `icon-512.png`, built from `symbol-navy-square.svg`. |
+| `og.png` | The 1200×630 share card. Composed from `logo-wordmark-white.svg` and `logo-symbol-white.svg` by `scripts/build-og.py`, rasterised on every build. |
+| Favicons and app icons | `favicon.svg`, `favicon-32.png`, `apple-touch-icon-180.png`, `icon-192.png`, `icon-512.png`, built from `avatar-social-navy-bg.svg`. |
 | `manifest.webmanifest` | Built alongside the icons. |
 | `map-lazimpat.png` | The Contact page map. Already built and committed. |
 

@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import { Picture } from 'astro:assets';
+import Slot from '../components/Slot.astro';
 import mapImage from '../images/map-lazimpat.png';
 import { site, businessTypes } from '../data/site.js';
 
@@ -77,7 +78,7 @@ const schema = [
             <textarea id="message" name="message" required minlength="10" maxlength="2000"></textarea>
           </div>
 
-          <!-- Left empty by people, filled in by bots. -->
+          {/* Left empty by people, filled in by bots. */}
           <div class="hp" aria-hidden="true">
             <label for="website">Website</label>
             <input id="website" name="website" type="text" tabindex="-1" autocomplete="off" />
@@ -103,6 +104,8 @@ const schema = [
           <Picture src={mapImage} alt="Map showing Nine Technology on Lazimpat Road, Kathmandu" widths={[400, 800, 1200]} sizes="(min-width: 900px) 520px, 100vw" formats={['avif', 'webp']} loading="lazy" decoding="async" />
         </a>
         <p class="slot-caption">Map data © OpenStreetMap contributors. Tap the map to open directions.</p>
+        {/* Appears only once office-exterior is supplied; see IMAGES.md. */}
+        <Slot name="office-exterior" alt="The Nine Technology office and signboard on Lazimpat Road, Kathmandu" ratio="3-2" optional caption="Look for this signboard on Lazimpat Road." class="section-body" sizes="(min-width: 900px) 520px, 100vw" />
 
         <dl class="detail-list">
           <div>
