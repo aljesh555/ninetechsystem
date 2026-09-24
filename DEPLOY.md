@@ -203,9 +203,10 @@ This is the highest-value item on this page for local enquiries.
 
 ### 6. Check the structured data
 
-Already validated: the schema.org validator reports **0 errors on all five live
-pages** (35 nodes — Organization, ProfessionalService, WebSite, Service ×15,
-FAQPage, Person ×2, AboutPage, ContactPage, BreadcrumbList).
+The first deployment validated with **0 errors on all five pages**. Since then the
+business has been merged into one node (`Organization` + `ProfessionalService`,
+31 nodes in all), so **run https://validator.schema.org once on `/` and
+`/services` after the next deploy** to confirm it is still clean.
 
 Google's own test needs a browser, so run it once yourself after the domain is
 attached:

@@ -1,4 +1,4 @@
-import { site, groups, commitments, industries, faqs, people } from '../data/site.js';
+import { site, groups, carePlans, commitments, industries, faqs, people } from '../data/site.js';
 
 /**
  * A plain-text summary for AI answer engines. Generated from the same data as
@@ -13,6 +13,10 @@ export async function GET() {
       return `### ${g.name}\n${g.promise}\n${lines}`;
     })
     .join('\n\n');
+
+  const plans = carePlans.plans
+    .map((p) => `- ${p.name}: ${carePlans.rows.map((row, i) => `${row}: ${p.values[i]}`).join('; ')}.`)
+    .join('\n');
 
   const body = `# ${site.legalName}
 
@@ -44,9 +48,7 @@ ${services}
 
 ### Monthly care plans
 Three levels, quoted with the project:
-- Essential: hosting, SSL, backups, updates, 2 small changes a month, 48-hour response.
-- Standard: adds 5 small changes a month, 24-hour response, a monthly report.
-- Complete: adds 10 small changes a month, same-day response, priority.
+${plans}
 
 ## What we commit to
 ${commitments.map((c) => `- ${c.title}: ${c.body}`).join('\n')}

@@ -9,7 +9,7 @@ const serviceSchema = groups.flatMap((g) =>
     name: s.name,
     serviceType: g.name,
     description: s.answer,
-    provider: { '@id': `${site.url}/#business` },
+    provider: { '@id': `${site.url}/#organization` },
     areaServed: site.areasServed.map((n) => ({ '@type': 'City', name: n })),
     url: `${site.url}/services#${g.id}`,
   })),

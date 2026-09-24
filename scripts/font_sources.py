@@ -1,4 +1,4 @@
-"""Fetches the upstream font slices that build-fonts.py and build-logo.py need.
+"""Fetches the upstream font slices that build-fonts.py and build-og.py need.
 
 The sources are Google Fonts' own `latin` and `devanagari` slices of Poppins and
 Inter, both SIL Open Font License 1.1. They land in tmp-fonts/, which is not

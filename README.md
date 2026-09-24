@@ -24,9 +24,11 @@ npx wrangler pages deploy --project-name ninetechsystem --branch main
 ## Checks
 
 ```bash
-node scripts/test-contact.mjs     # 32 tests on the contact form handler
+npm test                          # 32 tests on the contact form handler
+npm run preview                   # serve dist/ the way Cloudflare Pages does, on :4321
 node scripts/security-check.mjs   # greps dist/ for anything that must not be public
-node scripts/serve.mjs 4321       # serve dist/ the way Cloudflare Pages does
+                                  # (also runs at the end of every `npm run build`,
+                                  # and fails the build if it finds something)
 ```
 
 The build prints page weights against the performance budget every time it runs.

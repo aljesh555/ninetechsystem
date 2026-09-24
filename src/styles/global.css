@@ -104,8 +104,6 @@ h1, h2, h3, h4 { font-family: var(--display); font-weight: 600; letter-spacing: 
 h2, .h2 { font-size: clamp(1.9rem, 4vw, 2.6rem); }
 h3, .h3 { font-size: 1.25rem; letter-spacing: -0.01em; }
 .lead { font-size: 1.2rem; line-height: 1.55; color: var(--grey); max-width: var(--measure); }
-.small { font-size: 0.9375rem; }
-.meta { font-size: 0.8125rem; font-weight: 500; color: var(--grey); }
 p, .prose li { max-width: var(--measure); }
 .prose > * + * { margin-top: var(--s3); }
 
@@ -234,7 +232,7 @@ a { color: inherit; }
 .header-tel {
   display: inline-flex; align-items: center; gap: 6px;
   font-size: 0.8125rem; font-weight: 500; text-decoration: none;
-  white-space: nowrap; padding: 10px 2px;
+  white-space: nowrap; padding: 0 2px; min-height: 44px;
 }
 .header-icon {
   display: inline-flex; align-items: center; justify-content: center;
@@ -243,8 +241,11 @@ a { color: inherit; }
 .header-icon:hover { background: var(--off-white); }
 .menu-toggle { background: none; border: 1px solid var(--rule); border-radius: var(--radius); width: 44px; height: 44px; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; }
 
-.nav-mobile { display: none; border-top: 1px solid var(--rule); padding-block: var(--s3) var(--s4); }
-.nav-mobile.is-open { display: block; }
+/* The menu only collapses when JavaScript is there to open it again. */
+.nav-mobile { border-top: 1px solid var(--rule); padding-block: var(--s3) var(--s4); }
+.js .nav-mobile { display: none; }
+.js .nav-mobile.is-open { display: block; }
+html:not(.js) .menu-toggle { display: none; }
 @media (min-width: 900px) { .nav-mobile, .menu-toggle { display: none !important; } }
 .nav-mobile a { display: block; padding: var(--s2) 0; text-decoration: none; font-size: 1.0625rem; }
 .nav-mobile a[aria-current='page'] { font-weight: 500; }
@@ -386,19 +387,6 @@ a { color: inherit; }
 }
 @media (max-width: 479px) { .acc > p { padding-left: 0; } }
 
-/* --- steps (about) ------------------------------------------------------- */
-
-.steps { counter-reset: step; margin-top: var(--s5); }
-.step { counter-increment: step; border-top: 1px solid var(--rule); padding-block: var(--s4); display: grid; gap: var(--s1) var(--s4); }
-@media (min-width: 640px) { .step { grid-template-columns: 3rem 1fr; } }
-.step::before {
-  content: counter(step); font-family: var(--display); font-weight: 600;
-  font-size: 1.25rem; color: var(--grey); line-height: 1.2;
-  /* Not amber: amber on off-white is 2.2:1 and these numerals are content. */
-}
-.step h3 { font-size: 1.125rem; margin-bottom: var(--s1); }
-.step p { color: var(--grey); font-size: 1rem; }
-
 /* --- the nine ------------------------------------------------------------
    Nine squares, the ninth amber. Appears once, beside the paragraph that
    explains what nine means, and nowhere else. */
@@ -480,13 +468,14 @@ a { color: inherit; }
 .field .hint { display: block; font-size: 0.8125rem; color: var(--grey); font-weight: 400; margin-top: 2px; }
 .field input, .field select, .field textarea {
   width: 100%; min-height: 48px; padding: 0.7rem 0.85rem;
-  background: var(--white); border: 1px solid var(--rule);
+  /* 3.2:1 on white: a field's edge has to be visible (WCAG 1.4.11). */
+  background: var(--white); border: 1px solid #8391a6;
   border-radius: var(--radius); font-size: 1rem;
   transition: border-color 0.15s ease;
 }
 .field textarea { min-height: 132px; resize: vertical; line-height: 1.6; }
 .field select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%235A6B82' stroke-width='1.6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 1rem center; padding-right: 2.5rem; }
-.field input:hover, .field select:hover, .field textarea:hover { border-color: var(--grey); }
+.field input:hover, .field select:hover, .field textarea:hover { border-color: var(--navy); }
 .field .error { display: block; font-size: 0.875rem; color: #b3261e; margin-top: var(--s1); }
 .field [aria-invalid='true'] { border-color: #b3261e; }
 .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
@@ -551,18 +540,28 @@ a { color: inherit; }
   opacity: 1; transform: none;
   transition: opacity 0.55s var(--ease), transform 0.55s var(--ease);
 }
-.js .stagger > *:nth-child(2).is-in { transition-delay: 0.07s; }
-.js .stagger > *:nth-child(3).is-in { transition-delay: 0.14s; }
-.js .stagger > *:nth-child(4).is-in { transition-delay: 0.21s; }
+/* A staggered group: the container stays put and its children settle in one
+   after another once the group is revealed. */
+.js .stagger.reveal { opacity: 1; transform: none; }
+.js .stagger.reveal > * { opacity: 0; transform: translateY(28px); }
+.js .stagger.reveal.is-in > * {
+  opacity: 1; transform: none;
+  transition: opacity 0.55s var(--ease), transform 0.55s var(--ease);
+}
+.js .stagger.reveal.is-in > *:nth-child(2) { transition-delay: 0.07s; }
+.js .stagger.reveal.is-in > *:nth-child(3) { transition-delay: 0.14s; }
+.js .stagger.reveal.is-in > *:nth-child(4) { transition-delay: 0.21s; }
 
 @media (prefers-reduced-motion: reduce) {
   .js .hero-seq > * { animation: none; }
-  .js .reveal { opacity: 1; transform: none; transition: none; }
+  .js .reveal, .js .stagger.reveal > * { opacity: 1; transform: none; transition: none; }
   * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }
 
 @media print {
   .header, .wa-float, .footer, .skip { display: none; }
+  /* Sections never scrolled into view would otherwise print blank. */
+  .js .reveal, .js .stagger.reveal > * { opacity: 1; transform: none; }
 }
 
 /* --- aspect ratios for empty image slots --------------------------------- */
@@ -587,7 +586,6 @@ a { color: inherit; }
 .nava .prose { flex: 1 1 300px; }
 .commitments.one-col { grid-template-columns: 1fr; }
 .commitments.one-col .commitment:first-child { border-top: 0; padding-top: 0; }
-.steps .step:first-child { border-top: 0; padding-top: 0; }
 .contact-nepali { margin-top: var(--s4); font-size: 1.0625rem; color: var(--grey); }
 /* Equal-width hero buttons on small screens: two ragged widths read as an
    accident, and full-width targets are easier to hit on a phone. */

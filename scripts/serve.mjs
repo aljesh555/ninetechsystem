@@ -5,7 +5,7 @@
  */
 import { createServer } from 'node:http';
 import { readFile, stat } from 'node:fs/promises';
-import { join, extname } from 'node:path';
+import { join, extname, resolve, sep } from 'node:path';
 
 const DIST = 'dist';
 const PORT = Number(process.argv[2] || 4321);
@@ -48,7 +48,8 @@ const { onRequestPost, onRequestGet } = await import('../functions/api/contact.j
 
 createServer(async (req, res) => {
   const url = new URL(req.url, `http://localhost:${PORT}`);
-  let path = decodeURIComponent(url.pathname);
+  let path;
+  try { path = decodeURIComponent(url.pathname); } catch { res.writeHead(400); return res.end(); }
 
   if (path === '/api/contact') {
     const chunks = [];
@@ -82,8 +83,10 @@ createServer(async (req, res) => {
     ? ['index.html']
     : [path.slice(1), path.slice(1) + '.html', join(path.slice(1), 'index.html')];
 
+  const root = resolve(DIST) + sep;
   for (const c of candidates) {
     const file = join(DIST, c);
+    if (!resolve(file).startsWith(root)) break; // no ../ out of dist/
     if (!(await exists(file))) continue;
     const body = await readFile(file);
     res.writeHead(200, {

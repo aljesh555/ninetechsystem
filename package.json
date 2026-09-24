@@ -5,9 +5,10 @@
   "type": "module",
   "scripts": {
     "prebuild": "node scripts/generate-brand-assets.mjs",
-    "build": "astro build && node scripts/postbuild.mjs",
+    "build": "astro build && node scripts/postbuild.mjs && node scripts/security-check.mjs",
     "dev": "astro dev",
-    "preview": "astro preview"
+    "preview": "node scripts/serve.mjs 4321",
+    "test": "node scripts/test-contact.mjs"
   },
   "devDependencies": {
     "astro": "^5.15.0",

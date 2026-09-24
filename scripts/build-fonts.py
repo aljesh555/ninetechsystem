@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Subset the self-hosted webfonts. Run once; output is committed to src/fonts/.
+"""Subset the self-hosted webfonts. Run once; output is committed to public/fonts/.
 
 Sources are the Google Fonts `latin` / `devanagari` slices of Poppins and Inter,
 both under the SIL Open Font License 1.1 (commercial use permitted, see
-src/fonts/OFL.txt). Nothing is fetched at build time or at runtime.
+public/fonts/OFL.txt). Nothing is fetched at build time or at runtime.
 """
 import sys, pathlib
 sys.path.insert(0, str(pathlib.Path(__file__).parent))

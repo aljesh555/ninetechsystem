@@ -16,17 +16,20 @@ const {
 const canonical = new URL(path, site.url).href;
 const ogImage = new URL('/og.png', site.url).href;
 
-/** Organization + LocalBusiness ship on every page: the entity has to look
- *  identical to a crawler no matter where it lands. */
-const organization = {
-  '@type': 'Organization',
+/** The business ships on every page as ONE entity — an Organization that is
+ *  also a local ProfessionalService — so it looks identical to a crawler no
+ *  matter where it lands. Every other node points at it by `#organization`. */
+const business = {
+  '@type': ['Organization', 'ProfessionalService'],
   '@id': `${site.url}/#organization`,
   name: site.name,
   legalName: site.legalName,
   url: site.url,
   logo: `${site.url}/icon-512.png`,
+  image: ogImage,
   foundingDate: site.founded,
-  sameAs: site.social.map((s) => s.url),
+  telephone: site.phoneDisplay,
+  email: site.email,
   contactPoint: {
     '@type': 'ContactPoint',
     telephone: site.phoneDisplay,
@@ -35,19 +38,6 @@ const organization = {
     areaServed: 'NP',
     availableLanguage: ['en', 'ne'],
   },
-};
-
-const localBusiness = {
-  '@type': 'ProfessionalService',
-  '@id': `${site.url}/#business`,
-  name: site.name,
-  legalName: site.legalName,
-  parentOrganization: { '@id': `${site.url}/#organization` },
-  url: site.url,
-  image: ogImage,
-  telephone: site.phoneDisplay,
-  email: site.email,
-  priceRange: 'NPR',
   currenciesAccepted: 'NPR',
   slogan: site.tagline,
   address: {
@@ -71,7 +61,7 @@ const localBusiness = {
   sameAs: site.social.map((s) => s.url),
 };
 
-const graph = { '@context': 'https://schema.org', '@graph': [organization, localBusiness, ...schema] };
+const graph = { '@context': 'https://schema.org', '@graph': [business, ...schema] };
 ---
 
 <!doctype html>
@@ -81,8 +71,14 @@ const graph = { '@context': 'https://schema.org', '@graph': [organization, local
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <link rel="canonical" href={canonical} />
-    {noindex && <meta name="robots" content="noindex, follow" />}
+    {noindex ? <meta name="robots" content="noindex, follow" /> : <link rel="canonical" href={canonical} />}
+
+    <script is:inline>
+      // Set before first paint, so nothing that depends on it flickers. Without
+      // this class nothing is hidden, so a failed or blocked script leaves every
+      // page fully readable and the menu fully visible.
+      document.documentElement.classList.add('js');
+    </script>
 
     <link rel="preload" href="/fonts/inter-400-500.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/poppins-600.woff2" as="font" type="font/woff2" crossorigin />
@@ -98,7 +94,6 @@ const graph = { '@context': 'https://schema.org', '@graph': [organization, local
     <meta property="og:image" content={ogImage} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:locale" content="en_NP" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
@@ -128,10 +123,6 @@ const graph = { '@context': 'https://schema.org', '@graph': [organization, local
     </a>
 
     <script is:inline>
-      // Progressive enhancement. Without this class nothing is hidden, so a
-      // failed or blocked script leaves every page fully readable.
-      document.documentElement.classList.add('js');
-
       addEventListener('DOMContentLoaded', () => {
         const toggle = document.querySelector('[data-menu-toggle]');
         const menu = document.getElementById('menu');
