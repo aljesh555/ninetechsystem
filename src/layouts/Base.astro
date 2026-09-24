@@ -54,8 +54,8 @@ const business = {
     {
       '@type': 'OpeningHoursSpecification',
       dayOfWeek: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-      opens: '10:00',
-      closes: '18:00',
+      opens: site.opens,
+      closes: site.closes,
     },
   ],
   sameAs: site.social.map((s) => s.url),

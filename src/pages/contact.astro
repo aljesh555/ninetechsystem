@@ -26,7 +26,7 @@ const schema = [
 
 <Base
   title="Contact Nine Technology — Lazimpat, Kathmandu"
-  description="Call +977 9843325804, message us on WhatsApp or send the form. Lazimpat Road, Kathmandu. Open Sunday to Friday, 10am to 6pm. We reply within 2 hours."
+  description={`Call ${site.phoneDisplay}, message us on WhatsApp or send the form. Lazimpat Road, Kathmandu. Open ${site.hoursShort}. We reply ${site.replyTime}.`}
   path="/contact"
   schema={schema}
 >
@@ -95,7 +95,7 @@ const schema = [
 
         <div class="form-success" id="form-success" hidden>
           <h3>Message sent</h3>
-          <p>Thank you. We have your message and we will call or WhatsApp you on the number you gave, usually within 2 hours during {site.hoursShort}. If you sent it outside those hours, you will hear from us first thing on the next working day.</p>
+          <p>Thank you. We have your message and we will call or WhatsApp you on the number you gave, usually {site.replyTime} during {site.hoursShort}. If you sent it outside those hours, you will hear from us first thing on the next working day.</p>
           <p class="section-body">In a hurry? <a class="link" href={site.whatsapp} rel="noopener">Message us on WhatsApp</a> and we will see it sooner.</p>
         </div>
       </div>

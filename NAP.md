@@ -32,7 +32,7 @@ external profiles can, which is what this file is for.
 | **Email** | `info@ninetechsystem.com` |
 | **Website** | `https://ninetechsystem.com` |
 | **Coordinates** | `27.724562, 85.322562` |
-| **Hours** | `Sunday–Friday 10:00–18:00, Saturday closed` |
+| **Hours** | `Sunday–Friday 10:00–17:00, Saturday closed` |
 | **Founded** | `2026` |
 | **Tagline** | `Your ambition, our engineering.` |
 

@@ -128,6 +128,7 @@ exactly that job and is currently holding the timeline.
   `llms.txt` together.
 - **Nothing on the site can be held against the company.** No guaranteed
   rankings, no 24/7 promise, no fixed delivery date without scope, no invented
-  testimonial, no client named without permission. The reply promise — 2 hours,
-  Sunday to Friday, 10am to 6pm — appears in four places. It is the one
+  testimonial, no client named without permission. The reply promise — within
+  minutes, Sunday to Friday, 10am to 5pm — is set once, in `site.replyPromise`
+  and `site.replyTime`, and appears on every page that invites contact. It is the one
   commitment that needs a human to keep it.

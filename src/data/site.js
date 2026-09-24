@@ -33,9 +33,13 @@ export const site = {
   },
   geo: { lat: 27.724562, lng: 85.322562 },
   mapLink: 'https://www.google.com/maps/search/?api=1&query=27.724562,85.322562',
-  hours: 'Sunday–Friday 10:00–18:00, Saturday closed',
-  hoursShort: 'Sunday–Friday, 10am–6pm',
-  replyPromise: 'We reply within 2 hours, Sunday–Friday, 10am–6pm.',
+  hours: 'Sunday–Friday 10:00–17:00, Saturday closed',
+  hoursShort: 'Sunday–Friday, 10am–5pm',
+  opens: '10:00',
+  closes: '17:00',
+  // The one promise on the site that needs a person to keep it.
+  replyTime: 'within minutes',
+  replyPromise: 'We reply within minutes, Sunday–Friday, 10am–5pm.',
   areasServed: ['Kathmandu', 'Lalitpur', 'Bhaktapur'],
 
   social: [

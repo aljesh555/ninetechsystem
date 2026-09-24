@@ -171,7 +171,7 @@ export async function onRequestPost({ request, env }) {
   return wantsJson
     ? json(200, { ok: true })
     : html(200, 'Message sent',
-        `Thank you. We will call or WhatsApp you on the number you gave, usually within 2 hours, ${site.hoursShort}.`);
+        `Thank you. We will call or WhatsApp you on the number you gave, usually ${site.replyTime}, ${site.hoursShort}.`);
 }
 
 /** A GET on the endpoint is someone poking at it; send them to the page. */

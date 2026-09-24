@@ -192,7 +192,7 @@ This is the highest-value item on this page for local enquiries.
 2. Category: *Website designer*. Additional: *Software company*,
    *Internet marketing service*.
 3. Service area: Kathmandu, Lalitpur, Bhaktapur.
-4. Hours: Sunday–Friday 10:00–18:00, Saturday closed.
+4. Hours: Sunday–Friday 10:00–17:00, Saturday closed.
 5. Request the postcard or phone verification and complete it.
 6. **Once verified**, add the profile URL to the site footer: open
    `src/components/Footer.astro`, add it to the "Follow" list, and add the same
