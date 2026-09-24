@@ -20,7 +20,7 @@ const valid = {
   phone: '+977 9812345678',
   business: 'Restaurant or café',
   message: 'We need online ordering with eSewa for our restaurant in Thamel.',
-  website: '',
+  extra: '',
   ts: String(Date.now() - 20000),
 };
 
@@ -58,7 +58,8 @@ check('  email goes to info@ninetechsystem.com', sent?.to?.[0] === 'info@ninetec
 check('  subject names the sender', sent?.subject?.includes('Sita Gurung'));
 check('  body carries the phone number', sent?.text?.includes('+977 9812345678'));
 
-await run('honeypot filled is silently dropped', { website: 'http://spam.example' }, {}, 200, false);
+await run('honeypot filled is silently dropped', { extra: 'http://spam.example' }, {}, 200, false);
+await run('old honeypot name is now just ignored', { website: 'https://my-shop.com.np' }, {}, 200, true);
 await run('submitted too fast is rejected', { ts: String(Date.now() - 500) }, {}, 400, false);
 await run('stale timestamp is rejected', { ts: String(Date.now() - 9e7) }, {}, 400, false);
 await run('missing name is rejected', { name: '' }, {}, 422, false);
@@ -68,6 +69,10 @@ await run('business type off the list is rejected', { business: 'Arms dealer' },
 await run('short message is rejected', { message: 'hi' }, {}, 422, false);
 await run('foreign origin is blocked', {}, { origin: 'https://evil.example' }, 403, false);
 await run('pages.dev preview origin is allowed', {}, { origin: 'https://abc.ninetechsystem.pages.dev' }, 200, true);
+await run('pages.dev production origin is allowed', {}, { origin: 'https://ninetechsystem.pages.dev' }, 200, true);
+await run("someone else's pages.dev site is blocked", {}, { origin: 'https://evil-spam.pages.dev' }, 403, false);
+await run('lookalike pages.dev name is blocked', {}, { origin: 'https://evilninetechsystem.pages.dev' }, 403, false);
+await run('phone with dots is rejected', { phone: '984.332.5804' }, {}, 422, false);
 await run('no timestamp still works (JavaScript off)', { ts: '' }, {}, 200, true);
 
 // Over-long input is truncated, not rejected outright.
@@ -78,7 +83,34 @@ check('over-long message is truncated to 2000 chars', sent?.text?.includes('x'.r
 // Missing API key must fail loudly rather than pretend to have sent.
 sent = null;
 const noKey = await onRequestPost({ request: post({}), env: {} });
-check('missing RESEND_API_KEY returns 500, sends nothing', noKey.status === 500 && sent === null);
+const noKeyBody = await noKey.json();
+check('missing RESEND_API_KEY returns 503, sends nothing', noKey.status === 503 && sent === null);
+check('  and tells the visitor to call instead', noKeyBody.message?.includes('+977 9843325804'));
+
+// Errors explain themselves, so the page can show the real reason.
+const bad = await onRequestPost({ request: post({ phone: '12', message: 'hi' }), env });
+const badBody = await bad.json();
+check('422 lists the fields to fix', JSON.stringify(badBody.fields) === '["phone","message"]');
+check('  and carries a message for the visitor', typeof badBody.message === 'string' && badBody.message.length > 0);
+
+// Malformed bodies get a clean 400 rather than an exception.
+for (const [label, body] of [['null', 'null'], ['an array', '[]'], ['broken JSON', '{"name":']]) {
+  let status;
+  try {
+    status = (await onRequestPost({ request: new Request('https://ninetechsystem.com/api/contact', {
+      method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body,
+    }), env })).status;
+  } catch (e) { status = `threw ${e.message}`; }
+  check(`JSON body of ${label} returns 400`, status === 400, `(got ${status})`);
+}
+
+// The mail provider being unreachable is a 502 with advice, not a crash.
+const savedFetch = globalThis.fetch;
+globalThis.fetch = async () => { throw new TypeError('network down'); };
+let down;
+try { down = await onRequestPost({ request: post({}), env }); } catch (e) { down = { status: `threw ${e.message}` }; }
+globalThis.fetch = savedFetch;
+check('mail provider unreachable returns 502', down.status === 502, `(got ${down.status})`);
 
 // Non-JSON submission (no JavaScript) gets an HTML page back.
 sent = null;

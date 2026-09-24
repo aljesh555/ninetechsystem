@@ -175,7 +175,7 @@ telling the visitor to call or WhatsApp instead** — it never pretends to have
 sent something it did not send.
 
 **Defences, in order:** same-site `Origin` check → honeypot field → timing check
-(under 3 seconds or over 6 hours is rejected) → server-side validation of every
+(under 3 seconds or over 24 hours is rejected) → server-side validation of every
 field with length caps → per-IP rate limit of 5/hour.
 
 **The rate limit needs a KV namespace bound as `RATE_LIMIT`.** The code uses it if
@@ -190,7 +190,30 @@ message is emailed to info@ninetechsystem.com and forgotten.
 confirmation page back rather than raw JSON. The timing check is skipped in that
 case (there is no client to set the timestamp) and the honeypot carries the load.
 
-20 automated tests cover all of this: `node scripts/test-contact.mjs`.
+32 automated tests cover all of this: `node scripts/test-contact.mjs`.
+
+**Revised after review: the page and the server must agree, and the visitor must
+be told the real reason.** The first version checked the phone number more
+loosely in the browser than on the server, and whatever the server said, the page
+showed "That did not send, please call us". A visitor who typed `984.332.5804` was
+told the site was broken. Now:
+
+- the phone rule (`PHONE_CHARS`) and the 3-second minimum (`MIN_FILL_MS`) are
+  exported from `functions/api/contact.js` and handed to the page, so there is one
+  definition;
+- every JSON error carries a `message` written for the visitor, and a 422 lists
+  the `fields` to fix, which the page marks;
+- someone using autofill can finish inside 3 seconds, so the page waits out the
+  remainder before sending instead of letting the server reject a real person;
+- the honeypot was called `website`, a name browsers and password managers
+  sometimes autofill — which would have silently binned a real enquiry while
+  showing "Message sent". It is now `extra`, labelled "Leave this empty";
+- the Origin check allowed *any* `*.pages.dev` site, which anyone can create for
+  free. It now allows only `ninetechsystem.pages.dev` and its preview subdomains;
+- a malformed body (`null`, an array, broken JSON) and an unreachable mail
+  provider return clean 400 / 502 responses instead of throwing;
+- the business types, phone number and recipient address come from
+  `src/data/site.js`, not copies inside the Function.
 
 ---
 
@@ -407,7 +430,7 @@ long-lived caching.
 | TBT | **0 ms** on every page |
 | Page weight, gzipped | Home 45 KB, Services 51 KB including all four fonts |
 | CSS / JS | 18.6 KB / 15.4 KB raw (budgets 40 KB / 60 KB) |
-| Contact Function | 20/20 tests pass |
+| Contact Function | 32/32 tests pass |
 | Security grep of `dist/` | clean |
 | JSON-LD | 35 nodes across 5 pages, all parse, all typed |
 | Reduced motion | every screenshot in this build was taken with it forced on |

@@ -4,6 +4,7 @@ import { Picture } from 'astro:assets';
 import Slot from '../components/Slot.astro';
 import mapImage from '../images/map-lazimpat.png';
 import { site, businessTypes } from '../data/site.js';
+import { PHONE_CHARS, MIN_FILL_MS } from '../../functions/api/contact.js';
 
 const schema = [
   {
@@ -54,14 +55,14 @@ const schema = [
         <h2>Send a message</h2>
         <p class="lead">Tell us what the business does and what you need. The more specific you are, the more useful our first reply will be.</p>
 
-        <form class="form" id="contact-form" method="post" action="/api/contact" data-phone={site.phoneDisplay} novalidate>
+        <form class="form" id="contact-form" method="post" action="/api/contact" data-phone={site.phoneDisplay} data-phone-chars={PHONE_CHARS.source} data-min-ms={MIN_FILL_MS} novalidate>
           <div class="field">
             <label for="name">Your name</label>
             <input id="name" name="name" type="text" autocomplete="name" required maxlength="80" />
           </div>
 
           <div class="field">
-            <label for="phone">Phone number<span class="hint">So we can call or WhatsApp you back.</span></label>
+            <label for="phone">Phone number<span class="hint">So we can call or WhatsApp you back. Digits, spaces, + and - are fine.</span></label>
             <input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" required maxlength="24" />
           </div>
 
@@ -79,9 +80,10 @@ const schema = [
           </div>
 
           {/* Left empty by people, filled in by bots. */}
+          {/* Named so no browser or password manager will ever autofill it. */}
           <div class="hp" aria-hidden="true">
-            <label for="website">Website</label>
-            <input id="website" name="website" type="text" tabindex="-1" autocomplete="off" />
+            <label for="extra">Leave this empty</label>
+            <input id="extra" name="extra" type="text" tabindex="-1" autocomplete="off" />
           </div>
           <input type="hidden" name="ts" value="" />
 
@@ -145,7 +147,10 @@ const schema = [
       const success = document.getElementById('form-success');
 
       // Bots post instantly; people take longer than three seconds to type.
-      form.elements.ts.value = String(Date.now());
+      const loadedAt = Date.now();
+      form.elements.ts.value = String(loadedAt);
+      const minMs = Number(form.dataset.minMs);
+      const phoneChars = new RegExp(form.dataset.phoneChars);
 
       // Service pages link here with ?need=..., so the message starts written.
       const need = new URLSearchParams(location.search).get('need');
@@ -167,7 +172,12 @@ const schema = [
       const setError = (field, msg) => {
         const wrap = field.closest('.field');
         let el = wrap.querySelector('.error');
-        if (!msg) { field.removeAttribute('aria-invalid'); el?.remove(); return false; }
+        if (!msg) {
+          field.removeAttribute('aria-invalid');
+          field.removeAttribute('aria-describedby');
+          el?.remove();
+          return false;
+        }
         field.setAttribute('aria-invalid', 'true');
         if (!el) {
           el = document.createElement('span');
@@ -183,7 +193,11 @@ const schema = [
       const check = (field) => {
         const v = field.value.trim();
         if (field.name === 'name') return setError(field, v.length < 2 ? 'Please tell us your name.' : '');
-        if (field.name === 'phone') return setError(field, v.replace(/\D/g, '').length < 7 ? 'Please give a phone number we can reach you on.' : '');
+        if (field.name === 'phone') {
+          const digits = v.replace(/\D/g, '').length;
+          if (digits < 7 || digits > 15) return setError(field, 'Please give a phone number we can reach you on.');
+          return setError(field, phoneChars.test(v) ? '' : 'Please use only digits, spaces, + ( ) and -.');
+        }
         if (field.name === 'business') return setError(field, v ? '' : 'Please choose the closest match.');
         if (field.name === 'message') return setError(field, v.length < 10 ? 'A sentence or two is enough.' : '');
         return false;
@@ -193,6 +207,14 @@ const schema = [
         form.elements[f].addEventListener('blur', () => check(form.elements[f]));
       }
 
+      const button = form.querySelector('button[type=submit]');
+      const fail = (message) => {
+        button.disabled = false;
+        status.dataset.state = 'error';
+        status.textContent = message ||
+          'That did not send. Please call or WhatsApp us on ' + form.dataset.phone + ' instead, or try again in a moment.';
+      };
+
       form.addEventListener('submit', async (e) => {
         e.preventDefault();
         let bad = null;
@@ -201,10 +223,14 @@ const schema = [
         }
         if (bad) { bad.focus(); status.dataset.state = 'error'; status.textContent = 'Please fix the fields marked above.'; return; }
 
-        const button = form.querySelector('button[type=submit]');
         button.disabled = true;
         status.dataset.state = '';
         status.textContent = 'Sending…';
+
+        // Someone using autofill can finish in under three seconds. Wait out
+        // the remainder rather than have the server reject a real person.
+        const wait = minMs - (Date.now() - loadedAt);
+        if (wait > 0) await new Promise((r) => setTimeout(r, wait + 100));
 
         try {
           const res = await fetch(form.action, {
@@ -213,15 +239,20 @@ const schema = [
             body: JSON.stringify(Object.fromEntries(new FormData(form))),
           });
           const data = await res.json().catch(() => ({}));
-          if (!res.ok || !data.ok) throw new Error(data.error || 'Could not send');
-          form.hidden = true;
-          success.hidden = false;
-          success.setAttribute('tabindex', '-1');
-          success.focus();
-        } catch (err) {
-          button.disabled = false;
-          status.dataset.state = 'error';
-          status.textContent = 'That did not send. Please call or WhatsApp us on ' + form.dataset.phone + ' instead, or try again in a moment.';
+          if (res.ok && data.ok) {
+            form.hidden = true;
+            success.hidden = false;
+            success.setAttribute('tabindex', '-1');
+            success.focus();
+            return;
+          }
+          // The server says exactly what went wrong; show that, not a guess.
+          for (const f of data.fields || []) {
+            if (form.elements[f]) setError(form.elements[f], 'Please check this field.');
+          }
+          fail(data.message);
+        } catch {
+          fail();
         }
       });
     })();

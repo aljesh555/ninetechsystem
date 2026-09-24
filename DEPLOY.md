@@ -22,7 +22,7 @@ script and style). Never hand-edit `dist/`.
 Useful checks:
 
 ```bash
-node scripts/test-contact.mjs     # 20 tests on the form handler
+node scripts/test-contact.mjs     # 32 tests on the form handler
 node scripts/security-check.mjs   # greps dist/ for anything that must not ship
 ```
 

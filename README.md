@@ -24,7 +24,7 @@ npx wrangler pages deploy --project-name ninetechsystem --branch main
 ## Checks
 
 ```bash
-node scripts/test-contact.mjs     # 20 tests on the contact form handler
+node scripts/test-contact.mjs     # 32 tests on the contact form handler
 node scripts/security-check.mjs   # greps dist/ for anything that must not be public
 node scripts/serve.mjs 4321       # serve dist/ the way Cloudflare Pages does
 ```
