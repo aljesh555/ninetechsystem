@@ -57,7 +57,7 @@ ${people.map((p) => `- ${p.name}, ${p.title}`).join('\n')}
 
 ## Services and prices
 Prices are in Nepali rupees (NPR). ${VAT_NOTE} Where the scope is standard a price is
-published; everything else is quoted in writing after a free call. The final price is fixed
+published; everything else is priced in a written proposal after a consultation, which carries no cost. The final price is fixed
 in writing before any work begins.
 
 ${hub}

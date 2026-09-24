@@ -1,12 +1,13 @@
 ---
 import Base from '../../layouts/Base.astro';
-import Breadcrumb from '../../components/services/Breadcrumb.astro';
-import QuickAnswer from '../../components/services/QuickAnswer.astro';
+import BuildHero from '../../components/services/BuildHero.astro';
+import FallHeading from '../../components/services/FallHeading.astro';
 import Tiles from '../../components/services/Tiles.astro';
+import Groups from '../../components/services/Groups.astro';
+import Compare from '../../components/services/Compare.astro';
 import Flow from '../../components/services/Flow.astro';
 import Faq from '../../components/services/Faq.astro';
 import CtaStrip from '../../components/services/CtaStrip.astro';
-import { site } from '../../data/site.js';
 import { app, contactHref } from '../../data/services.js';
 import { breadcrumbList, faqPage, service } from '../../lib/schema.js';
 
@@ -16,7 +17,7 @@ const crumbs = [
   { name: 'Services', path: '/services' },
   { name: 'App', path },
 ];
-const ask = { label: 'Ask about an app', href: contactHref('mobile-app') };
+const consult = { label: 'Schedule a consultation', href: contactHref('mobile-app') };
 
 const schema = [
   service({
@@ -32,62 +33,58 @@ const schema = [
 
 <Base
   title="Mobile App Development in Kathmandu — Nine Technology"
-  description="Android and iPhone apps for businesses in Nepal, fast on mid-range phones and weak connections. We tell you honestly when a web app will do instead."
+  description="Android and iPhone apps for businesses in Nepal, tested on mid-range phones and weak networks, with store submission handled and honest advice on web apps."
   path={path}
   schema={schema}
 >
-  <section class="page-head">
+  <BuildHero
+    crumbs={crumbs}
+    kicker="Build — App"
+    h1="Mobile app development in Kathmandu"
+    sceneName="app"
+    primary={consult}
+    secondary={{ label: 'App or web app?', href: '#choose' }}
+    facts={app.facts}
+  >
+    Nine Technology builds Android and iPhone apps for businesses in Nepal, engineered to feel fast on mid-range phones and weak connections. Every app is priced in a written proposal — and where a progressive web app meets the need at far lower cost, that is what we recommend.
+  </BuildHero>
+
+  <section class="section">
     <div class="wrap">
-      <Breadcrumb crumbs={crumbs} />
-      <h1>Mobile app development in Kathmandu</h1>
-      <QuickAnswer>
-        Nine Technology builds Android and iPhone apps for businesses in Nepal, built to feel fast on mid-range phones and weak connections. Every app is quoted after a free call — and we'll tell you honestly when a progressive web app does the job for far less.
-      </QuickAnswer>
-      <p class="lead">Android and iPhone apps, built to feel fast on the mid-range phones your customers actually own — and to keep working when the connection doesn't.</p>
-      <div class="btn-row section-body">
-        <a class="btn btn-primary" href={ask.href}>{ask.label}</a>
-        <a class="btn btn-secondary" href={site.whatsapp} rel="noopener">Message us on WhatsApp</a>
+      <div class="section-head">
+        <FallHeading text="What we build" />
+        <p class="lead">One app for both stores, and the dashboard your team uses to run it.</p>
       </div>
+      <Tiles items={app.whatWeBuild} />
+    </div>
+  </section>
+
+  <section class="section section-tint" id="choose">
+    <div class="wrap">
+      <div class="section-head">
+        <FallHeading text="The right product for the job" />
+        <p class="lead">Most businesses are best served by a mobile website or a progressive web app. We recommend a native app only when the product requires one — and we make that recommendation before any money is spent.</p>
+      </div>
+      <Compare {...app.comparison} caption="Progressive web app compared with a native app" />
+      <h3 class="h4 section-body">A native app is the right choice when</h3>
+      <ul class="chips">{app.whenReal.map((w) => <li>{w}</li>)}</ul>
     </div>
   </section>
 
   <section class="section">
     <div class="wrap">
       <div class="section-head">
-        <h2>What we build</h2>
-        <p class="lead">One app for both stores, and the dashboard behind it.</p>
+        <FallHeading text="Risks we design out" />
+        <p class="lead">The four most common reasons apps fail after launch, and how each one is prevented before development begins.</p>
       </div>
-      <Tiles items={app.whatWeBuild} />
+      <Tiles items={app.risks} cols={2} />
     </div>
   </section>
 
   <section class="section section-tint">
     <div class="wrap split">
       <div class="split-head">
-        <h2>Most businesses don't need a native app</h2>
-      </div>
-      <div class="prose">
-        <p class="offer-intro">A well-built mobile website or a progressive web app often does the same job, works on every phone, costs far less, and needs no app-store approval. We'll tell you which you need before you spend on the expensive option.</p>
-        <h3 class="h4">A real app makes sense when</h3>
-        <ul class="checks">{app.whenReal.map((w) => <li>{w}</li>)}</ul>
-      </div>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="wrap split">
-      <div class="split-head">
-        <h2>Where apps usually go wrong</h2>
-        <p>We plan for all four before we build, not after launch.</p>
-      </div>
-      <ul class="plain-list">{app.failPoints.map((f) => <li>{f}</li>)}</ul>
-    </div>
-  </section>
-
-  <section class="section section-tint">
-    <div class="wrap split">
-      <div class="split-head">
-        <h2>Payments and subscriptions</h2>
+        <FallHeading text="Payments and subscriptions" />
       </div>
       <div class="prose">
         <p class="offer-intro">{app.payments}</p>
@@ -98,51 +95,52 @@ const schema = [
   <section class="section">
     <div class="wrap split">
       <div class="split-head">
-        <h2>Built for the phones and networks in Nepal</h2>
+        <FallHeading text="Built for Nepali phones and networks" />
       </div>
-      <ul class="checks">{app.builtForNepal.map((b) => <li>{b}</li>)}</ul>
+      <ul class="checks one">{app.builtForNepal.map((b) => <li>{b}</li>)}</ul>
     </div>
   </section>
 
   <section class="section section-tint">
+    <div class="wrap split">
+      <div class="split-head">
+        <FallHeading text="What you receive" />
+        <p>Delivered complete: built, tested, published and supported.</p>
+      </div>
+      <Groups groups={app.deliverables} />
+    </div>
+  </section>
+
+  <section class="section" id="process">
     <div class="wrap">
       <div class="section-head">
-        <h2>How we release it</h2>
-        <p class="lead">Four stages, from plan to the store. A native app usually takes {app.time}.</p>
+        <FallHeading text="How we release it" />
+        <p class="lead">Four stages from plan to store. A native app usually takes {app.time}.</p>
       </div>
       <Flow steps={app.release} />
     </div>
   </section>
 
-  <section class="section">
-    <div class="wrap split">
-      <div class="split-head">
-        <h2>What you get with a native app</h2>
-      </div>
-      <ul class="checks">{app.features.map((f) => <li>{f}</li>)}</ul>
-    </div>
-  </section>
-
   <section class="section section-tint">
     <div class="wrap split">
       <div class="split-head">
-        <h2>Common add-ons</h2>
-        <p>Added when your app needs them, and quoted with it.</p>
+        <FallHeading text="Common add-ons" />
+        <p>Added when the product needs them, and included in the proposal.</p>
       </div>
-      <ul class="checks">{app.addons.map((a) => <li>{a}</li>)}</ul>
+      <ul class="chips">{app.addons.map((a) => <li>{a}</li>)}</ul>
     </div>
   </section>
 
   <section class="section">
     <div class="wrap split">
       <div class="split-head">
-        <h2>How we quote it</h2>
+        <FallHeading text="Engagement and pricing" />
       </div>
       <div>
         <p class="offer-intro">{app.quote}</p>
-        <h3 class="h4 section-body">What moves the price</h3>
-        <ul class="plain-list">{app.priceMovers.map((m) => <li>{m}</li>)}</ul>
-        <a class="btn btn-primary section-body" href={ask.href}>{ask.label}</a>
+        <h3 class="h4 section-body">What determines the price</h3>
+        <ul class="chips">{app.priceMovers.map((m) => <li>{m}</li>)}</ul>
+        <a class="btn btn-primary section-body" href={consult.href}>{consult.label}</a>
       </div>
     </div>
   </section>
@@ -150,8 +148,8 @@ const schema = [
   <Faq faqs={app.faqs} heading="App questions" />
 
   <CtaStrip
-    heading="Ready to plan your app?"
-    body="Tell us what your customers would use it for. If a web app does the job, we will say so — before you spend on the expensive option."
-    primary={ask}
+    heading="Plan your app with our team"
+    body="Tell us who will use it and what it must do. If a progressive web app meets the need, we will recommend it — before you commit to the larger investment."
+    primary={consult}
   />
 </Base>

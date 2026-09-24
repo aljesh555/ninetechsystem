@@ -1,0 +1,13 @@
+---
+/**
+ * A heading whose words drop into place, once. On load for the page's h1
+ * (`now`), on scroll for section headings. The words are plain text in spans,
+ * so screen readers and search engines read the heading normally. With
+ * `stop`, the heading ends in the amber square, the company's full stop.
+ */
+const { as: Tag = 'h2', text, stop = false, now = false, class: cls = '' } = Astro.props;
+const words = text.split(' ');
+---
+<Tag class={`fall${now ? ' fall-now' : ''} ${cls}`}>
+  {words.map((w, i) => <><span class="w">{w}</span>{i < words.length - 1 ? ' ' : ''}</>)}{stop && <><span class="stop w" aria-hidden="true"></span><span class="sr-only">.</span></>}
+</Tag>

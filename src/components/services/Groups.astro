@@ -1,0 +1,13 @@
+---
+/** Deliverables in titled groups, each headed by a small icon. */
+import { icon } from '../../lib/icons.js';
+const { groups } = Astro.props;
+---
+<div class="groups">
+  {groups.map((g) => (
+    <div class="group">
+      <h3 class="group-head">{g.icon && <Fragment set:html={icon(g.icon, 36)} />}{g.name}</h3>
+      <ul class="checks">{g.items.map((i) => <li>{i}</li>)}</ul>
+    </div>
+  ))}
+</div>

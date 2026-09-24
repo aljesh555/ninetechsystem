@@ -139,7 +139,7 @@ const graph = { '@context': 'https://schema.org', '@graph': [business, ...schema
         });
 
         // Things settling into place. Once each, never replayed.
-        const items = document.querySelectorAll('.reveal');
+        const items = document.querySelectorAll('.reveal, .fall:not(.fall-now)');
         if (!items.length) return;
         if (!('IntersectionObserver' in window)) {
           for (const el of items) el.classList.add('is-in');

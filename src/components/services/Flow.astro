@@ -2,10 +2,10 @@
 /** A numbered process, left to right on wide screens. A real sequence. */
 const { steps } = Astro.props;
 ---
-<ol class="flow">
+<ol class="flow stagger reveal">
   {steps.map((s, i) => (
     <li>
-      <span class="flow-num" aria-hidden="true">{i + 1}</span>
+      <span class="flow-num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
       <h3>{s.name}</h3>
       <p>{s.body}</p>
     </li>

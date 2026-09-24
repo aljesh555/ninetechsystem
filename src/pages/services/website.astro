@@ -1,9 +1,14 @@
 ---
 import Base from '../../layouts/Base.astro';
-import Breadcrumb from '../../components/services/Breadcrumb.astro';
-import QuickAnswer from '../../components/services/QuickAnswer.astro';
+import BuildHero from '../../components/services/BuildHero.astro';
+import FallHeading from '../../components/services/FallHeading.astro';
+import Tiles from '../../components/services/Tiles.astro';
+import Groups from '../../components/services/Groups.astro';
+import Flow from '../../components/services/Flow.astro';
 import Faq from '../../components/services/Faq.astro';
 import CtaStrip from '../../components/services/CtaStrip.astro';
+import Arrow from '../../components/services/Arrow.astro';
+import { icon } from '../../lib/icons.js';
 import { website, priceLabel, npr, contactHref } from '../../data/services.js';
 import { breadcrumbList, faqPage, service } from '../../lib/schema.js';
 
@@ -14,6 +19,7 @@ const crumbs = [
   { name: 'Website', path },
 ];
 const [landing, business, store] = website.offers;
+const proposal = { label: 'Request a proposal', href: contactHref('website') };
 
 const schema = [
   ...website.offers.map((o) =>
@@ -30,77 +36,70 @@ const schema = [
   path={path}
   schema={schema}
 >
-  <section class="page-head">
-    <div class="wrap">
-      <Breadcrumb crumbs={crumbs} />
-      <h1>Website design and development in Kathmandu</h1>
-      <QuickAnswer>
-        Nine Technology builds custom websites for businesses in Nepal — landing pages from NPR {npr(landing.price.from)}, business websites from NPR {npr(business.price.from)} and online stores from NPR {npr(store.price.from)}. Every site is custom-designed, fast on Nepali mobile networks, built to be found on Google and AI search, and handed over in your name with a CMS and training.
-      </QuickAnswer>
-      <nav class="jump" aria-label="Website types">
-        {website.offers.map((o) => <a href={`#${o.id}`}>{o.short}</a>)}
-      </nav>
-    </div>
-  </section>
+  <BuildHero
+    crumbs={crumbs}
+    kicker="Build — Website"
+    h1="Website design and development in Kathmandu"
+    sceneName="website"
+    primary={proposal}
+    secondary={{ label: 'Compare formats', href: '#formats' }}
+    facts={website.facts}
+  >
+    Nine Technology builds custom websites for businesses in Nepal — landing pages from NPR {npr(landing.price.from)}, business websites from NPR {npr(business.price.from)} and online stores from NPR {npr(store.price.from)}. Every site is custom-designed, fast on Nepali mobile networks, built to be found on Google and AI search, and handed over in your name with a CMS and training.
+  </BuildHero>
 
-  <section class="section">
+  <section class="section" id="formats">
     <div class="wrap">
-      <h2>Prices at a glance</h2>
-      <div class="price-table">
-        <table>
-          <caption class="sr-only">Website types, prices and timelines</caption>
-          <thead>
-            <tr><th scope="col">Type</th><th scope="col">Price</th><th scope="col">Time</th></tr>
-          </thead>
-          <tbody>
-            {website.offers.map((o) => (
-              <tr>
-                <th scope="row"><a class="link" href={`#${o.id}`}>{o.tableName ?? o.name}</a></th>
-                <td>{priceLabel(o.price, o.priceNote)}</td>
-                <td>{o.time}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <div class="section-head">
+        <FallHeading text="Four formats, one standard" />
+        <p class="lead">Choose the format that matches what the website has to do. Every format is built to the same standard of design, performance and ownership.</p>
+      </div>
+      <div class="formats stagger reveal">
+        {website.offers.map((o) => (
+          <article class="format">
+            <h3>{o.name}</h3>
+            <p class="format-price">{priceLabel(o.price, o.priceNote)}</p>
+            <p class="format-time">{o.time}</p>
+            <ul>{o.highlights.map((h) => <li>{h}</li>)}</ul>
+            <a class="svc-view" href={`#${o.id}`}>Full specification <Arrow /></a>
+          </article>
+        ))}
       </div>
       <p class="vat-note">{website.priceFootnote}</p>
     </div>
   </section>
 
+  <section class="section section-tint">
+    <div class="wrap">
+      <div class="section-head">
+        <FallHeading text="What every website includes" />
+        <p class="lead">The standard we hold every project to, whichever format you choose.</p>
+      </div>
+      <Tiles items={website.standards} />
+    </div>
+  </section>
+
   {website.offers.map((o, i) => (
-    <section class={`section offer${i % 2 === 0 ? ' section-tint' : ''}`} id={o.id}>
+    <section class={`section offer${i % 2 ? ' section-tint' : ''}`} id={o.id}>
       <div class="wrap split">
         <div class="split-head">
+          <div class="offer-icon"><Fragment set:html={icon(['website', 'website', 'store', 'calendar'][i], 64)} /></div>
           <h2>{o.name}</h2>
           <p class="offer-price">{priceLabel(o.price, o.priceNote)}</p>
-          <p class="offer-time">{o.time}</p>
+          <p class="offer-time">Delivery: {o.time}</p>
           <a class="btn btn-primary section-body" href={contactHref(o.cta.need)}>{o.cta.label}</a>
         </div>
         <div>
           <p class="offer-intro">{o.intro}</p>
-
-          {o.features && (
-            <ul class="checks">{o.features.map((f) => <li>{f}</li>)}</ul>
-          )}
-
-          {o.clusters && (
-            <>
-              <p class="offer-lead">{o.lead}</p>
-              <div class="clusters">
-                {o.clusters.map((c) => (
-                  <div>
-                    <h3 class="h4">{c.name}</h3>
-                    <ul class="checks">{c.items.map((f) => <li>{f}</li>)}</ul>
-                  </div>
-                ))}
-              </div>
-            </>
-          )}
+          {o.lead && <p class="offer-lead">{o.lead}</p>}
+          <div class="section-body">
+            <Groups groups={o.groups ?? o.clusters} />
+          </div>
 
           {o.addons && (
             <div class="addons">
-              <h3 class="h4">Optional add-ons (quoted)</h3>
-              <ul class="plain-list">{o.addons.map((a) => <li>{a}</li>)}</ul>
+              <h3 class="h4">Optional add-ons, quoted separately</h3>
+              <ul class="chips">{o.addons.map((a) => <li>{a}</li>)}</ul>
             </div>
           )}
 
@@ -111,10 +110,21 @@ const schema = [
     </section>
   ))}
 
-  <Faq faqs={website.faqs} heading="Website questions" intro="What business owners ask us before they sign anything." />
+  <section class="section" id="process">
+    <div class="wrap">
+      <div class="section-head">
+        <FallHeading text="How a website project runs" />
+        <p class="lead">Five stages, with your approval at each one. A business website usually takes 2–3 weeks from approved content to launch.</p>
+      </div>
+      <Flow steps={website.process} />
+    </div>
+  </section>
+
+  <Faq faqs={website.faqs} heading="Website questions" intro="What business owners ask before they commit to a project." />
 
   <CtaStrip
-    heading="Tell us about the site you need"
-    body="What the business does, who it is for, and whether you already have a site. We will come back with the right type and a fixed price in writing."
+    heading="Discuss your website with our team"
+    body="Tell us about the business, its customers and any website you have today. We will recommend the right format and send a fixed-price proposal in writing."
+    primary={proposal}
   />
 </Base>

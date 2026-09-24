@@ -1,0 +1,13 @@
+---
+import { icon } from '../../lib/icons.js';
+const { facts } = Astro.props;
+---
+<dl class="facts">
+  {facts.map((f) => (
+    <div>
+      <Fragment set:html={icon(f.icon, 44)} />
+      <dt>{f.label}</dt>
+      <dd>{f.value}</dd>
+    </div>
+  ))}
+</dl>

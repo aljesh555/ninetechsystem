@@ -1,0 +1,19 @@
+---
+/** A two-option comparison. The last column is the one we recommend. */
+const { head, rows, caption } = Astro.props;
+---
+<div class="compare reveal">
+  <table>
+    <caption class="sr-only">{caption}</caption>
+    <thead><tr>{head.map((h, i) => <th scope="col">{i === 0 ? <span class="sr-only">Aspect</span> : h}</th>)}</tr></thead>
+    <tbody>
+      {rows.map(([aspect, a, b]) => (
+        <tr>
+          <th scope="row">{aspect}</th>
+          <td data-label={head[1]}>{a}</td>
+          <td data-label={head[2]}>{b}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>

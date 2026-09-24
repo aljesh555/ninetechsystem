@@ -1,0 +1,30 @@
+---
+/**
+ * The hero for the Build detail pages: breadcrumb, a heading that settles into
+ * place and ends in the amber stop, the answer-first block, two actions, the
+ * key facts, and an isometric scene whose pieces drop in one after another.
+ */
+import Breadcrumb from './Breadcrumb.astro';
+import FallHeading from './FallHeading.astro';
+import Facts from './Facts.astro';
+import { scene } from '../../lib/icons.js';
+const { crumbs, kicker, h1, sceneName, primary, secondary, facts } = Astro.props;
+---
+<section class="build-hero">
+  <div class="wrap">
+    <Breadcrumb crumbs={crumbs} />
+    <div class="build-hero-grid">
+      <div>
+        <p class="kicker">{kicker}</p>
+        <FallHeading as="h1" text={h1} stop now />
+        <p class="quick-answer"><slot /></p>
+        <div class="btn-row section-body">
+          <a class="btn btn-primary" href={primary.href}>{primary.label}</a>
+          {secondary && <a class="btn btn-secondary" href={secondary.href}>{secondary.label}</a>}
+        </div>
+      </div>
+      <div class="build-hero-art"><Fragment set:html={scene(sceneName)} /></div>
+    </div>
+    <Facts facts={facts} />
+  </div>
+</section>

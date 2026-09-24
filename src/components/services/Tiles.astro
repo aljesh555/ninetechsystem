@@ -1,10 +1,12 @@
 ---
-/** A grid of short titled items: systems, integrations, pillars. */
+/** A grid of short titled items, each with an optional isometric icon. */
+import { icon } from '../../lib/icons.js';
 const { items, cols = 3 } = Astro.props;
 ---
-<ul class={`tiles tiles-${cols}`}>
+<ul class={`tiles tiles-${cols} stagger reveal`}>
   {items.map((t) => (
     <li>
+      {t.icon && <Fragment set:html={icon(t.icon, 52)} />}
       <h3>{t.name}</h3>
       <p>{t.body}</p>
     </li>

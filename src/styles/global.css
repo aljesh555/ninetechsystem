@@ -761,3 +761,132 @@ h1 + .lead, h2 + .lead { margin-top: var(--s3); }
 .flow li:last-child { border-top-color: var(--amber); }
 .flow h3 { font-size: 1.125rem; }
 .flow p { margin-top: var(--s1); color: var(--grey); font-size: 0.9875rem; }
+
+/* ==========================================================================
+   Build detail pages (/services/website, /software, /app)
+   Motion is one idea throughout the site: things settling into place. Here
+   the heading's words drop in and the scene assembles piece by piece, once.
+   ========================================================================== */
+
+.build-hero { padding-block: var(--s6) var(--s6); border-bottom: 1px solid var(--rule); overflow: hidden; }
+@media (min-width: 720px) { .build-hero { padding-block: var(--s7) var(--s6); } }
+.build-hero-grid { display: grid; gap: var(--s5); align-items: center; }
+@media (min-width: 900px) { .build-hero-grid { grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: var(--s7); } }
+.build-hero h1 { font-size: clamp(2.1rem, 5vw, 3.4rem); letter-spacing: -0.03em; max-width: 16ch; }
+.build-hero .quick-answer { margin-top: var(--s4); }
+.build-hero-art { display: flex; justify-content: center; }
+.build-hero-art .scene { width: min(100%, 380px); height: auto; }
+@media (max-width: 899px) { .build-hero-art .scene { width: min(72%, 280px); } .build-hero-art { order: -1; } }
+
+.kicker { display: inline-flex; align-items: center; gap: var(--s2); font-size: 0.9375rem; font-weight: 500; color: var(--grey); margin-bottom: var(--s3); }
+.kicker::before { content: ''; width: 10px; height: 10px; background: var(--amber); }
+
+/* Key facts under the hero. */
+.facts { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--s4); margin-top: var(--s6); padding-top: var(--s5); border-top: 1px solid var(--rule); }
+@media (min-width: 900px) { .facts { grid-template-columns: repeat(4, 1fr); } }
+.facts div { display: grid; grid-template-columns: 44px 1fr; column-gap: var(--s2); align-items: center; }
+.facts svg { grid-row: span 2; }
+.facts dt { font-size: 0.8125rem; color: var(--grey); order: 2; }
+.facts dd { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.0625rem; letter-spacing: -0.01em; }
+
+/* Words that drop into place. */
+.fall .w { display: inline-block; }
+@keyframes drop {
+  from { opacity: 0; transform: translateY(-0.55em); }
+  to { opacity: 1; transform: none; }
+}
+.js .fall .w { opacity: 0; }
+.js .fall-now .w, .js .fall.is-in .w { animation: drop 0.6s var(--ease) both; }
+.js .fall .w:nth-child(2) { animation-delay: 0.05s; } .js .fall .w:nth-child(3) { animation-delay: 0.1s; }
+.js .fall .w:nth-child(4) { animation-delay: 0.15s; } .js .fall .w:nth-child(5) { animation-delay: 0.2s; }
+.js .fall .w:nth-child(6) { animation-delay: 0.25s; } .js .fall .w:nth-child(7) { animation-delay: 0.3s; }
+.js .fall .w:nth-child(8) { animation-delay: 0.35s; } .js .fall .w:nth-child(n+9) { animation-delay: 0.4s; }
+.js .fall .stop.w { animation-name: stop-drop; animation-delay: 0.5s; }
+@keyframes stop-drop {
+  0% { opacity: 0; transform: translateY(-1.2em); }
+  70% { opacity: 1; transform: translateY(0.06em); }
+  100% { opacity: 1; transform: none; }
+}
+
+/* The scene assembles: each piece drops onto the platform in turn. */
+.scene .part { transform-box: fill-box; }
+.js .scene .part { animation: drop-part 0.7s var(--ease) both; }
+.js .scene .part:nth-child(2) { animation-delay: 0.15s; }
+.js .scene .part:nth-child(3) { animation-delay: 0.3s; }
+.js .scene .part:nth-child(4) { animation-delay: 0.45s; }
+.js .scene .part:nth-child(5) { animation-delay: 0.6s; }
+@keyframes drop-part {
+  from { opacity: 0; transform: translateY(-18px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* Staggered reveals for longer groups (tiles, flow steps). */
+.js .stagger.reveal.is-in > *:nth-child(5) { transition-delay: 0.28s; }
+.js .stagger.reveal.is-in > *:nth-child(6) { transition-delay: 0.35s; }
+.js .stagger.reveal.is-in > *:nth-child(n+7) { transition-delay: 0.42s; }
+
+/* Tiles with icons. */
+.tiles svg { display: block; margin-bottom: var(--s2); }
+.tiles li { border-top-width: 1px; border-top-color: var(--rule); transition: border-color 0.15s ease; }
+.tiles li:hover { border-color: var(--navy); }
+
+/* Grouped deliverables. */
+.groups { display: grid; gap: var(--s5); }
+@media (min-width: 720px) { .groups { grid-template-columns: 1fr 1fr; gap: var(--s5) var(--s6); } }
+.group-head { display: flex; align-items: center; gap: var(--s2); font-size: 1.0625rem; padding-bottom: var(--s2); border-bottom: 1px solid var(--rule); }
+.group .checks { grid-template-columns: 1fr; margin-top: var(--s3); }
+
+/* Format cards (website pricing). */
+.formats { display: grid; gap: var(--s4); margin-top: var(--s5); }
+@media (min-width: 640px) { .formats { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1040px) { .formats { grid-template-columns: repeat(4, 1fr); } }
+.format { display: flex; flex-direction: column; padding: var(--s4); background: var(--white); border: 1px solid var(--rule); border-radius: var(--radius); transition: border-color 0.15s ease; }
+.format:hover { border-color: var(--navy); }
+.format h3 { font-size: 1.125rem; }
+.format-price { font-family: var(--display); font-weight: 600; font-size: 1.0625rem; letter-spacing: -0.01em; white-space: nowrap; margin-top: var(--s2); }
+.format-time { font-size: 0.875rem; color: var(--grey); }
+.format ul { margin-block: var(--s3); }
+.format li { font-size: 0.9375rem; padding-block: 6px; border-top: 1px solid var(--rule); }
+.format .svc-view { margin-top: auto; }
+
+/* Comparison table; stacks into labelled cards on phones. */
+.compare { margin-top: var(--s5); }
+.compare table { width: 100%; border-collapse: collapse; font-size: 0.9375rem; }
+.compare th, .compare td { text-align: left; vertical-align: top; padding: var(--s3); border-bottom: 1px solid var(--rule); }
+.compare thead th { font-family: var(--display); font-weight: 600; font-size: 1rem; border-bottom: 2px solid var(--navy); }
+.compare thead th:last-child { color: var(--navy); }
+.compare tbody th { font-weight: 500; color: var(--grey); width: 22%; }
+.compare td:last-child { background: var(--white); font-weight: 500; }
+.section-tint .compare td:last-child { background: var(--white); }
+.compare thead th:last-child, .compare td:last-child { border-left: 3px solid var(--amber); }
+@media (max-width: 719px) {
+  .compare thead { display: none; }
+  .compare tr { display: block; padding-block: var(--s3); border-bottom: 1px solid var(--rule); }
+  .compare th, .compare td { display: block; padding: 4px 0; border: 0; width: auto; }
+  .compare td::before { content: attr(data-label) ': '; color: var(--grey); font-weight: 400; }
+  .compare td:last-child { border-left: 3px solid var(--amber); padding-left: var(--s2); }
+}
+
+/* Chips: short, scannable lists such as common uses. */
+.chips { display: flex; flex-wrap: wrap; gap: var(--s1); margin-top: var(--s3); }
+.chips li { padding: 6px var(--s2); border: 1px solid var(--rule); border-radius: var(--radius); font-size: 0.875rem; background: var(--white); }
+
+/* Flow numbers read as a sequence. */
+.flow-num { font-size: 0.875rem; letter-spacing: 0.04em; }
+
+/* FAQ accordion: no step numbers, so no indent. */
+.faq-acc { margin-top: 0; }
+.faq-acc .acc > p { padding-left: 0; }
+.faq-acc .acc-title { font-size: 1.0625rem; }
+
+/* Reduced motion and print: everything at rest, immediately. !important
+   because the animated states above are more specific by design. */
+@media (prefers-reduced-motion: reduce) {
+  .js .fall .w, .js .scene .part { opacity: 1 !important; transform: none !important; animation: none !important; }
+}
+@media print {
+  .js .fall .w, .js .scene .part { opacity: 1 !important; transform: none !important; animation: none !important; }
+}
+.offer-icon { margin-bottom: var(--s3); }
+.checks.one { grid-template-columns: 1fr; margin-top: 0; }
+@media (max-width: 519px) { .facts { grid-template-columns: 1fr; gap: var(--s3); } }

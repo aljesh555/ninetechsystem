@@ -494,6 +494,46 @@ The references also list a technology stack. That was left out on purpose: the
 stack is not recorded anywhere in this project, and the site's rules keep the
 internal tool stack off the public site.
 
+## Company voice and the Build pages redesign (founder's direction)
+
+**Vocabulary.** The founder asked that the site read as a company and a team, not
+a freelancer. "Free call" and "free review" were retired everywhere (25 places).
+The standard terms now are:
+
+| Retired | Standard |
+|---|---|
+| Free scoping call | Consultation (at no cost, no obligation) |
+| Book a free scoping call | Schedule a consultation |
+| Get a quote for a … | Request a proposal |
+| Free process review | Process assessment |
+| Quoted after a free call | By proposal |
+
+Casual phrasing and contractions in headings and descriptions were rewritten
+("Drowning in messages?" → "More messages than your team can answer?", "We don't
+disappear after launch" → "We stay accountable after launch"). The honesty stays;
+only the register changed.
+
+**Design of /services/website, /software and /app.** They had become long single
+columns of equal-weight lists. Each now follows one structure:
+
+1. A hero with an isometric scene, a kicker ("Build — Website"), the answer-first
+   block and two actions, closed by a four-item facts strip.
+2. Capabilities as icon tiles; deliverables as titled groups (19 flat bullets
+   became four groups of four or five); a comparison table where a buyer is
+   choosing (off-the-shelf vs custom; progressive web app vs native); the
+   delivery process as numbered stages; the FAQ as an accordion.
+
+**The signature.** Every Build page heading ends in the amber square, as the home
+hero does, and its words drop into place on load; section headings do the same as
+they scroll in. The hero scene assembles piece by piece, once. It is the "building"
+metaphor, and the motion language the site already had (things settling into
+place). Transform and opacity only, never looped, off under reduced motion and in
+print. Lighthouse mobile: 99–100 on all three pages, LCP 1.7–1.8 s, CLS 0.
+
+**Icons.** Eight concept icons (lock, coins, sheet, users, store, calendar, gauge,
+launch) and three scenes were added to `src/lib/icons.js`, drawn on the same
+isometric grid as the thirteen service icons, so the family is consistent.
+
 ## Two bugs found after the first deploy
 
 **Unknown URLs returned the home page with HTTP 200.** Cloudflare Pages falls

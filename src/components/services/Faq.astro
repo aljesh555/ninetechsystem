@@ -1,4 +1,8 @@
 ---
+/**
+ * FAQ as a native <details> accordion: opens without JavaScript, keyboard
+ * operable, and the answers stay in the page for search and AI crawlers.
+ */
 const { faqs, heading = 'Common questions', intro } = Astro.props;
 ---
 <section class="section section-tint" id="faq">
@@ -7,12 +11,17 @@ const { faqs, heading = 'Common questions', intro } = Astro.props;
       <h2>{heading}</h2>
       {intro && <p>{intro}</p>}
     </div>
-    <div class="faq">
-      {faqs.map((f) => (
-        <article class="faq-item">
-          <h3>{f.q}</h3>
+    <div class="accordion faq-acc">
+      {faqs.map((f, i) => (
+        <details class="acc" open={i === 0}>
+          <summary>
+            <span class="acc-title">{f.q}</span>
+            <svg class="acc-chev" width="14" height="9" viewBox="0 0 14 9" fill="none" aria-hidden="true" focusable="false">
+              <path d="M1 1.5L7 7.5L13 1.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </summary>
           <p>{f.a}</p>
-        </article>
+        </details>
       ))}
     </div>
   </div>

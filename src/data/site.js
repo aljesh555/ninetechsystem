@@ -112,7 +112,7 @@ export const businessTypes = [
 ];
 
 export const steps = [
-  { title: 'We understand the business', body: 'A call or a visit. What you sell, who buys it, and where the work piles up. No charge, no obligation.' },
+  { title: 'We understand the business', body: 'A consultation, by call or at your office: what you sell, who buys it, and where the work piles up. It carries no cost and no obligation.' },
   { title: 'Scope and price in writing', body: 'What is included, what is not, what it costs and how long it takes. You approve it before anything starts.' },
   { title: 'We build it', body: 'You see progress as it happens, not at the end. Changes inside the agreed scope are part of the job.' },
   { title: 'We launch it', body: 'We hand over admin access and train your team on it. Everything is registered in your name.' },
