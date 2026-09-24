@@ -11,8 +11,8 @@
     "test": "node scripts/test-contact.mjs"
   },
   "devDependencies": {
-    "astro": "^5.15.0",
-    "sharp": "^0.34.4",
+    "astro": "^7.3.4",
+    "sharp": "^0.35.4",
     "svgo": "^4.1.0"
   }
 }

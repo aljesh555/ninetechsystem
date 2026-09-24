@@ -7,7 +7,9 @@ where research settled a question, the finding is recorded with it.
 
 ## Stack and build
 
-**Astro 5, static output, vanilla CSS, no UI framework.** As specified. Nothing
+**Astro 7, static output, vanilla CSS, no UI framework.** As specified (built on
+Astro 5; upgraded to 7 in September 2026 to clear security advisories in Astro and
+sharp — the built pages were compared before and after and are equivalent). Nothing
 in the site needed a component runtime, so no JavaScript framework ships at all.
 Total JS on the heaviest page is 15 KB of hand-written inline script.
 
