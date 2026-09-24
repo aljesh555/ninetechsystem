@@ -15,7 +15,7 @@ export async function GET() {
     .map((g) => {
       const lines = g.services
         .map((id) => services[id])
-        .map((s) => `- ${s.name} — ${priceLabel(s.price, s.priceNote)} — ${url(s.href)}\n  ${s.short}`)
+        .map((s) => `- ${s.name} — ${priceLabel(s.price, s.priceNote)}${s.priceSuffix ? ` ${s.priceSuffix}` : ''} — ${url(s.href)}\n  ${s.short}`)
         .join('\n');
       return `### ${g.name}\n${g.tagline}\n${lines}`;
     })

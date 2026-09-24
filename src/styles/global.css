@@ -921,3 +921,14 @@ h1 + .lead, h2 + .lead { margin-top: var(--s3); }
 .format-tiers h4, .tier-card h3 { font-family: var(--display); font-weight: 600; font-size: 1.0625rem; color: var(--navy); margin: 0; letter-spacing: -0.01em; }
 .format-tier-price { font-family: var(--display); font-weight: 600; margin-top: 2px; }
 .format-tiers p:last-child, .tier-card p:last-child { font-size: 0.9375rem; color: var(--grey); margin-top: var(--s1); }
+
+/* Grow page */
+.format > svg { display: block; margin-bottom: var(--s2); }
+.svc-price-suffix { display: block; font-family: var(--sans); font-weight: 400; font-size: 0.875rem; color: var(--grey); }
+.terms strong { font-weight: 600; }
+.cta-note { margin-top: var(--s2); font-size: 0.875rem; color: var(--grey); }
+.money .tier-card:last-child { border-left: 3px solid var(--amber); }
+.fee-rule { width: 100%; border-collapse: collapse; font-size: 0.9375rem; }
+.fee-rule th, .fee-rule td { text-align: left; padding: var(--s2) var(--s3) var(--s2) 0; border-bottom: 1px solid var(--rule); vertical-align: top; }
+.fee-rule th { font-weight: 400; color: var(--grey); }
+.fee-rule td { font-weight: 500; }

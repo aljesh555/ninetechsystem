@@ -340,6 +340,31 @@ const scenes = {
   },
 };
 
+scenes.grow = () => {
+  const board = B(1.2, 1.4, 3.2, 5.4, 0.6, 3.8);
+  const phone = B(6.6, 5.4, 0.6, 2.4, 0.6, 4.2);
+  return (
+    part(box(0.2, 0.2, 0, 9.6, 9.6, 0.6, PLATFORM)) +
+    part(
+      box(2, 1.6, 0.6, 0.5, 0.5, 2.6) + box(5.4, 1.6, 0.6, 0.5, 0.5, 2.6) +
+      box(...board) +
+      on('left', board, 0.4, 0.5, 2.6, 3.2, AMBER.left) +
+      on('left', board, 3, 2.3, 5, 2.8, LIGHT) +
+      on('left', board, 3, 1.4, 5, 1.9, LIGHT_DIM) +
+      on('left', board, 3, 0.5, 4.2, 1, LIGHT_DIM),
+    ) +
+    part(box(1.4, 5.6, 0.6, 1.2, 1.2, 1.4) + box(3, 5.6, 0.6, 1.2, 1.2, 2.6) + box(4.6, 5.6, 0.6, 1.2, 1.2, 4, AMBER)) +
+    part(
+      box(...phone) +
+      on('left', phone, 0.2, 0.5, 2.2, 3.8, LIGHT) +
+      on('left', phone, 0.35, 2.3, 1.15, 3.1, AMBER.left) +
+      on('left', phone, 1.25, 2.3, 2.05, 3.1, LIGHT_DIM) +
+      on('left', phone, 0.35, 1.2, 1.15, 2, LIGHT_DIM) +
+      on('left', phone, 1.25, 1.2, 2.05, 2, AMBER.left),
+    )
+  );
+};
+
 /** Inline SVG for a service or concept icon. Decorative: its heading names it. */
 export function icon(name, size = 80) {
   const body = draw[name]?.();

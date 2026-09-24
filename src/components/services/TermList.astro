@@ -1,0 +1,17 @@
+---
+/**
+ * A checklist whose items read "Term — detail". The term is set in bold so the
+ * list scans by its first words.
+ */
+const { items, one = false } = Astro.props;
+const split = (item) => {
+  const i = item.indexOf(' — ');
+  return i === -1 ? [null, item] : [item.slice(0, i), item.slice(i + 3)];
+};
+---
+<ul class={`checks terms${one ? ' one' : ''}`}>
+  {items.map((item) => {
+    const [term, rest] = split(item);
+    return <li>{term ? <><strong>{term}</strong> — {rest}</> : rest}</li>;
+  })}
+</ul>

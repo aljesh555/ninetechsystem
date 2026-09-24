@@ -571,6 +571,24 @@ have", because the site states elsewhere that nobody can guarantee rankings — 
 method (URL mapping, 301 redirects, metadata and schema migrated) is what makes the
 promise credible; "then quote the rebuild" became "a written proposal follows".
 
+### Grow rebuilt from the founder's content (Digital marketing)
+
+`/services/grow` now uses the Build page system: hero with its own isometric scene,
+falling heading, facts strip, four service cards, "What every engagement
+includes", one section per service, five working stages, FAQ accordion.
+
+New prices: Search & AI visibility from NPR 30,000/month; Social media marketing
+from NPR 20,000/month; Content & video from NPR 25,000 one-time or NPR 35,000/month;
+Paid advertising management from NPR 8,000/month plus the client's ad budget
+(flat fee below NPR 50,000/month of spend, 15% of spend above). Paid advertising
+has a "How the money works" block so the fee and the ad budget are never confused.
+
+The six-month SEO minimum and the "6–10 pieces per shoot day" figure were removed
+from everywhere, because the founder's new copy no longer states them.
+Wording adjusted to the company voice ("free call" → consultation, "free
+AI-search audit" → "an AI-search audit, at no cost"), and "thousands of the right
+people" was dropped as a figure that cannot yet be evidenced.
+
 ## Two bugs found after the first deploy
 
 **Unknown URLs returned the home page with HTTP 200.** Cloudflare Pages falls

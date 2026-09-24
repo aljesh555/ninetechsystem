@@ -1,24 +1,182 @@
 ---
-import GroupDetail from '../../components/services/GroupDetail.astro';
-import { grow, groups, npr } from '../../data/services.js';
+import Base from '../../layouts/Base.astro';
+import BuildHero from '../../components/services/BuildHero.astro';
+import FallHeading from '../../components/services/FallHeading.astro';
+import Tiles from '../../components/services/Tiles.astro';
+import TermList from '../../components/services/TermList.astro';
+import Flow from '../../components/services/Flow.astro';
+import Faq from '../../components/services/Faq.astro';
+import CtaStrip from '../../components/services/CtaStrip.astro';
+import Arrow from '../../components/services/Arrow.astro';
+import { icon } from '../../lib/icons.js';
+import { grow, priceLabel, npr, contactHref, VAT_NOTE } from '../../data/services.js';
+import { breadcrumbList, faqPage, service, offer, orgRef, abs } from '../../lib/schema.js';
 
-const [seo, social, video, ads] = grow.services.map((s) => npr(s.price.from));
+const path = '/services/grow';
+const crumbs = [
+  { name: 'Home', path: '/' },
+  { name: 'Services', path: '/services' },
+  { name: 'Grow', path },
+];
+const [seo, social, video, ads] = grow.services;
+const proposal = { label: 'Request a proposal', href: '/contact' };
+
+const schema = [
+  ...grow.services.map((s) =>
+    s.tiers
+      ? {
+          '@type': 'Service',
+          name: s.name,
+          serviceType: 'Digital marketing',
+          description: s.intro,
+          provider: orgRef,
+          url: abs(`${path}#${s.id}`),
+          offers: s.tiers.map((t) => ({ ...offer(t.price, `${path}#${s.id}`), name: t.name })),
+        }
+      : service({ name: s.name, description: s.intro, path: `${path}#${s.id}`, price: s.price, serviceType: 'Digital marketing' }),
+  ),
+  faqPage(path, grow.faqs),
+  breadcrumbList(crumbs),
+];
 ---
 
-<GroupDetail
-  path="/services/grow"
-  crumb="Grow"
-  title="SEO, Social Media & Ads in Kathmandu — Nine Technology"
-  description={`SEO and AI search from NPR ${seo}/month, social media from NPR ${social}/month, video shoots and paid ads for businesses in Kathmandu. Reported in enquiries.`}
-  h1="SEO, social media, video and ads in Kathmandu"
-  lead={groups.find((g) => g.id === 'grow').tagline}
-  group={grow}
-  cta={{
-    heading: 'Tell us where your customers come from now',
-    body: 'Walk-ins, word of mouth, Facebook, Google? We will tell you which channel would bring you more of them, and which would waste your money.',
-  }}
+<Base
+  title="Digital Marketing in Kathmandu — Nine Technology"
+  description={`SEO and AI search from NPR ${npr(seo.price.from)}/month, social media from NPR ${npr(social.price.from)}/month, video production and paid ads in Kathmandu. Reported in enquiries.`}
+  path={path}
+  schema={schema}
 >
-  <Fragment slot="answer">
-    Nine Technology brings customers to businesses in Nepal: search visibility on Google and AI tools (SEO, AEO and GEO) from NPR {seo} a month, social media management from NPR {social} a month, video shoots from NPR {video} a shoot, and paid ads management from NPR {ads} a month. Everything is reported in enquiries, not likes, and ad spend is always paid by you directly to the platform.
-  </Fragment>
-</GroupDetail>
+  <BuildHero
+    crumbs={crumbs}
+    kicker="Grow — Digital marketing"
+    h1="Digital marketing in Kathmandu"
+    sceneName="grow"
+    primary={proposal}
+    secondary={{ label: 'Compare services', href: '#services' }}
+    facts={grow.facts}
+  >
+    Nine Technology brings customers to businesses in Nepal: search and AI visibility from NPR {npr(seo.price.from)} a month, social media marketing from NPR {npr(social.price.from)} a month, video production from NPR {npr(video.price.from)}, and paid advertising management from NPR {npr(ads.price.from)} a month plus your own ad budget. Every channel is reported in enquiries, not likes.
+  </BuildHero>
+
+  <section class="section" id="services">
+    <div class="wrap">
+      <div class="section-head">
+        <FallHeading text="Four services, one measure" />
+        <p class="lead">{grow.intro}</p>
+      </div>
+      <div class="formats stagger reveal">
+        {grow.services.map((s) => (
+          <article class="format">
+            <Fragment set:html={icon(s.icon, 52)} />
+            <h3>{s.name}</h3>
+            <p class="format-price">{priceLabel(s.price)}</p>
+            <p class="format-time">{s.priceSuffix ?? (s.tiers ? `or NPR ${npr(s.tiers[1].price.from)}/mo monthly` : 'Scoped to your goals')}</p>
+            <ul>{s.highlights.map((h) => <li>{h}</li>)}</ul>
+            <a class="svc-view" href={`#${s.id}`}>Full details <Arrow /></a>
+          </article>
+        ))}
+      </div>
+      <p class="vat-note">{VAT_NOTE} Ad budgets are separate and paid directly to the platform.</p>
+    </div>
+  </section>
+
+  <section class="section section-tint">
+    <div class="wrap">
+      <div class="section-head">
+        <FallHeading text="What every engagement includes" />
+        <p class="lead">The standard we hold every marketing engagement to, whichever services you choose.</p>
+      </div>
+      <Tiles items={grow.standards} />
+    </div>
+  </section>
+
+  {grow.services.map((s, i) => (
+    <section class={`section offer${i % 2 ? ' section-tint' : ''}`} id={s.id}>
+      <div class="wrap split">
+        <div class="split-head">
+          <div class="offer-icon"><Fragment set:html={icon(s.icon, 64)} /></div>
+          <h2>{s.name}</h2>
+          <p class="offer-price">{priceLabel(s.price)}</p>
+          {s.priceSuffix && <p class="offer-time">{s.priceSuffix}</p>}
+          {s.tiers && <p class="offer-time">One-time or monthly</p>}
+          <a class="btn btn-primary section-body" href={contactHref(s.cta.need)}>{s.cta.label}</a>
+          {s.ctaNote && <p class="cta-note">{s.ctaNote}</p>}
+        </div>
+        <div>
+          <p class="offer-intro">{s.intro}</p>
+
+          {s.features && (
+            <div class="section-body">
+              <h3 class="group-head">{s.id === 'ads' ? 'What we do' : 'What you get'}</h3>
+              <TermList items={s.features} />
+            </div>
+          )}
+
+          {s.makes && (
+            <div class="section-body">
+              <h3 class="group-head">What we make</h3>
+              <ul class="chips">{s.makes.map((m) => <li>{m}</li>)}</ul>
+              <p class="price-movers">{s.makesNote}</p>
+            </div>
+          )}
+
+          {s.tiers && (
+            <div class="section-body">
+              <h3 class="group-head">Two ways to work with us</h3>
+              <div class="tier-cards section-body">
+                {s.tiers.map((t) => (
+                  <div class="tier-card">
+                    <h3>{t.name}</h3>
+                    <p class="format-tier-price">{priceLabel(t.price)}</p>
+                    <p>{t.body}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {s.money && (
+            <div class="section-body">
+              <h3 class="group-head">How the money works</h3>
+              <div class="tier-cards section-body money">
+                {s.money.map((m) => (
+                  <div class="tier-card">
+                    <h3>{m.name}</h3>
+                    <p class="format-tier-price">{m.value}</p>
+                    <p>{m.body}</p>
+                  </div>
+                ))}
+              </div>
+              <table class="fee-rule section-body">
+                <caption class="sr-only">How the management fee is set</caption>
+                <tbody>
+                  {s.feeRule.map(([when, fee]) => <tr><th scope="row">{when}</th><td>{fee}</td></tr>)}
+                </tbody>
+              </table>
+            </div>
+          )}
+
+          {s.note && <p class="service-note">{s.note}</p>}
+        </div>
+      </div>
+    </section>
+  ))}
+
+  <section class="section" id="process">
+    <div class="wrap">
+      <div class="section-head">
+        <FallHeading text="How we work" />
+        <p class="lead">Five stages, from the first consultation to a monthly report you can act on.</p>
+      </div>
+      <Flow steps={grow.process} />
+    </div>
+  </section>
+
+  <Faq faqs={grow.faqs} heading="Marketing questions" />
+
+  <CtaStrip
+    heading="Discuss your marketing with our team"
+    body="Tell us where your customers come from today and where you want the next ones to come from. We will recommend the channels that fit, and send a written proposal."
+    primary={proposal}
+  />
+</Base>
