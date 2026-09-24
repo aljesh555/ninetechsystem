@@ -1,7 +1,7 @@
 import { site, commitments, industries, people } from '../data/site.js';
 import {
   services, groups, website, software, app, grow, automate, support, carePlans,
-  servicePages, priceLabel, VAT_NOTE,
+  servicePages, priceLabel, VAT_NOTE, deliveryModels, modelsIntro,
 } from '../data/services.js';
 
 /**
@@ -27,6 +27,10 @@ export async function GET() {
 
   const plans = carePlans.plans
     .map((p) => `- ${p.name}, ${priceLabel(p.price)}: ${carePlans.rows.map((row, i) => `${row}: ${p.values[i]}`).join('; ')}.`)
+    .join('\n');
+
+  const models = Object.values(deliveryModels)
+    .map((m) => `- ${m.name}: ${m.short} Phases: ${m.phases.join(', ')}. Best suited to: ${m.bestFor} Pricing: ${m.pricing}`)
     .join('\n');
 
   const faqs = [website, software, app, grow, automate, support]
@@ -67,6 +71,11 @@ ${websiteTypes}
 
 ### Monthly care plans (${url('/services/support#care-plans')})
 ${plans}
+
+## Delivery models
+${modelsIntro}
+
+${models}
 
 ## What every project includes
 ${commitments.map((c) => `- ${c.title}: ${c.body}`).join('\n')}

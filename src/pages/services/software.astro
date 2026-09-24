@@ -6,6 +6,7 @@ import Tiles from '../../components/services/Tiles.astro';
 import Groups from '../../components/services/Groups.astro';
 import Compare from '../../components/services/Compare.astro';
 import Flow from '../../components/services/Flow.astro';
+import DeliveryModels from '../../components/services/DeliveryModels.astro';
 import Faq from '../../components/services/Faq.astro';
 import CtaStrip from '../../components/services/CtaStrip.astro';
 import { software, contactHref } from '../../data/services.js';
@@ -111,7 +112,9 @@ const schema = [
     </div>
   </section>
 
-  <section class="section">
+  <DeliveryModels page="software" />
+
+  <section class="section section-tint">
     <div class="wrap split">
       <div class="split-head">
         <FallHeading text="Hosting and operations" />
@@ -121,7 +124,7 @@ const schema = [
     </div>
   </section>
 
-  <section class="section section-tint">
+  <section class="section">
     <div class="wrap split">
       <div class="split-head">
         <FallHeading text="Engagement and pricing" />

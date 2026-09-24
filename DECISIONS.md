@@ -534,6 +534,26 @@ print. Lighthouse mobile: 99–100 on all three pages, LCP 1.7–1.8 s, CLS 0.
 launch) and three scenes were added to `src/lib/icons.js`, drawn on the same
 isometric grid as the thirteen service icons, so the family is consistent.
 
+### Delivery models (founder's direction)
+
+Each Build page now has a "Delivery models" section after its own delivery
+stages. It states the principle first — no project is forced into one model; the
+model follows the client's requirements, the certainty needed on cost and how
+the product will change, and the proposal names it — then gives the three
+deciding factors and seven models as a native `<details>` accordion: Waterfall,
+Iterative Waterfall, Incremental, Agile (Scrum), Prototyping, V-Model and Kanban
+(the last for work after launch). Each shows its phases, how it works, what it
+suits and how it is priced and approved.
+
+Each page leads with the models most common for its kind of work, marked with a
+badge (websites: iterative waterfall, waterfall, prototyping, agile; software:
+incremental, agile, V-model, iterative waterfall; apps: prototyping, agile,
+incremental, iterative waterfall). The content lives once in
+`src/data/services.js` (`deliveryModels`, `modelFit`), feeds `llms.txt`, and each
+page gained a "Which development model do you use?" FAQ, which is also in the
+FAQPage schema. The accordion keeps every model's text in the page, so it is
+indexable while the page stays short.
+
 ## Two bugs found after the first deploy
 
 **Unknown URLs returned the home page with HTTP 200.** Cloudflare Pages falls

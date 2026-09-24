@@ -344,6 +344,10 @@ export const website = {
       a: 'Support is included: 30 days on business websites and stores, 14 days on a landing page. After that you can move to a monthly care plan, or simply call us when you need something. There is no obligation to keep paying us.',
     },
     {
+      q: 'Which development model do you use for websites?',
+      a: 'It depends on the project. Most websites are delivered with an iterative waterfall model: requirements, design, development, testing and launch, with your approval at the end of each phase. Where requirements are still open we start with a prototype, and larger web systems can be delivered in agile sprints. The model is named in the written proposal.',
+    },
+    {
       q: 'What if I want changes after the scope is agreed?',
       a: 'Changes inside the agreed scope are part of the job. If you want something outside it, we quote the change in writing first, and nothing extra is built until you approve it.',
     },
@@ -440,6 +444,10 @@ export const software = {
     {
       q: 'Is our data safe?',
       a: 'Each person sees only what their role allows, every connection is encrypted, backups run automatically, and the data is stored on hosting registered in your name.',
+    },
+    {
+      q: 'Which software development model do you use?',
+      a: 'We do not force every project into one model. Business software is usually delivered incrementally, so you use the first module while the next is built. Evolving products use agile sprints, and systems where accuracy is critical, such as billing and payments, follow the V-model with testing planned for every phase. The proposal names the model and explains why.',
     },
     {
       q: 'Do you support it after launch?',
@@ -540,10 +548,93 @@ export const app = {
       a: 'Yes. The app can have a Nepali interface, an English one, or both with a switch. Tell us on the first call so it is part of the scope.',
     },
     {
+      q: 'Which development model do you use for apps?',
+      a: 'Most apps start with a clickable prototype, so you and your users can test the flow before development begins. The app is then built in agile two-week sprints, with a working demonstration at the end of each one. Where the scope is fully defined, an iterative waterfall model can be used instead. The proposal names the model.',
+    },
+    {
       q: 'Do you handle the Play Store and App Store?',
       a: 'Yes. We prepare the store listings and screenshots and take the app through the approval process. The developer accounts are registered in your name, and their fees are paid by you directly to Google and Apple.',
     },
   ],
+};
+
+/* --------------------------------------------------------------------------
+   Delivery models. Shown on the three Build pages. We do not force a project
+   into one model: the proposal names the model that fits the requirements.
+   -------------------------------------------------------------------------- */
+
+export const modelsIntro = 'We do not fit every project into one model. How a project is delivered depends on how settled the requirements are, how much certainty you need on cost, and how the product is expected to grow. After the consultation we recommend a model — or a combination, such as a prototype followed by incremental delivery — and name it in the written proposal.';
+
+export const modelFactors = [
+  { icon: 'sheet', name: 'Clarity of requirements', body: 'Fully defined, partly known, or still to be discovered with you.' },
+  { icon: 'coins', name: 'Certainty of cost', body: 'One fixed price for the whole scope, or a fixed price per stage.' },
+  { icon: 'gauge', name: 'Pace of change', body: 'Whether the product is finished at launch or keeps evolving.' },
+];
+
+export const deliveryModels = {
+  waterfall: {
+    name: 'Waterfall',
+    short: 'Sequential phases, one fixed scope and price.',
+    phases: ['Requirements', 'Design', 'Development', 'Testing', 'Launch'],
+    how: 'Each phase is completed and approved before the next begins. The full scope is agreed at the start, so cost and timeline are known in advance.',
+    bestFor: 'Projects with clear, stable requirements: most business websites, landing pages and well-defined systems.',
+    pricing: 'One fixed price for the whole scope, approved in the proposal.',
+  },
+  'iterative-waterfall': {
+    name: 'Iterative Waterfall',
+    short: 'Waterfall with a review and correction point at every phase.',
+    phases: ['Requirements', 'Design', 'Development', 'Testing', 'Launch'],
+    how: 'The same sequence as waterfall, but each phase ends with a formal review. Anything the review finds is corrected in that phase, or fed back to the previous one, before work moves on.',
+    bestFor: 'Defined projects where early approval matters — for example, a website whose design is signed off before development starts.',
+    pricing: 'One fixed price. Corrections found at a review within the agreed scope are included.',
+  },
+  incremental: {
+    name: 'Incremental',
+    short: 'Delivered in usable parts, the most important first.',
+    phases: ['Core release', 'Increment 2', 'Increment 3', 'Further increments'],
+    how: 'The system is divided into increments. Each is designed, built, tested and handed over as working software, so your team uses the first part while the next is built.',
+    bestFor: 'Business software replacing several manual processes — for example, billing first, then inventory, then reporting.',
+    pricing: 'A fixed price for each increment, agreed before that increment starts.',
+  },
+  agile: {
+    name: 'Agile (Scrum)',
+    short: 'Short sprints, with priorities reviewed with you every two weeks.',
+    phases: ['Backlog', 'Sprint planning', 'Two-week sprint', 'Review and demo', 'Next sprint'],
+    how: 'Work is organised into a prioritised backlog and delivered in two-week sprints. Each sprint ends with a demonstration of working software and a review of what comes next, so the plan adapts as you learn.',
+    bestFor: 'Products whose requirements will evolve: mobile apps, customer platforms and systems that grow after launch.',
+    pricing: 'Priced per sprint or per phase, agreed in writing, with priorities set by you.',
+  },
+  prototype: {
+    name: 'Prototyping',
+    short: 'See and test a working prototype before development begins.',
+    phases: ['Requirements', 'Prototype', 'Your feedback', 'Refinement', 'Development'],
+    how: 'A clickable prototype of the key screens is built first. You and your users test it, and it is refined until it is right. Only then does full development begin.',
+    bestFor: 'New products and unclear requirements — especially apps and customer-facing systems, where seeing the flow changes the brief.',
+    pricing: 'The prototype is priced on its own. Development is priced once the prototype is approved.',
+  },
+  'v-model': {
+    name: 'V-Model',
+    short: 'Every build phase paired with a planned test phase.',
+    phases: ['Requirements — acceptance tests', 'System design — system tests', 'Module design — integration tests', 'Development — unit tests'],
+    how: 'Testing is planned alongside each phase of design, not left to the end. Each level of the build is verified against the matching level of requirements before handover.',
+    bestFor: 'Systems where accuracy is critical: billing, payments, financial records and anything audited.',
+    pricing: 'One fixed price, with the test plan agreed as part of the scope.',
+  },
+  kanban: {
+    name: 'Kanban',
+    short: 'A continuous flow of improvements after launch.',
+    phases: ['Request', 'Prioritised', 'In progress', 'Review', 'Done'],
+    how: 'Requests are placed on a shared board, prioritised with you and worked through continuously, with a limit on work in progress so each item is finished properly.',
+    bestFor: 'Ongoing improvements, maintenance and support once a website, system or app is live.',
+    pricing: 'Covered by a monthly care plan or an agreed monthly scope.',
+  },
+};
+
+/** Which models each Build page leads with; the rest follow. */
+export const modelFit = {
+  website: { label: 'Common for websites', ids: ['iterative-waterfall', 'waterfall', 'prototype', 'agile'] },
+  software: { label: 'Common for software', ids: ['incremental', 'agile', 'v-model', 'iterative-waterfall'] },
+  app: { label: 'Common for apps', ids: ['prototype', 'agile', 'incremental', 'iterative-waterfall'] },
 };
 
 /* --------------------------------------------------------------------------

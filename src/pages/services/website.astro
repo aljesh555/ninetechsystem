@@ -5,6 +5,7 @@ import FallHeading from '../../components/services/FallHeading.astro';
 import Tiles from '../../components/services/Tiles.astro';
 import Groups from '../../components/services/Groups.astro';
 import Flow from '../../components/services/Flow.astro';
+import DeliveryModels from '../../components/services/DeliveryModels.astro';
 import Faq from '../../components/services/Faq.astro';
 import CtaStrip from '../../components/services/CtaStrip.astro';
 import Arrow from '../../components/services/Arrow.astro';
@@ -120,7 +121,9 @@ const schema = [
     </div>
   </section>
 
-  <Faq faqs={website.faqs} heading="Website questions" intro="What business owners ask before they commit to a project." />
+  <DeliveryModels page="website" tint />
+
+  <Faq tint={false} faqs={website.faqs} heading="Website questions" intro="What business owners ask before they commit to a project." />
 
   <CtaStrip
     heading="Discuss your website with our team"

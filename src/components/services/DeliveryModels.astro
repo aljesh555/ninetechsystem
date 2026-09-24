@@ -1,0 +1,57 @@
+---
+/**
+ * Delivery models as an accordion. The page's most common models come first,
+ * marked; the rest follow. Native <details>, so it works without JavaScript
+ * and every model's text stays in the page for search engines.
+ */
+import FallHeading from './FallHeading.astro';
+import Tiles from './Tiles.astro';
+import Arrow from './Arrow.astro';
+import { deliveryModels, modelFit, modelsIntro, modelFactors } from '../../data/services.js';
+const { page, tint = false } = Astro.props;
+const fit = modelFit[page];
+const order = [...fit.ids, ...Object.keys(deliveryModels).filter((id) => !fit.ids.includes(id))];
+---
+<section class={`section${tint ? ' section-tint' : ''}`} id="models">
+  <div class="wrap">
+    <div class="section-head">
+      <FallHeading text="Delivery models" />
+      <p class="lead">{modelsIntro}</p>
+    </div>
+    <Tiles items={modelFactors} />
+
+    <div class="accordion models">
+      {order.map((id, i) => {
+        const m = deliveryModels[id];
+        const common = fit.ids.includes(id);
+        return (
+          <details class="acc model" id={`model-${id}`} open={i === 0}>
+            <summary>
+              <span class="model-title">
+                <span class="acc-title">{m.name}</span>
+                {common && <span class="badge">{fit.label}</span>}
+                <span class="model-short">{m.short}</span>
+              </span>
+              <svg class="acc-chev" width="14" height="9" viewBox="0 0 14 9" fill="none" aria-hidden="true" focusable="false">
+                <path d="M1 1.5L7 7.5L13 1.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </summary>
+            <div class="model-body">
+              <ol class="phases" aria-label={`${m.name} phases`}>
+                {m.phases.map((p, j) => (
+                  <li>{p}{j < m.phases.length - 1 && <Arrow />}</li>
+                ))}
+              </ol>
+              <p>{m.how}</p>
+              <dl class="model-facts">
+                <div><dt>Best suited to</dt><dd>{m.bestFor}</dd></div>
+                <div><dt>Pricing and approval</dt><dd>{m.pricing}</dd></div>
+              </dl>
+            </div>
+          </details>
+        );
+      })}
+    </div>
+    <p class="price-movers section-body">Not sure which applies to your project? That is what the consultation is for — the proposal states the model we recommend and why.</p>
+  </div>
+</section>

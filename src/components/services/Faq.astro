@@ -3,9 +3,9 @@
  * FAQ as a native <details> accordion: opens without JavaScript, keyboard
  * operable, and the answers stay in the page for search and AI crawlers.
  */
-const { faqs, heading = 'Common questions', intro } = Astro.props;
+const { faqs, heading = 'Common questions', intro, tint = true } = Astro.props;
 ---
-<section class="section section-tint" id="faq">
+<section class={`section${tint ? ' section-tint' : ''}`} id="faq">
   <div class="wrap split">
     <div class="split-head">
       <h2>{heading}</h2>
