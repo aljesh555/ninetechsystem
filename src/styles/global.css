@@ -655,12 +655,12 @@ h1 + .lead, h2 + .lead { margin-top: var(--s3); }
 .svc-card:hover .svc-icon::after, .svc-card:focus-within .svc-icon::after { transform: scale(0.75); opacity: 0.06; }
 .svc-card h3 { font-size: 1.1875rem; }
 .svc-card p { color: var(--grey); font-size: 0.9375rem; margin-top: var(--s2); }
-.svc-card .svc-price { color: var(--navy); font-family: var(--display); font-weight: 600; font-size: 1rem; white-space: nowrap; margin-top: auto; padding-top: var(--s3); }
 .svc-link { text-decoration: none; }
 .svc-link::after { content: ''; position: absolute; inset: 0; border-radius: var(--radius); }
 .svc-link:focus-visible { outline: none; }
 .svc-card:has(.svc-link:focus-visible) { outline: 3px solid var(--navy); outline-offset: 2px; }
 .svc-view { display: inline-flex; align-items: center; gap: 6px; margin-top: var(--s2); font-size: 0.9375rem; font-weight: 500; }
+.svc-card .svc-view { margin-top: auto; padding-top: var(--s3); }
 .arrow { transition: transform 0.2s var(--ease); }
 .svc-card:hover .arrow { transform: translateX(3px); }
 
@@ -924,7 +924,6 @@ h1 + .lead, h2 + .lead { margin-top: var(--s3); }
 
 /* Grow page */
 .format > svg { display: block; margin-bottom: var(--s2); }
-.svc-price-suffix { display: block; font-family: var(--sans); font-weight: 400; font-size: 0.875rem; color: var(--grey); }
 .terms strong { font-weight: 600; }
 .cta-note { margin-top: var(--s2); font-size: 0.875rem; color: var(--grey); }
 .money .tier-card:last-child { border-left: 3px solid var(--amber); }

@@ -10,7 +10,7 @@ import ServiceCard from '../components/services/ServiceCard.astro';
 import CtaStrip from '../components/services/CtaStrip.astro';
 import Arrow from '../components/services/Arrow.astro';
 import { site } from '../data/site.js';
-import { services, groups, popularRequests, howToChoose, howWeWork, VAT_NOTE } from '../data/services.js';
+import { services, groups, popularRequests, howToChoose, howWeWork } from '../data/services.js';
 import { breadcrumbList, service, abs } from '../lib/schema.js';
 
 const crumbs = [
@@ -28,7 +28,7 @@ const schema = [
     itemListElement: ordered.map((s, i) => ({
       '@type': 'ListItem',
       position: i + 1,
-      item: service({ name: s.name, description: s.short, path: s.href, price: s.price, serviceType: s.group }),
+      item: service({ name: s.name, description: s.short, path: s.href, serviceType: s.group }),
     })),
   },
   breadcrumbList(crumbs),
@@ -43,16 +43,16 @@ const included = [
 ---
 
 <Base
-  title="Services and Prices — Nine Technology, Kathmandu"
-  description="Websites from NPR 20,000, custom software, apps, SEO, social media, AI automation and care plans in Kathmandu. Prices shown where the scope is standard."
+  title="Services — Nine Technology, Kathmandu"
+  description="Websites, custom software, mobile apps, SEO, social media, video, ads, AI automation and care plans for businesses in Kathmandu, from one team."
   path="/services"
   schema={schema}
 >
   <section class="page-head">
     <div class="wrap">
       <Breadcrumb crumbs={crumbs} />
-      <h1>What we build, and what it costs</h1>
-      <p class="lead">Four groups of work: we build the thing, bring customers to it, automate the work behind it, and keep it running. Standard work carries a published price; custom work is priced in a written proposal after a consultation.</p>
+      <h1>What we build, and how we deliver it</h1>
+      <p class="lead">Four groups of work: we build the thing, bring customers to it, automate the work behind it, and keep it running. Each service page sets out what is included and how it is priced; every engagement is confirmed in a written proposal.</p>
       <div class="btn-row section-body">
         <a class="btn btn-primary" href="/contact">Get a quote</a>
         <a class="btn btn-secondary" href={site.whatsapp} rel="noopener">Message us on WhatsApp</a>
@@ -73,7 +73,6 @@ const included = [
         <div class="svc-grid stagger reveal">
           {g.services.map((id) => <ServiceCard service={services[id]} />)}
         </div>
-        {i === groups.length - 1 && <p class="vat-note">{VAT_NOTE}</p>}
       </div>
     </section>
   ))}
