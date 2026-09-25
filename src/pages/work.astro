@@ -12,7 +12,6 @@ import Slot from '../components/Slot.astro';
 import Breadcrumb from '../components/services/Breadcrumb.astro';
 import FallHeading from '../components/services/FallHeading.astro';
 import CtaStrip from '../components/services/CtaStrip.astro';
-import Arrow from '../components/services/Arrow.astro';
 import { site } from '../data/site.js';
 import { projects } from '../data/projects.js';
 import { breadcrumbList, abs, orgRef } from '../lib/schema.js';
@@ -77,31 +76,29 @@ const schema = [
       <div class="wrap">
         {projects.map((p, i) => (
           <article class="case reveal" id={p.slug}>
-            <div class="case-shot">
-              <Slot name={p.image} alt={`The ${p.client} website, built by ${site.name}`} ratio="3-2" priority={i === 0} sizes="(min-width: 1000px) 52vw, 100vw" />
-            </div>
+            <figure class="case-shot">
+              <Slot name={p.image} alt={`The ${p.client} website, built by ${site.name}`} ratio="3-2" priority={i === 0} sizes="(min-width: 1000px) 56vw, 100vw" />
+              <figcaption>{p.url.replace('https://', '')}</figcaption>
+            </figure>
             <div class="case-copy">
               <p class="case-meta">
                 <a href={p.sectorHref}>{p.sector}</a>
-                <span aria-hidden="true">·</span>{p.location}
-                <span aria-hidden="true">·</span>{p.year}
+                <span class="case-dot" aria-hidden="true">·</span>
+                <span class="case-where">{p.location}</span>
               </p>
               <h2>{p.client}</h2>
               <p class="case-summary">{p.summary}</p>
 
-              <h3 class="case-label">What we built</h3>
               <ul class="case-built">
-                {p.built.map((b) => <li>{b}</li>)}
+                {p.built.map((b) => <li><strong>{b.lead}.</strong> {b.text}</li>)}
               </ul>
 
-              <h3 class="case-label">Services involved</h3>
-              <ul class="chips">
-                {p.services.map((s) => <li><a href={s.href}>{s.label}</a></li>)}
-              </ul>
-
-              <p class="section-body">
-                <a class="svc-view" href={p.url} target="_blank" rel="noopener">Open the live site <Arrow /></a>
-              </p>
+              <div class="case-foot">
+                <a class="btn btn-secondary" href={p.url} target="_blank" rel="noopener">Open the live site</a>
+                <ul class="chips case-chips">
+                  {p.services.map((s) => <li><a href={s.href}>{s.label}</a></li>)}
+                </ul>
+              </div>
             </div>
           </article>
         ))}

@@ -10,59 +10,57 @@
  *     ("A travel agency in Lazimpat")
  *   - no screenshots containing customer data, prices you were not asked to
  *     publish, or anything identifying staff
- *   - `built` describes what exists and can be checked on the live site. No
- *     outcome is claimed unless the client has confirmed the number and would
- *     repeat it out loud, in which case it goes in `outcome`
+ *   - `built` items lead with the decision, then say what it does. Each one
+ *     must be checkable on the live site. No outcome is claimed unless the
+ *     client confirmed the number and would repeat it out loud (`outcome`)
  *   - drop the screenshot at src/images/slots/<image>.jpg (see IMAGES.md)
  */
 
 export const projects = [
   {
-    slug: 'shakti-x-gym',
-    client: 'Shakti X Gym and Fitness',
-    sector: 'Gyms and fitness studios',
-    sectorHref: '/sectors#gyms',
-    location: 'Gongabu Ganeshthan, Kathmandu',
-    year: '2026',
-    url: 'https://shaktixgym.com.np',
-    summary:
-      'A gym trades on two questions a visitor asks before anything else: where is it, and what does membership cost. The site answers both before it asks for an enquiry.',
-    built: [
-      'The address published with its landmark and a map link, because an address in Kathmandu is given by landmark and floor, not by street number.',
-      'Opening hours, both phone numbers and the accepted payment methods marked up as structured data, so search results can carry them without the visitor opening the site at all.',
-      'Membership plans set out in full, so the price is answered on the page instead of becoming a message someone has to reply to.',
-      'Founder and coach profiles, the equipment and training zones, and a gallery of the floor, for the part of the decision that is about trust rather than price.',
-      'An enquiry route to a consultation, reachable from every screen.',
-      'A light and a dark theme, built for phones first, since that is how almost every visitor arrives.',
-    ],
-    services: [
-      { label: 'Business website', href: '/services/website#business' },
-      { label: 'Search visibility', href: '/services/seo' },
-    ],
-    image: 'work-shakti-x-gym',
-  },
-  {
     slug: 'fitness-durbar',
     client: 'Fitness Durbar',
     sector: 'Gyms and fitness studios',
     sectorHref: '/sectors#gyms',
-    location: 'Hattiban, Velpa Marga, Lalitpur',
+    location: 'Hattiban, Lalitpur',
     year: '2026',
     url: 'https://fitnessdurbar.com.np',
     summary:
-      'A gym is chosen on proof: who will train you, what it costs, and whether people starting where you are have got anywhere. The site puts those three in front of the visitor rather than making them ask for any of them.',
+      'A gym is chosen on proof: who will train you, what it costs, and whether people starting where you are have got anywhere. The site puts all three in front of the visitor rather than making them ask.',
     built: [
-      'Opening hours, map coordinates and the full address including its landmark marked up for search, so the gym can be placed on the map and shown as open or closed at the moment someone looks.',
-      'Programmes, trainers, pricing and member transformations each given a section of their own, so a visitor can go straight to the one question they arrived with.',
-      'The questions people ask before joining marked up as structured data, so the answers can be shown in search results without the visitor opening the site.',
-      'A blog and a media section, so the gym can publish on its own terms instead of depending on paid reach.',
-      'Instagram, Facebook and TikTok connected, and WhatsApp enquiry reachable from every screen, because those are the channels a gym in Lalitpur is actually contacted through.',
-      'A day and a night theme, and a layout built for phones first.',
+      { lead: 'Placed on the map', text: 'Opening hours, coordinates and the landmark address marked up for search, so the gym reads as open or closed at the moment someone looks for one.' },
+      { lead: 'One question, one section', text: 'Programmes, trainers, pricing and member transformations each given their own place, so nobody has to hunt for the single thing they came for.' },
+      { lead: 'Answers inside the results', text: 'The questions people ask before joining marked up as structured data, so search can answer them before the site is even opened.' },
+      { lead: 'Published, not rented', text: 'A blog and a media section, so the gym builds an audience it owns instead of paying for reach every month.' },
+      { lead: 'Reachable where they already are', text: 'Instagram, Facebook and TikTok connected, with WhatsApp enquiry on every screen.' },
     ],
     services: [
       { label: 'Business website', href: '/services/website#business' },
       { label: 'Search visibility', href: '/services/seo' },
     ],
     image: 'work-fitness-durbar',
+  },
+  {
+    slug: 'shakti-x-gym',
+    client: 'Shakti X Gym and Fitness',
+    sector: 'Gyms and fitness studios',
+    sectorHref: '/sectors#gyms',
+    location: 'Gongabu, Kathmandu',
+    year: '2026',
+    url: 'https://shaktixgym.com.np',
+    summary:
+      'A gym trades on two questions asked before any other: where is it, and what does membership cost. The site answers both before it asks anyone for an enquiry.',
+    built: [
+      { lead: 'Found by landmark', text: 'The address published with its landmark and floor alongside a map link, because that is how an address in Kathmandu is actually given.' },
+      { lead: 'Answerable from search', text: 'Opening hours, both phone numbers and the accepted payment methods marked up, so a result can carry them without the site being opened.' },
+      { lead: 'Price answered up front', text: 'Membership plans set out in full, so cost stops being a message somebody has to reply to.' },
+      { lead: 'Proof before price', text: 'Founder and coach profiles, the equipment and training zones, and a gallery of the floor, for the half of the decision that is about trust.' },
+      { lead: 'Built for the phone', text: 'A light and a dark theme, and a layout that assumes mobile data rather than office wifi.' },
+    ],
+    services: [
+      { label: 'Business website', href: '/services/website#business' },
+      { label: 'Search visibility', href: '/services/seo' },
+    ],
+    image: 'work-shakti-x-gym',
   },
 ];
