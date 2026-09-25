@@ -669,6 +669,28 @@ Implementation notes:
 - `GroupDetail.astro` and `ServiceBlock.astro` were removed: every services page
   now uses the Build page system.
 
+### Services hub redesign
+
+The hub had fallen behind the pages it links to: a text-only hero, a generic
+H1 ("What we build, and how we deliver it") that nobody searches for, bare group
+headings, and plain lists below. It now uses the same system as the service
+pages:
+
+- H1 "IT and digital services in Kathmandu" (the search people actually make),
+  title "IT & Digital Services in Kathmandu", an answer-first summary, a scene
+  combining the four groups, and a facts strip (groups and service count computed
+  from the data).
+- "Four groups, one team": a map of the page, two per row on phones.
+- Each group: falling heading with the amber stop, its own scene assembling as it
+  scrolls in (desktop), and an "Explore…" link to its overview page.
+- "Where to start": four problem-to-solution cards with icons and links.
+- "Popular requests in Nepal": every item now links to the page that covers it.
+- "How we work": the numbered-stage design, plus a link to the delivery models.
+- "What every project includes": icon cards from `commitments` in `site.js`, the
+  single source, which states the real support days (14/30/60).
+- "Get a quote" → "Request a proposal"; the shared closing strip no longer says
+  "We'll".
+
 ## Two bugs found after the first deploy
 
 **Unknown URLs returned the home page with HTTP 200.** Cloudflare Pages falls

@@ -469,6 +469,31 @@ scenes.support = () => {
   );
 };
 
+scenes.services = () => {
+  const tower = B(1, 1, 0.6, 1.9, 1.9, 4.4);
+  const panel = B(0.9, 5.4, 0.6, 3.8, 0.5, 3.2);
+  const chip = B(5.8, 5.8, 0.6, 2.9, 2.9, 0.6);
+  return (
+    part(box(0.2, 0.2, 0, 9.6, 9.6, 0.6, PLATFORM)) +
+    part(box(...tower) + [3.4, 2.4, 1.4].map((v) => on('left', tower, 0.3, v, 0.7, v + 0.4, AMBER.left)).join('')) +
+    part(box(5.4, 1.2, 0.6, 1, 1, 1.6) + box(6.7, 1.2, 0.6, 1, 1, 2.8) + box(8, 1.2, 0.6, 1, 1, 4.2, AMBER)) +
+    part(
+      box(...panel) +
+      on('left', panel, 0.3, 2.5, 3.5, 2.9, AMBER.left) +
+      on('left', panel, 0.3, 0.4, 1.8, 2.2, LIGHT) +
+      on('left', panel, 2.1, 1.7, 3.5, 2.1, LIGHT_DIM) +
+      on('left', panel, 2.1, 0.9, 3.5, 1.3, LIGHT_DIM),
+    ) +
+    part(
+      box(...chip) +
+      [6.3, 7.1, 7.9].map((a) => box(a, 8.7, 0.7, 0.45, 0.5, 0.25)).join('') +
+      [6.3, 7.1, 7.9].map((a) => box(8.7, a, 0.7, 0.5, 0.45, 0.25)).join('') +
+      on('top', chip, 0.4, 0.4, 2.5, 2.5, '#2a5189') +
+      box(6.6, 6.6, 1.2, 1.3, 1.3, 0.7, AMBER),
+    )
+  );
+};
+
 /** Inline SVG for a service or concept icon. Decorative: its heading names it. */
 export function icon(name, size = 80) {
   const body = draw[name]?.();

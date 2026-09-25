@@ -162,6 +162,8 @@ export const services = {
 export const groups = [
   {
     id: 'build',
+    icon: 'website',
+    scene: 'website',
     name: 'Build',
     tagline: 'Websites, software and apps — built properly, handed over fully.',
     summary: 'Websites, online stores, custom software and mobile apps.',
@@ -169,6 +171,9 @@ export const groups = [
   },
   {
     id: 'grow',
+    icon: 'gauge',
+    scene: 'grow',
+    page: { href: '/services/grow', label: 'Explore digital marketing' },
     name: 'Grow',
     tagline: 'A website nobody visits earns nothing. We bring customers to what we build — through search, social, video and ads — and we report in enquiries, not likes.',
     summary: 'Search visibility, social media, video production and paid ads.',
@@ -176,6 +181,9 @@ export const groups = [
   },
   {
     id: 'automate',
+    icon: 'agent',
+    scene: 'automate',
+    page: { href: '/services/automate', label: 'Explore AI automation' },
     name: 'Automate',
     tagline: 'Every business has work that repeats. We find it in yours and build systems — and AI agents — that do it for you.',
     summary: 'AI assistants and chatbots, AI agents, workflow automation and automatic reports.',
@@ -183,6 +191,9 @@ export const groups = [
   },
   {
     id: 'support',
+    icon: 'hosting',
+    scene: 'support',
+    page: { href: '/services/support', label: 'Explore support & maintenance' },
     name: 'Support',
     tagline: 'We stay accountable after launch.',
     summary: 'Domain, hosting, maintenance and monthly care plans.',
@@ -192,24 +203,24 @@ export const groups = [
 
 /** Plain-list SEO block on the hub. */
 export const popularRequests = [
-  'Business website design and development',
-  'E-commerce store with eSewa and Khalti',
-  'Restaurant, hotel and travel agency websites',
-  'School and college websites with admissions',
-  'Booking systems for clinics, salons and hotels',
-  'Billing, inventory and POS software',
-  'WhatsApp chatbot for customer enquiries',
-  'Social media management and reels',
-  'SEO and showing up in ChatGPT search',
-  'Website speed fixes and redesigns',
+  { label: 'Business website design and development', href: '/services/website#business' },
+  { label: 'E-commerce store with eSewa and Khalti', href: '/services/website#ecommerce' },
+  { label: 'Restaurant, hotel and travel agency websites', href: '/services/website' },
+  { label: 'School and college websites with admissions', href: '/services/website' },
+  { label: 'Booking systems for clinics, salons and hotels', href: '/services/website#booking' },
+  { label: 'Billing, inventory and POS software', href: '/services/software' },
+  { label: 'WhatsApp chatbot for customer enquiries', href: '/services/automate#assistants' },
+  { label: 'Social media management and reels', href: '/services/social-media' },
+  { label: 'SEO and showing up in ChatGPT search', href: '/services/seo' },
+  { label: 'Website speed fixes and redesigns', href: '/services/website#redesign' },
 ];
 
 /** "How to choose" on the hub. */
 export const howToChoose = [
-  { q: 'Need customers?', a: 'Website + Search & AI visibility', links: ['/services/website', '/services/seo'] },
-  { q: 'Need a system?', a: 'Software', links: ['/services/software'] },
-  { q: 'More messages than your team can answer?', a: 'AI assistants & workflow automation', links: ['/services/automate'] },
-  { q: 'A website that is slow or out of date?', a: 'Website redesign & rescue, built to keep your search rankings', links: ['/services/website#redesign'] },
+  { icon: 'search', name: 'Need more customers?', body: 'A website that converts, and search and AI visibility so the right people find it.', link: { label: 'Website and search', href: '/services/seo' } },
+  { icon: 'software', name: 'Need a system?', body: 'Custom software that replaces the Excel files, registers and message threads.', link: { label: 'Custom software', href: '/services/software' } },
+  { icon: 'chat', name: 'More messages than your team can answer?', body: 'AI assistants and workflow automation that reply, follow up and report for you.', link: { label: 'AI automation', href: '/services/automate' } },
+  { icon: 'gauge', name: 'A website that is slow or out of date?', body: 'A redesign or rebuild, built to keep the search rankings you already have.', link: { label: 'Redesign & rescue', href: '/services/website#redesign' } },
 ];
 
 /* --------------------------------------------------------------------------

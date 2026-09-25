@@ -1,15 +1,19 @@
 ---
 /**
- * The services hub. It routes; the detail pages under /services/ explain.
- * Old links to /services#build, #grow, #automate and #support still land on
- * the matching group here, because each group section keeps that id.
+ * The services hub. It routes; the service pages explain. Old links to
+ * /services#build, #grow, #automate and #support still land on the matching
+ * group here, because each group section keeps that id.
  */
 import Base from '../layouts/Base.astro';
-import Breadcrumb from '../components/services/Breadcrumb.astro';
+import BuildHero from '../components/services/BuildHero.astro';
+import FallHeading from '../components/services/FallHeading.astro';
 import ServiceCard from '../components/services/ServiceCard.astro';
+import Tiles from '../components/services/Tiles.astro';
+import Flow from '../components/services/Flow.astro';
 import CtaStrip from '../components/services/CtaStrip.astro';
 import Arrow from '../components/services/Arrow.astro';
-import { site } from '../data/site.js';
+import { icon, scene } from '../lib/icons.js';
+import { site, commitments } from '../data/site.js';
 import { services, groups, popularRequests, howToChoose, howWeWork } from '../data/services.js';
 import { breadcrumbList, service, abs } from '../lib/schema.js';
 
@@ -17,9 +21,23 @@ const crumbs = [
   { name: 'Home', path: '/' },
   { name: 'Services', path: '/services' },
 ];
+const proposal = { label: 'Request a proposal', href: '/contact' };
+const total = groups.reduce((n, g) => n + g.services.length, 0);
+
+const facts = [
+  { icon: 'website', value: `4 groups, ${total} services`, label: 'Build, grow, automate, support' },
+  { icon: 'users', value: 'One team', label: 'Builds, markets and maintains' },
+  { icon: 'sheet', value: 'Written proposal', label: 'Scope, price and timeline' },
+  { icon: 'lock', value: 'In your name', label: 'Domain, hosting and logins' },
+];
+
+// Section backgrounds alternate from the first section after the hero.
+const bg = (i) => (i % 2 === 0 ? ' section-tint' : '');
+
+const commitmentIcons = ['sheet', 'lock', 'maintenance', 'users'];
+const included = commitments.map((c, i) => ({ icon: commitmentIcons[i], name: c.title, body: c.body }));
 
 const ordered = groups.flatMap((g) => g.services.map((id) => ({ ...services[id], group: g.name })));
-
 const schema = [
   {
     '@type': 'ItemList',
@@ -33,42 +51,55 @@ const schema = [
   },
   breadcrumbList(crumbs),
 ];
-
-const included = [
-  'Scope and price in writing before we start',
-  'Admin access to everything, registered in your name',
-  'Support included after launch: 30 days on websites, 60 on software and apps',
-  'One team builds, markets and maintains it',
-];
 ---
 
 <Base
-  title="Services — Nine Technology, Kathmandu"
-  description="Websites, custom software, mobile apps, SEO, social media, video, ads, AI automation and care plans for businesses in Kathmandu, from one team."
+  title="IT & Digital Services in Kathmandu — Nine Technology"
+  description="Websites, software, apps, SEO, social media, video, ads, AI automation and support for businesses in Kathmandu. One team; every engagement in writing."
   path="/services"
   schema={schema}
 >
-  <section class="page-head">
+  <BuildHero
+    crumbs={crumbs}
+    kicker="Services"
+    h1="IT and digital services in Kathmandu"
+    sceneName="services"
+    primary={proposal}
+    secondary={{ label: 'Message us on WhatsApp', href: site.whatsapp }}
+    facts={facts}
+  >
+    Nine Technology is an IT and digital services company in Kathmandu. We build websites, software and apps, bring customers to them through search, social, video and ads, automate repetitive work with AI, and keep everything running — one team, with every engagement confirmed in a written proposal.
+  </BuildHero>
+
+  <section class={`section${bg(0)}`} id="groups">
     <div class="wrap">
-      <Breadcrumb crumbs={crumbs} />
-      <h1>What we build, and how we deliver it</h1>
-      <p class="lead">Four groups of work: we build the thing, bring customers to it, automate the work behind it, and keep it running. Each service page sets out what is included and how it is priced; every engagement is confirmed in a written proposal.</p>
-      <div class="btn-row section-body">
-        <a class="btn btn-primary" href="/contact">Get a quote</a>
-        <a class="btn btn-secondary" href={site.whatsapp} rel="noopener">Message us on WhatsApp</a>
+      <div class="section-head">
+        <FallHeading text="Four groups, one team" />
+        <p class="lead">We build the thing, bring customers to it, automate the work behind it, and keep it running. Take one group or all four.</p>
       </div>
-      <nav class="jump" aria-label="Service groups">
-        {groups.map((g) => <a href={`#${g.id}`}>{g.name}</a>)}
-      </nav>
+      <div class="group-map stagger reveal">
+        {groups.map((g) => (
+          <a class="group-tile" href={`#${g.id}`}>
+            <Fragment set:html={icon(g.icon, 52)} />
+            <span class="group-tile-name">{g.name}</span>
+            <span class="group-tile-summary">{g.summary}</span>
+            <span class="svc-view">{g.services.length} services <Arrow /></span>
+          </a>
+        ))}
+      </div>
     </div>
   </section>
 
   {groups.map((g, i) => (
-    <section class={`section svc-group${i % 2 ? ' section-tint' : ''}`} id={g.id}>
+    <section class={`section svc-group${bg(i + 1)}`} id={g.id}>
       <div class="wrap">
-        <div class="section-head reveal">
-          <h2>{g.name}</h2>
-          <p class="lead">{g.tagline}</p>
+        <div class="group-head">
+          <div class="section-head">
+            <FallHeading text={g.name} stop />
+            <p class="lead">{g.tagline}</p>
+            {g.page && <p class="section-body"><a class="svc-view" href={g.page.href}>{g.page.label} <Arrow /></a></p>}
+          </div>
+          <div class="group-art reveal"><Fragment set:html={scene(g.scene)} /></div>
         </div>
         <div class="svc-grid stagger reveal">
           {g.services.map((id) => <ServiceCard service={services[id]} />)}
@@ -77,64 +108,61 @@ const included = [
     </section>
   ))}
 
-  <section class="section">
-    <div class="wrap split">
-      <div class="split-head">
-        <h2>How to choose</h2>
-        <p>Start from the problem, not the product.</p>
+  <section class={`section${bg(groups.length + 1)}`}>
+    <div class="wrap">
+      <div class="section-head">
+        <FallHeading text="Where to start" />
+        <p class="lead">Start from the problem, not the product.</p>
       </div>
-      <div>
-        <dl class="choose">
-          {howToChoose.map((c) => (
-            <div>
-              <dt>{c.q}</dt>
-              <dd><a class="link" href={c.links[0]}>{c.a}</a></dd>
-            </div>
-          ))}
-        </dl>
-      </div>
-    </div>
-  </section>
-
-  <section class="section section-tint">
-    <div class="wrap split">
-      <div class="split-head">
-        <h2>Popular requests in Nepal</h2>
-        <p>These are the things businesses in Kathmandu ask us for most.</p>
-      </div>
-      <ul class="plain-list">
-        {popularRequests.map((r) => <li>{r}</li>)}
-      </ul>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="wrap split">
-      <div class="split-head">
-        <h2>How we work</h2>
-        <p>Five steps, in this order, on every project.</p>
-      </div>
-      <ol class="steps-list">
-        {howWeWork.map((s) => (
-          <li><strong>{s.title}</strong> — {s.body}</li>
+      <ul class="tiles tiles-2 start stagger reveal">
+        {howToChoose.map((c) => (
+          <li>
+            <Fragment set:html={icon(c.icon, 52)} />
+            <h3>{c.name}</h3>
+            <p>{c.body}</p>
+            <a class="svc-view" href={c.link.href}>{c.link.label} <Arrow /></a>
+          </li>
         ))}
-      </ol>
-    </div>
-  </section>
-
-  <section class="section section-tint">
-    <div class="wrap split">
-      <div class="split-head">
-        <h2>What every project includes</h2>
-        <p>In every contract we write, not just on this page.</p>
-      </div>
-      <ul class="plain-list included">
-        {included.map((c) => <li>{c}</li>)}
       </ul>
     </div>
   </section>
 
-  <CtaStrip />
+  <section class={`section${bg(groups.length + 2)}`}>
+    <div class="wrap split">
+      <div class="split-head">
+        <FallHeading text="Popular requests in Nepal" />
+        <p>The work businesses in Kathmandu ask us for most. Each links to the service that covers it.</p>
+      </div>
+      <ul class="request-list">
+        {popularRequests.map((r) => (
+          <li><a href={r.href}><span>{r.label}</span><Arrow /></a></li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class={`section${bg(groups.length + 3)}`}>
+    <div class="wrap">
+      <div class="section-head">
+        <FallHeading text="How we work" />
+        <p class="lead">Five stages, in this order, on every project.</p>
+      </div>
+      <Flow steps={howWeWork.map((s) => ({ name: s.title, body: s.body }))} />
+      <p class="price-movers section-body">The delivery model — waterfall, iterative, incremental, agile and others — is chosen to fit each project. <a class="link" href="/services/software#models">See how we choose</a>.</p>
+    </div>
+  </section>
+
+  <section class={`section${bg(groups.length + 4)}`}>
+    <div class="wrap">
+      <div class="section-head">
+        <FallHeading text="What every project includes" />
+        <p class="lead">In every contract we write, not just on this page.</p>
+      </div>
+      <Tiles items={included} cols={2} />
+    </div>
+  </section>
+
+  <CtaStrip primary={proposal} />
 
   <script is:inline>
     // Cards tilt a few degrees toward the pointer. Mouse and trackpad only, and
