@@ -1058,12 +1058,35 @@ h1 + .lead, h2 + .lead { margin-top: var(--s3); }
 .problems .svc-view { margin-top: auto; padding-top: var(--s3); }
 
 /* Industries: name and the work we most often do for it. */
-/* Sectors, set as a specification sheet: name left, capability right. */
-.sectors { margin-top: var(--s5); border-top: 1px solid var(--rule); }
-.sectors > div { display: grid; gap: var(--s1) var(--s5); padding-block: var(--s4); border-bottom: 1px solid var(--rule); }
-@media (min-width: 760px) { .sectors > div { grid-template-columns: 15rem 1fr; align-items: baseline; } }
-.sectors dt { font-family: var(--display); font-weight: 600; font-size: 1.0625rem; letter-spacing: -0.01em; }
-.sectors dd { margin: 0; color: var(--grey); max-width: 52ch; }
+/* Sectors: the operational pattern, and the services it routes to. */
+.sectors { display: grid; gap: var(--s4); margin-top: var(--s5); }
+@media (min-width: 760px) { .sectors { grid-template-columns: repeat(2, 1fr); } }
+.sectors > li {
+  position: relative; display: flex; flex-direction: column;
+  padding: var(--s4); background: var(--off-white);
+  border: 1px solid var(--rule); border-top: 2px solid var(--navy);
+  border-radius: var(--radius); transition: border-color 0.15s ease;
+}
+.sectors > li:hover { border-color: var(--navy); }
+.sector-index {
+  position: absolute; top: var(--s3); right: var(--s4);
+  font-family: var(--display); font-weight: 600; font-size: 0.875rem;
+  letter-spacing: 0.04em; color: #c3cbd8;
+}
+.sectors h3 { font-size: 1.1875rem; padding-right: var(--s5); }
+.sector-pattern { margin-top: var(--s2); color: var(--grey); font-size: 0.9875rem; }
+.sector-label {
+  margin-top: var(--s4); padding-top: var(--s3); border-top: 1px solid var(--rule);
+  font-size: 0.8125rem; font-weight: 500; color: var(--grey);
+}
+.sector-uses { display: flex; flex-wrap: wrap; gap: var(--s1); margin-top: var(--s2); }
+.sector-uses a {
+  display: inline-block; padding: 5px var(--s2);
+  background: var(--white); border: 1px solid var(--rule); border-radius: var(--radius);
+  font-size: 0.875rem; font-weight: 500; text-decoration: none;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+.sector-uses a:hover { border-color: var(--navy); background: #fff7eb; }
 
 /* Commitments, set as numbered pledges. */
 .pledges { display: grid; gap: var(--s5); margin-top: var(--s5); }

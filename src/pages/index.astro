@@ -155,14 +155,19 @@ const schema = [
         <FallHeading text="Sectors we work in" />
         <p class="lead">Every sector has its own operational shape. These are the patterns we see repeatedly in Kathmandu, and what we build against them.</p>
       </div>
-      <dl class="sectors stagger reveal">
-        {industries.map((i) => (
-          <div>
-            <dt>{i.name}</dt>
-            <dd>{i.needs}</dd>
-          </div>
+      <ol class="sectors stagger reveal">
+        {industries.map((i, n) => (
+          <li>
+            <p class="sector-index" aria-hidden="true">{String(n + 1).padStart(2, '0')}</p>
+            <h3>{i.name}</h3>
+            <p class="sector-pattern">{i.needs}</p>
+            <p class="sector-label">Typically involves</p>
+            <ul class="sector-uses">
+              {i.uses.map((u) => <li><a href={u.href}>{u.label}</a></li>)}
+            </ul>
+          </li>
         ))}
-      </dl>
+      </ol>
     </div>
   </section>
 

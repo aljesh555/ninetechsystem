@@ -100,34 +100,82 @@ export const industries = [
   {
     name: 'Restaurants and cafés',
     needs: 'Online ordering with eSewa, Khalti and Fonepay, delivery zones and menu management, order handling that does not live in a notebook, and social content that fills tables midweek.',
+    uses: [
+      { label: 'Online store', href: '/services/website#ecommerce' },
+      { label: 'AI chat', href: '/services/automate#assistants' },
+      { label: 'Social media', href: '/services/social-media' },
+      { label: 'Content and video', href: '/services/video-production' },
+    ],
   },
   {
     name: 'Hotels and resorts',
     needs: 'Direct booking that reduces commission, property and room galleries, visibility for travellers researching before they arrive, and enquiry handling across time zones.',
+    uses: [
+      { label: 'Booking systems', href: '/services/website#booking' },
+      { label: 'Search visibility', href: '/services/seo' },
+      { label: 'Content and video', href: '/services/video-production' },
+      { label: 'AI chat', href: '/services/automate#assistants' },
+    ],
   },
   {
     name: 'Travel and trekking',
     needs: 'Itinerary structure built for seasonal demand, enquiry capture and qualification, bilingual follow-up that does not lapse, and content that answers the questions asked before booking.',
+    uses: [
+      { label: 'Business website', href: '/services/website#business' },
+      { label: 'Search visibility', href: '/services/seo' },
+      { label: 'AI chat', href: '/services/automate#assistants' },
+      { label: 'Workflow automation', href: '/services/automate#workflows' },
+    ],
   },
   {
     name: 'Schools and colleges',
     needs: 'Admissions journeys with forms and downloads, notices and results, fee reminders, and management systems for records, attendance and reporting.',
+    uses: [
+      { label: 'Business website', href: '/services/website#business' },
+      { label: 'Custom software', href: '/services/software' },
+      { label: 'Workflow automation', href: '/services/automate#workflows' },
+      { label: 'Social media', href: '/services/social-media' },
+    ],
   },
   {
     name: 'Clinics and healthcare',
     needs: 'Appointment booking, practitioner profiles, patient reminders, and an accessible, credible presence for people deciding where to be treated.',
+    uses: [
+      { label: 'Booking systems', href: '/services/website#booking' },
+      { label: 'AI chat', href: '/services/automate#assistants' },
+      { label: 'Workflow automation', href: '/services/automate#workflows' },
+      { label: 'Search visibility', href: '/services/seo' },
+    ],
   },
   {
     name: 'Retail and e-commerce',
     needs: 'Product discovery and search, local payments and cash on delivery, stock and order operations, mobile performance, and paid acquisition measured to cost per order.',
+    uses: [
+      { label: 'Online store', href: '/services/website#ecommerce' },
+      { label: 'Paid advertising', href: '/services/paid-ads' },
+      { label: 'Search visibility', href: '/services/seo' },
+      { label: 'Custom software', href: '/services/software' },
+    ],
   },
   {
     name: 'Distributors and wholesalers',
     needs: 'Billing, inventory and POS systems, order-to-invoice automation, dealer and staff access with roles, and daily sales reporting that compiles itself.',
+    uses: [
+      { label: 'Custom software', href: '/services/software' },
+      { label: 'Workflow automation', href: '/services/automate#workflows' },
+      { label: 'Automatic reports', href: '/services/automate#reports' },
+      { label: 'Support and care', href: '/services/support' },
+    ],
   },
   {
     name: 'NGOs and development organisations',
     needs: 'Programme and impact reporting, document libraries that stay findable, bilingual publishing, and a structure donors and partners can navigate.',
+    uses: [
+      { label: 'Business website', href: '/services/website#business' },
+      { label: 'Search visibility', href: '/services/seo' },
+      { label: 'Content and video', href: '/services/video-production' },
+      { label: 'Support and care', href: '/services/support' },
+    ],
   },
 ];
 
