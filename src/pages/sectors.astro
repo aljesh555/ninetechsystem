@@ -7,6 +7,7 @@ import Base from '../layouts/Base.astro';
 import BuildHero from '../components/services/BuildHero.astro';
 import FallHeading from '../components/services/FallHeading.astro';
 import CtaStrip from '../components/services/CtaStrip.astro';
+import Arrow from '../components/services/Arrow.astro';
 import { site, industries } from '../data/site.js';
 import { breadcrumbList, abs } from '../lib/schema.js';
 
@@ -75,6 +76,9 @@ const schema = [
             <ul class="sector-uses">
               {i.uses.map((u) => <li><a href={u.href}>{u.label}</a></li>)}
             </ul>
+            {i.proof && (
+              <p class="sector-proof"><a class="svc-view" href={i.proof.href}>Work we have delivered: {i.proof.label} <Arrow /></a></p>
+            )}
           </li>
         ))}
       </ol>

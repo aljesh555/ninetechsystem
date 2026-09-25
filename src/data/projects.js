@@ -1,53 +1,44 @@
 /**
  * Real projects only.
  *
- * `projects` is empty on purpose: the company launched in 2026 and no client
- * has yet given written permission to be named or shown. While it is empty,
- * Home and /work render the honest empty state instead of invented work.
+ * A project appears here once the client has given written permission to be
+ * named and shown. Until then it stays off the site: /work renders an honest
+ * empty state rather than invented work.
  *
- * To publish a project, copy one of the templates below into the array. The
- * rules from CLAUDE.md section 2 apply to every field:
+ * Rules for every field:
  *   - no client name without written permission; anonymise until you have it
  *     ("A travel agency in Lazimpat")
  *   - no screenshots containing customer data, prices you were not asked to
  *     publish, or anything identifying staff
- *   - `outcome` must be a number the client would confirm out loud
- *   - drop the image at src/images/slots/<image>.jpg (see IMAGES.md)
+ *   - `built` describes what exists and can be checked on the live site. No
+ *     outcome is claimed unless the client has confirmed the number and would
+ *     repeat it out loud, in which case it goes in `outcome`
+ *   - drop the screenshot at src/images/slots/<image>.jpg (see IMAGES.md)
  */
 
-export const projects = [];
-
-/* ---------------------------------------------------------------------------
-PLACEHOLDER: replace with a real project before publishing.
-
-{
-  slug: 'travel-agency-booking',
-  client: 'A travel agency in Lazimpat',   // real name only with written permission
-  what: 'Booking and enquiry system with staff logins and automatic replies.',
-  outcome: 'Enquiries answered in minutes instead of the next morning.',
-  image: 'work-01',
-  year: '2026',
-},
-
-PLACEHOLDER: replace with a real project before publishing.
-
-{
-  slug: 'restaurant-online-orders',
-  client: 'A restaurant in Thamel',
-  what: 'Online ordering with eSewa and Khalti, and a phone order dashboard.',
-  outcome: 'Orders stopped being written in a notebook.',
-  image: 'work-02',
-  year: '2026',
-},
-
-PLACEHOLDER: replace with a real project before publishing.
-
-{
-  slug: 'distributor-reporting',
-  client: 'A distributor in Kathmandu',
-  what: 'Daily sales reporting automated out of the existing Excel files.',
-  outcome: 'The 8pm report writes itself.',
-  image: 'work-03',
-  year: '2026',
-},
---------------------------------------------------------------------------- */
+export const projects = [
+  {
+    slug: 'shakti-x-gym',
+    client: 'Shakti X Gym and Fitness',
+    sector: 'Gyms and fitness studios',
+    sectorHref: '/sectors#gyms',
+    location: 'Gongabu Ganeshthan, Kathmandu',
+    year: '2026',
+    url: 'https://shaktixgym.com.np',
+    summary:
+      'A gym trades on two questions a visitor asks before anything else: where is it, and what does membership cost. The site answers both before it asks for an enquiry.',
+    built: [
+      'The address published with its landmark and a map link, because an address in Kathmandu is given by landmark and floor, not by street number.',
+      'Opening hours, both phone numbers and the accepted payment methods marked up as structured data, so search results can carry them without the visitor opening the site at all.',
+      'Membership plans set out in full, so the price is answered on the page instead of becoming a message someone has to reply to.',
+      'Founder and coach profiles, the equipment and training zones, and a gallery of the floor, for the part of the decision that is about trust rather than price.',
+      'An enquiry route to a consultation, reachable from every screen.',
+      'A light and a dark theme, built for phones first, since that is how almost every visitor arrives.',
+    ],
+    services: [
+      { label: 'Business website', href: '/services/website#business' },
+      { label: 'Search visibility', href: '/services/seo' },
+    ],
+    image: 'work-shakti-x-gym',
+  },
+];

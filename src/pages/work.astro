@@ -1,72 +1,132 @@
 ---
+/**
+ * Work. One case study per project, published only once the client has given
+ * written permission. Each describes what exists and can be checked on the live
+ * site; no outcome is claimed unless the client confirmed the number.
+ *
+ * While `projects` is empty the page renders the honest empty state rather than
+ * inventing work, so it is safe to ship at any point.
+ */
 import Base from '../layouts/Base.astro';
 import Slot from '../components/Slot.astro';
+import Breadcrumb from '../components/services/Breadcrumb.astro';
+import FallHeading from '../components/services/FallHeading.astro';
+import CtaStrip from '../components/services/CtaStrip.astro';
+import Arrow from '../components/services/Arrow.astro';
 import { site } from '../data/site.js';
 import { projects } from '../data/projects.js';
+import { breadcrumbList, abs, orgRef } from '../lib/schema.js';
+
+const path = '/work';
+const crumbs = [
+  { name: 'Home', path: '/' },
+  { name: 'Work', path },
+];
+const consult = { label: 'Request a consultation', href: '/contact' };
 
 const schema = [
-  {
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home', item: site.url },
-      { '@type': 'ListItem', position: 2, name: 'Work', item: `${site.url}/work` },
-    ],
-  },
+  ...(projects.length
+    ? [{
+        '@type': 'ItemList',
+        '@id': `${abs(path)}#work`,
+        name: `Work delivered by ${site.name}`,
+        itemListElement: projects.map((p, n) => ({
+          '@type': 'ListItem',
+          position: n + 1,
+          item: {
+            '@type': 'WebSite',
+            name: p.client,
+            url: p.url,
+            description: p.summary,
+            creator: orgRef,
+          },
+        })),
+      }]
+    : []),
+  breadcrumbList(crumbs),
 ];
 ---
 
 <Base
   title="Our Work — Nine Technology"
-  description="Our first projects are being documented here. Message us and we will show you the work we have built for businesses in Kathmandu directly."
-  path="/work"
+  description="Projects we have delivered for businesses in Kathmandu, published with the client's written permission. Open the live sites and judge the work yourself."
+  path={path}
   schema={schema}
 >
   <section class="page-head">
     <div class="wrap">
-      <h1>Our work</h1>
-      <p class="lead">We publish a project here once the client has given written permission and we can show a result they would repeat out loud. Until then this page stays honest and short.</p>
+      <Breadcrumb crumbs={crumbs} />
+      <p class="kicker">Work</p>
+      <FallHeading as="h1" text="Our work" stop now />
+      <p class="lead">A project appears here only once the client has given written permission to be named and shown. Every site linked below is live, so you can open it, load it on your own phone and judge the work rather than take our word for it.</p>
     </div>
   </section>
 
-  <section class="section">
-    <div class="wrap">
-      {projects.length === 0 ? (
-        <div class="empty">
-          <h2>We are a new company, founded in 2026</h2>
-          <p>Our first projects are being documented here. Message us and we will show you the work directly — the live sites, the systems behind them, and what each one changed for the business.</p>
-          <p>We do not put invented case studies or other companies’ screenshots on this page.</p>
-          <div class="btn-row">
-            <a class="btn btn-primary" href={site.whatsapp} rel="noopener">Message us on WhatsApp</a>
-            <a class="btn btn-secondary" href="/contact">Get a quote</a>
-          </div>
+  {projects.length === 0 ? (
+    <section class="section">
+      <div class="wrap narrow">
+        <p class="lead">The first projects are being documented here. Ask us and we will take you through the work directly: the live sites, the systems behind them, and what each one changed for the business.</p>
+        <div class="btn-row section-body">
+          <a class="btn btn-primary" href={consult.href}>{consult.label}</a>
+          <a class="btn btn-secondary" href={site.whatsapp} rel="noopener">Message us on WhatsApp</a>
         </div>
-      ) : (
-        <div class="projects">
-          {projects.map((p) => (
-            <article class="project">
-              <Slot name={p.image} alt={`${p.what} — ${p.client}`} ratio="3-2" sizes="(min-width: 760px) 33vw, 100vw" />
-              <h3>{p.client}</h3>
-              <p>{p.what}</p>
-              <p><strong>{p.outcome}</strong></p>
-            </article>
-          ))}
-        </div>
-      )}
-    </div>
-  </section>
+      </div>
+    </section>
+  ) : (
+    <section class="section">
+      <div class="wrap">
+        {projects.map((p, i) => (
+          <article class="case reveal" id={p.slug}>
+            <div class="case-shot">
+              <Slot name={p.image} alt={`The ${p.client} website, built by ${site.name}`} ratio="3-2" priority={i === 0} sizes="(min-width: 1000px) 52vw, 100vw" />
+            </div>
+            <div class="case-copy">
+              <p class="case-meta">
+                <a href={p.sectorHref}>{p.sector}</a>
+                <span aria-hidden="true">·</span>{p.location}
+                <span aria-hidden="true">·</span>{p.year}
+              </p>
+              <h2>{p.client}</h2>
+              <p class="case-summary">{p.summary}</p>
+
+              <h3 class="case-label">What we built</h3>
+              <ul class="case-built">
+                {p.built.map((b) => <li>{b}</li>)}
+              </ul>
+
+              <h3 class="case-label">Services involved</h3>
+              <ul class="chips">
+                {p.services.map((s) => <li><a href={s.href}>{s.label}</a></li>)}
+              </ul>
+
+              <p class="section-body">
+                <a class="svc-view" href={p.url} target="_blank" rel="noopener">Open the live site <Arrow /></a>
+              </p>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+  )}
 
   <section class="section section-tint">
     <div class="wrap split">
       <div class="split-head">
         <h2>What we would show you</h2>
-        <p>Ask and we will walk you through it on a call or in person.</p>
+        <p>More than fits on a page. Ask, and we will take you through it on a call or in person.</p>
       </div>
       <div class="prose">
-        <p>The live site or system, opened on a phone, so you can see how fast it loads on mobile data.</p>
-        <p>The admin side — the part you would actually use every day to change prices, add products or answer enquiries.</p>
+        <p>The live site or system opened on a phone, so you can see how it loads on mobile data rather than on office wifi.</p>
+        <p>The admin side: the part you would actually use every day to change prices, add products or answer enquiries.</p>
         <p>What it cost, how long it took, and what changed for the business afterwards.</p>
         <p class="section-body"><a class="link" href="/services">See what we do</a></p>
       </div>
     </div>
   </section>
+
+  <CtaStrip
+    heading="Tell us about your project"
+    body="Describe what you need to build or improve. The first consultation carries no cost and no obligation, and you will have a written proposal before any work begins."
+    primary={consult}
+  />
 </Base>

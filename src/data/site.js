@@ -169,6 +169,7 @@ export const industries = [
       { label: 'Workflow automation', href: '/services/automate#workflows' },
       { label: 'Social media', href: '/services/social-media' },
     ],
+    proof: { label: 'Shakti X Gym, Gongabu', href: '/work#shakti-x-gym' },
   },
   {
     slug: 'retail',

@@ -888,6 +888,32 @@ h1 + .lead, h2 + .lead { margin-top: var(--s3); }
 .faq-acc .acc > p { padding-left: 0; }
 .faq-acc .acc-title { font-size: 1.0625rem; }
 
+/* A case study on /work. The screenshot leads on wide screens, because the
+   work is the argument; the description sits beside it. */
+.case {
+  display: grid; gap: var(--s4); margin-top: var(--s2); padding: var(--s4);
+  background: var(--white); border: 1px solid var(--rule);
+  border-top: 2px solid var(--navy); border-radius: var(--radius);
+}
+.case + .case { margin-top: var(--s6); }
+@media (min-width: 1000px) {
+  .case { grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: var(--s6); padding: var(--s5); align-items: start; }
+}
+.case-shot img { border-radius: var(--radius); border: 1px solid var(--rule); }
+.case-copy h2 { font-size: clamp(1.5rem, 3.4vw, 2.1rem); margin-top: var(--s2); }
+.case-meta { display: flex; flex-wrap: wrap; gap: var(--s2); align-items: center; font-size: 0.875rem; color: var(--grey); }
+.case-meta a { color: var(--navy); }
+.case-summary { margin-top: var(--s3); color: var(--grey); }
+.case-label { margin-top: var(--s4); font-size: 0.9375rem; letter-spacing: 0.02em; }
+.case-built { margin-top: var(--s2); display: grid; gap: var(--s2); }
+.case-built li { position: relative; padding-left: var(--s4); }
+.sector-proof { margin-top: var(--s3); }
+
+.case-built li::before {
+  content: ''; position: absolute; left: 0; top: 0.55em;
+  width: 7px; height: 7px; background: var(--amber); border-radius: 1px;
+}
+
 /* Reduced motion and print: everything at rest, immediately. !important
    because the animated states above are more specific by design. */
 @media (prefers-reduced-motion: reduce) {
