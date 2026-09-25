@@ -159,6 +159,18 @@ export const industries = [
     ],
   },
   {
+    slug: 'gyms',
+    name: 'Gyms and fitness studios',
+    brief: 'Memberships, renewals, classes',
+    needs: 'Membership plans with renewals that do not depend on someone remembering, class and trainer schedules bookable from a phone, attendance and dues recorded against each member, and reminders that reach people before a membership lapses.',
+    uses: [
+      { label: 'Custom software', href: '/services/software' },
+      { label: 'Booking systems', href: '/services/website#booking' },
+      { label: 'Workflow automation', href: '/services/automate#workflows' },
+      { label: 'Social media', href: '/services/social-media' },
+    ],
+  },
+  {
     slug: 'retail',
     name: 'Retail and e-commerce',
     brief: 'Storefront, payments, stock, ads',
