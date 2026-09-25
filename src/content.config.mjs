@@ -12,7 +12,7 @@ const blog = defineCollection({
     title: z.string(),
     description: z.string(),
     date: z.date(),
-    category: z.enum(['Costs', 'Buying advice', 'Payments', 'Sectors', 'Automation', 'Search visibility']),
+    category: z.enum(['AI', 'Costs', 'Buying advice', 'Payments', 'Sectors', 'Automation', 'Search visibility']),
     art: z.enum(['website', 'software', 'app', 'services', 'grow', 'automate', 'support', 'payments', 'process', 'seo']),
     takeaways: z.array(z.string()).min(2).max(5),
     faqs: z.array(z.object({ q: z.string(), a: z.string() })).default([]),
