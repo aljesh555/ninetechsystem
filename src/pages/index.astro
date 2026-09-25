@@ -2,8 +2,9 @@
 /**
  * Home. In order: what we build and run (hero), the position we take, the
  * operational problems we solve, the four groups and the disciplines behind
- * them, how we work, the sectors we work in, what we commit to, and how to
- * start. Icons appear only where they carry meaning: the three problems and
+ * them, how we work, the sectors we work in, and how to start. The four
+ * commitments are not repeated here: the hero strip states them and How we work
+ * details them, so they live on About and the Services hub. Icons appear only where they carry meaning: the three problems and
  * the four groups (the process steps carry their own).
  */
 import Base from '../layouts/Base.astro';
@@ -11,7 +12,7 @@ import HowWeWork from '../components/HowWeWork.astro';
 import FallHeading from '../components/services/FallHeading.astro';
 import Arrow from '../components/services/Arrow.astro';
 import { icon, iconOnNavy, sceneOnNavy } from '../lib/icons.js';
-import { site, commitments, industries, disciplines } from '../data/site.js';
+import { site, industries, disciplines } from '../data/site.js';
 import { groups } from '../data/services.js';
 
 const consult = { label: 'Request a consultation', href: '/contact' };
@@ -165,24 +166,6 @@ const schema = [
             <ul class="sector-uses">
               {i.uses.map((u) => <li><a href={u.href}>{u.label}</a></li>)}
             </ul>
-          </li>
-        ))}
-      </ol>
-    </div>
-  </section>
-
-  <section class="section section-tint">
-    <div class="wrap">
-      <div class="section-head">
-        <FallHeading text="What we commit to in writing" />
-        <p class="lead">Four commitments, written into every engagement we take on.</p>
-      </div>
-      <ol class="pledges stagger reveal">
-        {commitments.map((c, i) => (
-          <li>
-            <span class="pledge-num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
-            <h3>{c.title}</h3>
-            <p>{c.body}</p>
           </li>
         ))}
       </ol>

@@ -839,6 +839,15 @@ Changes:
   involves" label was first set in capitals, which breaks the design system's own
   rule against ALL-CAPS labels anywhere; it is sentence case.
 - Disciplines and sectors added to `llms.txt`.
+- **The commitments section was then removed from Home** (founder's call, and
+  correct): the four commitments were being stated three times on one page —
+  once in the hero trust strip, again across the six steps of How we work, and
+  again as their own section. Repetition weakened the page rather than
+  reinforcing it. They remain where a reader goes looking for them, on About
+  ("What we commit to") and the Services hub ("What every project includes"),
+  and in `llms.txt`. The company line (legal name, address, and the note that
+  case studies are published only with written permission) moved under the
+  sectors, where it still carries the local-search value.
 
 ## Two bugs found after the first deploy
 

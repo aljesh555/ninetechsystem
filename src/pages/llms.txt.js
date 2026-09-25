@@ -96,7 +96,7 @@ ${faqs}
 Yes. We meet clients in person across Kathmandu, Lalitpur and Bhaktapur, and work remotely with businesses anywhere in Nepal. Travel for a video shoot outside the valley is quoted separately.
 
 ## Pages
-- ${url('/')} — what we do, for whom, and the four commitments
+- ${url('/')} — what we build and run, the problems we solve, and the sectors we work in
 ${servicePages.map((p) => `- ${url(p.path)} — ${p.name}`).join('\n')}
 - ${url('/work')} — projects, published only with written client permission
 - ${url('/how-we-work')} — the six steps, from understanding the business to documenting the solution and ongoing support
