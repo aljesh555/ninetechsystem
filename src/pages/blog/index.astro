@@ -74,7 +74,7 @@ const schema = [
           <div class="post-art post-art-lg"><Fragment set:html={scene(featured.data.art)} /></div>
           <div class="post-featured-copy">
             <p class="post-meta">
-              <span class="post-badge">Latest</span>
+              <span class="post-badge">{featured.data.featured ? 'Featured' : 'Latest'}</span>
               <time datetime={featured.data.date.toISOString().slice(0, 10)}>{formatDate(featured.data.date)}</time>
               <span aria-hidden="true">·</span>{featured.data.category}
               <span aria-hidden="true">·</span>{readingTime(featured.body)} min read

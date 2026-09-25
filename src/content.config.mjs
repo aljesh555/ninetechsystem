@@ -17,6 +17,7 @@ const blog = defineCollection({
     takeaways: z.array(z.string()).min(2).max(5),
     faqs: z.array(z.object({ q: z.string(), a: z.string() })).default([]),
     service: z.object({ label: z.string(), href: z.string() }).optional(),
+    featured: z.boolean().default(false),
     draft: z.boolean().default(false),
   }),
 });

@@ -4,6 +4,7 @@ description: "The short answer is no, and the longer answer matters more if you 
 date: 2026-09-25
 category: "AI"
 art: "automate"
+featured: true
 takeaways:
   - "AI has changed how code gets written, not who is accountable for it. The work has moved from producing code to specifying, reviewing and owning it."
   - "It is strongest on the parts that are well defined and repetitive, and weakest on the parts that decide whether a project succeeds: what to build, and what happens at the edges."

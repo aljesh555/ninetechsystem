@@ -1,10 +1,19 @@
 /** Shared helpers for the blog listing and post pages. */
 import { getCollection } from 'astro:content';
 
-/** Published posts, newest first. Drafts never ship. */
+/**
+ * Published posts. A featured guide leads, then newest first; titles break
+ * any remaining tie so the order never depends on how the files were read.
+ * Drafts never ship.
+ */
 export async function getPosts() {
   const posts = await getCollection('blog', ({ data }) => !data.draft);
-  return posts.sort((a, b) => b.data.date - a.data.date);
+  return posts.sort(
+    (a, b) =>
+      Number(b.data.featured) - Number(a.data.featured) ||
+      b.data.date - a.data.date ||
+      a.data.title.localeCompare(b.data.title),
+  );
 }
 
 /** Reading time from the raw markdown, at 200 words a minute. */
