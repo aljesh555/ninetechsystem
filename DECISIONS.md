@@ -829,9 +829,15 @@ Changes:
   integration, role-based access control, workflow orchestration, analytics and
   attribution, store compliance, backups and monitoring) — every one of them
   checkable on this site.
-- **Sectors** rewritten as operational patterns and set as a specification sheet
-  (name left, capability right), with NGOs and development organisations added,
-  which is a significant sector in Nepal. Eight sectors.
+- **Sectors** rewritten as operational patterns, with NGOs and development
+  organisations added, which is a significant sector in Nepal. Eight sectors.
+  The founder judged the first treatment (a hairline specification sheet) still
+  under-designed, so each sector is now a numbered card carrying the pattern and
+  the services it routes to: four linked service chips each, 32 internal links
+  in all. The section is now useful as well as designed, because a visitor finds
+  their sector and goes straight to the service that covers it. The "Typically
+  involves" label was first set in capitals, which breaks the design system's own
+  rule against ALL-CAPS labels anywhere; it is sentence case.
 - Disciplines and sectors added to `llms.txt`.
 
 ## Two bugs found after the first deploy
