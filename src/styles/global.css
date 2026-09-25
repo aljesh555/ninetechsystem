@@ -408,12 +408,29 @@ html:not(.js) .menu-toggle { display: none; }
 
 /* --- people -------------------------------------------------------------- */
 
-.people { display: grid; gap: var(--s5); margin-top: var(--s5); }
-@media (min-width: 640px) { .people { grid-template-columns: 1fr 1fr; gap: var(--s6); } }
-.person h3 { font-size: 1.125rem; }
-.person .title { font-weight: 500; font-size: 0.9375rem; margin-top: 2px; }
-.person p:last-child { color: var(--grey); font-size: 1rem; margin-top: var(--s2); }
-.person .slot { margin-bottom: var(--s3); max-width: 200px; }
+.people { display: grid; gap: var(--s4); margin-top: var(--s5); }
+@media (min-width: 720px) { .people { grid-template-columns: 1fr 1fr; gap: var(--s5); } }
+.person {
+  display: grid; grid-template-columns: 116px minmax(0, 1fr); gap: var(--s4);
+  align-items: center; padding: var(--s4); background: var(--white);
+  border: 1px solid var(--rule); border-top: 2px solid var(--navy);
+  border-radius: var(--radius);
+}
+.person h3 { font-size: 1.1875rem; }
+.person .title { color: var(--grey); font-size: 0.9375rem; margin-top: 2px; }
+.person-role { margin-top: var(--s2); color: var(--grey); font-size: 0.9375rem; }
+.person .svc-view { margin-top: var(--s3); }
+.person-photo { position: relative; }
+.person-photo .slot { max-width: none; }
+
+/* Until a photograph exists, the person's initials stand in. Two identical
+   empty frames read as broken images; a monogram reads as a decision. */
+.person-monogram {
+  display: grid; place-items: center; aspect-ratio: 1; border-radius: var(--radius);
+  background: var(--navy); color: #fff;
+  font-family: var(--display); font-weight: 600; font-size: 1.75rem; letter-spacing: 0.01em;
+}
+.person-photo .slot ~ .person-monogram { display: none; }
 
 /* --- image slots --------------------------------------------------------- */
 

@@ -60,16 +60,24 @@ export const nav = [
   { label: 'Contact', href: '/contact' },
 ];
 
+/**
+ * The two directors. `role` is one line on what each is responsible for; it is
+ * rendered only when set, so it stays empty rather than invented. Until a
+ * photograph is dropped at src/images/slots/<slot>.jpg the card shows the
+ * person's initials, which reads as a design rather than a missing image.
+ */
 export const people = [
   {
     name: 'Anis Raut',
     title: 'Managing Director',
     slot: 'portrait-anis',
+    role: '',
   },
   {
     name: 'Raju Thapa',
     title: 'Director',
     slot: 'portrait-raju',
+    role: '',
   },
 ];
 

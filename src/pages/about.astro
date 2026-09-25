@@ -14,6 +14,7 @@ import BuildHero from '../components/services/BuildHero.astro';
 import FallHeading from '../components/services/FallHeading.astro';
 import HowWeWork from '../components/HowWeWork.astro';
 import CtaStrip from '../components/services/CtaStrip.astro';
+import Arrow from '../components/services/Arrow.astro';
 import { icon } from '../lib/icons.js';
 import { site, people, commitments } from '../data/site.js';
 import { breadcrumbList, abs } from '../lib/schema.js';
@@ -24,6 +25,7 @@ const crumbs = [
   { name: 'About', path },
 ];
 const consult = { label: 'Request a consultation', href: '/contact' };
+const initials = (name) => name.split(' ').map((w) => w[0]).join('');
 
 const facts = [
   { icon: 'users', value: 'Two directors', label: 'You deal with one of them directly' },
@@ -94,15 +96,22 @@ const schema = [
         <FallHeading text="The people" />
         <p class="lead">Two directors. You will deal with one of them directly, not an account manager, and the same person stays with the project from the first consultation through to support after launch.</p>
       </div>
-      <div class="people">
+      <ul class="people">
         {people.map((p) => (
-          <div class="person">
-            <Slot name={p.slot} alt={`${p.name}, ${p.title} at Nine Technology`} ratio="1-1" sizes="200px" />
-            <h3>{p.name}</h3>
-            <p class="title">{p.title}</p>
-          </div>
+          <li class="person">
+            <div class="person-photo">
+              <Slot name={p.slot} alt={`${p.name}, ${p.title} at Nine Technology`} ratio="1-1" sizes="160px" optional />
+              <span class="person-monogram" aria-hidden="true">{initials(p.name)}</span>
+            </div>
+            <div class="person-copy">
+              <h3>{p.name}</h3>
+              <p class="title">{p.title}</p>
+              {p.role && <p class="person-role">{p.role}</p>}
+              <a class="svc-view" href={consult.href}>Talk to {p.name.split(' ')[0]} <Arrow /></a>
+            </div>
+          </li>
         ))}
-      </div>
+      </ul>
     </div>
   </section>
 
