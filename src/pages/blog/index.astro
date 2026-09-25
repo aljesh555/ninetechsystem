@@ -1,0 +1,90 @@
+---
+/**
+ * The blog index. Newest first, with the date, category and reading time, in
+ * the manner of a reading list rather than a magazine. Posts live in
+ * src/content/blog/ as markdown.
+ */
+import Base from '../../layouts/Base.astro';
+import Breadcrumb from '../../components/services/Breadcrumb.astro';
+import FallHeading from '../../components/services/FallHeading.astro';
+import CtaStrip from '../../components/services/CtaStrip.astro';
+import { getPosts, readingTime, formatDate } from '../../lib/blog.js';
+import { site } from '../../data/site.js';
+import { breadcrumbList, abs, orgRef } from '../../lib/schema.js';
+
+const path = '/blog';
+const crumbs = [
+  { name: 'Home', path: '/' },
+  { name: 'Blog', path },
+];
+const posts = await getPosts();
+const categories = [...new Set(posts.map((p) => p.data.category))];
+
+const schema = [
+  {
+    '@type': 'Blog',
+    '@id': `${abs(path)}#blog`,
+    name: `${site.name} guides`,
+    description: 'Practical answers to the questions business owners in Nepal ask before they commission software.',
+    url: abs(path),
+    publisher: orgRef,
+    blogPost: posts.map((p) => ({
+      '@type': 'BlogPosting',
+      headline: p.data.title,
+      description: p.data.description,
+      datePublished: p.data.date.toISOString().slice(0, 10),
+      url: abs(`/blog/${p.id}`),
+    })),
+  },
+  breadcrumbList(crumbs),
+];
+---
+
+<Base
+  title="Guides for Businesses in Nepal — Nine Technology"
+  description="Practical answers to the questions business owners ask before they commission a website, software or automation: what things cost, what to check, what to avoid."
+  path={path}
+  schema={schema}
+>
+  <section class="page-head">
+    <div class="wrap">
+      <Breadcrumb crumbs={crumbs} />
+      <p class="kicker">Guides</p>
+      <FallHeading as="h1" text="Answers to the questions we are asked" stop now />
+      <p class="lead">Written for the person deciding, not for other developers. What things cost in Nepal, what to check before you sign, and what tends to go wrong. No sign-up, no sales sequence.</p>
+      {categories.length > 0 && (
+        <ul class="chips" aria-label="Topics covered">
+          {categories.map((c) => <li>{c}</li>)}
+        </ul>
+      )}
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap narrow">
+      {posts.length === 0 ? (
+        <p class="lead">The first guides are being written and will appear here shortly.</p>
+      ) : (
+        <ol class="post-list">
+          {posts.map((p) => (
+            <li>
+              <p class="post-meta">
+                <time datetime={p.data.date.toISOString().slice(0, 10)}>{formatDate(p.data.date)}</time>
+                <span aria-hidden="true">·</span>{p.data.category}
+                <span aria-hidden="true">·</span>{readingTime(p.body)} min read
+              </p>
+              <h2><a href={`/blog/${p.id}`}>{p.data.title}</a></h2>
+              <p class="post-excerpt">{p.data.description}</p>
+            </li>
+          ))}
+        </ol>
+      )}
+    </div>
+  </section>
+
+  <CtaStrip
+    heading="A question we have not covered?"
+    body="Ask it directly. If the answer is useful to other businesses, it becomes the next guide."
+    primary={{ label: 'Request a consultation', href: '/contact' }}
+  />
+</Base>

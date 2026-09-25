@@ -223,7 +223,16 @@ a { color: inherit; }
   .nav-desktop a { font-size: 0.9375rem; text-decoration: none; padding-block: var(--s1); }
   .nav-desktop a:hover { color: var(--navy); text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 0.3em; text-decoration-color: var(--amber); }
   .nav-desktop a[aria-current] { font-weight: 500; }
+  .nav-desktop a, .nav-desktop .btn { white-space: nowrap; }
   .nav-desktop .btn { min-height: 42px; margin-left: var(--s2); }
+}
+/* Seven items plus the button need tighter spacing before the bar is wide
+   enough to hold them comfortably. */
+@media (min-width: 900px) and (max-width: 1119px) {
+  .nav-desktop { gap: var(--s3); }
+  .nav-desktop a { font-size: 0.875rem; }
+  .nav-desktop .btn { padding: 0 1rem; margin-left: var(--s1); font-size: 0.9375rem; }
+  .brand-full svg { width: 160px; }
 }
 
 /* Mobile: the phone number and WhatsApp never hide behind the menu. */
@@ -1148,3 +1157,64 @@ h1 + .lead, h2 + .lead { margin-top: var(--s3); }
 .sector-strip-brief { color: var(--grey); font-size: 0.8125rem; line-height: 1.45; }
 /* On /sectors the cards head with h2, so match the card heading size. */
 .sectors h2 { font-size: 1.1875rem; padding-right: var(--s5); }
+
+/* ==========================================================================
+   Blog
+   ========================================================================== */
+
+.post-meta {
+  display: flex; flex-wrap: wrap; gap: var(--s2);
+  font-size: 0.875rem; color: var(--grey);
+}
+.page-head .post-meta { margin-bottom: var(--s3); }
+
+.post-list { border-top: 1px solid var(--rule); }
+.post-list > li { padding-block: var(--s5); border-bottom: 1px solid var(--rule); }
+.post-list h2 { font-size: clamp(1.375rem, 3vw, 1.75rem); margin-top: var(--s2); }
+.post-list h2 a, .post-list h3 a { text-decoration: none; }
+.post-list h2 a:hover, .post-list h3 a:hover {
+  text-decoration: underline; text-decoration-thickness: 2px;
+  text-underline-offset: 0.18em; text-decoration-color: var(--amber);
+}
+.post-excerpt { margin-top: var(--s2); color: var(--grey); }
+.post-list-compact > li { padding-block: var(--s4); }
+.post-list-compact h3 { font-size: 1.125rem; margin-top: var(--s1); }
+
+/* Long-form body copy. The measure is the same 34em used everywhere. */
+.post-body { margin-top: var(--s2); }
+.post-body > * + * { margin-top: var(--s4); }
+.post-body p, .post-body li { font-size: 1.0625rem; line-height: 1.7; }
+.post-body h2 {
+  font-size: clamp(1.375rem, 3vw, 1.75rem); margin-top: var(--s7);
+  padding-top: var(--s4); border-top: 1px solid var(--rule);
+}
+.post-body h3 { font-size: 1.1875rem; margin-top: var(--s6); }
+.post-body h2 + p, .post-body h3 + p { margin-top: var(--s3); }
+.post-body ul, .post-body ol { margin-top: var(--s3); padding-left: 0; }
+.post-body li + li { margin-top: var(--s2); }
+.post-body ul > li { position: relative; padding-left: 1.4rem; }
+.post-body ul > li::before {
+  content: ''; position: absolute; left: 2px; top: 0.72em;
+  width: 6px; height: 6px; background: var(--amber);
+}
+.post-body ol { counter-reset: step; }
+.post-body ol > li { counter-increment: step; position: relative; padding-left: 2rem; }
+.post-body ol > li::before {
+  content: counter(step) '.'; position: absolute; left: 0;
+  font-family: var(--display); font-weight: 600; color: var(--grey);
+}
+.post-body strong { font-weight: 600; }
+.post-body a { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 0.18em; text-decoration-color: var(--rule); }
+.post-body a:hover { text-decoration-color: var(--amber); }
+.post-body code {
+  font-size: 0.9em; padding: 2px 5px; background: var(--off-white);
+  border: 1px solid var(--rule); border-radius: var(--radius);
+}
+.post-body blockquote {
+  padding-left: var(--s3); border-left: 3px solid var(--amber);
+  color: var(--grey);
+}
+.post-service {
+  margin-top: var(--s6); padding-top: var(--s4);
+  border-top: 1px solid var(--rule); font-size: 0.9375rem; color: var(--grey);
+}

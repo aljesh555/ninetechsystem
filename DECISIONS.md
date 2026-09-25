@@ -870,6 +870,47 @@ service links for each. Home fell from 7,883px to 6,215px on desktop and from
 page that can rank for sector searches such as "school management software
 Nepal". `/sectors` is in the sitemap (17 URLs) and `llms.txt`.
 
+## The blog (September 2026)
+
+**This reverses the original brief**, which said no blog. The founder asked for
+one, referencing haribhusal.com.np/blog.
+
+That reference is a developer's blog — Next.js, React patterns, DevOps — written
+for other engineers. Copying its topic mix would attract developers rather than
+the restaurant, school and clinic owners who buy from us. What was worth taking
+was its restraint: a plain reverse-chronological list with date, category,
+reading time and a one-line excerpt. No sidebar, no newsletter capture, no
+social counts.
+
+**The content strategy is the opposite of the reference's.** Every guide answers
+a question a business owner asks before commissioning work, and routes to the
+service that covers it. The four launch guides are drawn entirely from content
+the founder has already approved elsewhere on the site, so none of them makes a
+new claim:
+
+| Guide | Drawn from |
+|---|---|
+| How much does a website cost in Nepal? | The published website prices and what moves them |
+| Who should own your domain, hosting and logins? | The ownership commitment |
+| Website or mobile app: which does your business need? | The app page's progressive-web-app comparison |
+| Taking online payments in Nepal | The e-commerce scope notes on merchant accounts and fees |
+
+No invented statistics, no competitor claims, and nothing attributed to a named
+person — posts are published by the organisation.
+
+**Mechanics.** Astro content collections (`src/content.config.mjs`), one markdown
+file per post in `src/content/blog/`, with `draft: true` keeping a post out of
+the build. Reading time is computed from the word count. `BlogPosting` and
+`BreadcrumbList` schema per post, `Blog` on the index, an RSS feed at
+`/rss.xml` (hand-rolled, no dependency), and posts in the sitemap (22 URLs) and
+`llms.txt`.
+
+**Header.** Adding Blog made seven nav items, which wrapped between 900px and
+1100px. Labels stay; the bar tightens its spacing and logo in that range
+instead. Checked at 900, 1000, 1120 and 1280px.
+
+Lighthouse mobile on the index and a post: 100/100/100/100.
+
 ## Two bugs found after the first deploy
 
 **Unknown URLs returned the home page with HTTP 200.** Cloudflare Pages falls

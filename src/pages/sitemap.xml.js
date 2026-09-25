@@ -1,5 +1,6 @@
 import { site, nav } from '../data/site.js';
 import { servicePages } from '../data/services.js';
+import { getPosts } from '../lib/blog.js';
 
 /**
  * Every public page, one URL form. No <lastmod>: stamping every page with the
@@ -7,7 +8,8 @@ import { servicePages } from '../data/services.js';
  * and <changefreq> are left out too; Google ignores both.
  */
 export async function GET() {
-  const paths = [...new Set([...nav.map((p) => p.href), '/how-we-work', '/sectors', ...servicePages.map((p) => p.path)])];
+  const posts = await getPosts();
+  const paths = [...new Set([...nav.map((p) => p.href), '/how-we-work', '/sectors', ...posts.map((p) => `/blog/${p.id}`), ...servicePages.map((p) => p.path)])];
   const urls = paths
     .map((path) => `  <url>\n    <loc>${site.url}${path === '/' ? '' : path}</loc>\n  </url>`)
     .join('\n');

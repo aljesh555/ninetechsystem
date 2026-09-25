@@ -1,0 +1,100 @@
+---
+/** One blog post. Content comes from src/content/blog/<slug>.md. */
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Breadcrumb from '../../components/services/Breadcrumb.astro';
+import CtaStrip from '../../components/services/CtaStrip.astro';
+import Arrow from '../../components/services/Arrow.astro';
+import { getPosts, readingTime, formatDate } from '../../lib/blog.js';
+import { site } from '../../data/site.js';
+import { breadcrumbList, abs, orgRef } from '../../lib/schema.js';
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  return posts.map((post, i) => ({
+    params: { slug: post.id },
+    props: { post, more: [...posts.slice(i + 1), ...posts.slice(0, i)].slice(0, 2) },
+  }));
+}
+
+const { post, more } = Astro.props;
+const { Content } = await render(post);
+const path = `/blog/${post.id}`;
+const crumbs = [
+  { name: 'Home', path: '/' },
+  { name: 'Blog', path: '/blog' },
+  { name: post.data.title, path },
+];
+
+const schema = [
+  {
+    '@type': 'BlogPosting',
+    '@id': `${abs(path)}#post`,
+    headline: post.data.title,
+    description: post.data.description,
+    datePublished: post.data.date.toISOString().slice(0, 10),
+    dateModified: post.data.date.toISOString().slice(0, 10),
+    inLanguage: 'en',
+    author: orgRef,
+    publisher: orgRef,
+    image: abs('/og.png'),
+    mainEntityOfPage: { '@type': 'WebPage', '@id': abs(path) },
+    articleSection: post.data.category,
+  },
+  breadcrumbList(crumbs),
+];
+---
+
+<Base title={`${post.data.title} — Nine Technology`} description={post.data.description} path={path} schema={schema}>
+  <article>
+    <section class="page-head">
+      <div class="wrap narrow">
+        <Breadcrumb crumbs={crumbs} />
+        <p class="post-meta">
+          <time datetime={post.data.date.toISOString().slice(0, 10)}>{formatDate(post.data.date)}</time>
+          <span aria-hidden="true">·</span>{post.data.category}
+          <span aria-hidden="true">·</span>{readingTime(post.body)} min read
+        </p>
+        <h1>{post.data.title}</h1>
+        <p class="lead">{post.data.description}</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap narrow">
+        <div class="post-body">
+          <Content />
+        </div>
+
+        {post.data.service && (
+          <p class="post-service">
+            Related service: <a class="link" href={post.data.service.href}>{post.data.service.label}</a>
+          </p>
+        )}
+      </div>
+    </section>
+  </article>
+
+  {more.length > 0 && (
+    <section class="section section-tint">
+      <div class="wrap narrow">
+        <h2 class="h3">More guides</h2>
+        <ol class="post-list post-list-compact">
+          {more.map((p) => (
+            <li>
+              <p class="post-meta">{p.data.category}<span aria-hidden="true">·</span>{readingTime(p.body)} min read</p>
+              <h3><a href={`/blog/${p.id}`}>{p.data.title}</a></h3>
+            </li>
+          ))}
+        </ol>
+        <p class="section-body"><a class="svc-view" href="/blog">All guides <Arrow /></a></p>
+      </div>
+    </section>
+  )}
+
+  <CtaStrip
+    heading="Want this applied to your business?"
+    body="Describe how the business runs today and what you would like to improve. The first consultation carries no cost and no obligation."
+    primary={{ label: 'Request a consultation', href: '/contact' }}
+  />
+</Base>
