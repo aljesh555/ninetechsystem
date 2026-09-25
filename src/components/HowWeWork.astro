@@ -1,0 +1,32 @@
+---
+/**
+ * The compact "How we work": the promise, then the six steps in one line each.
+ * Used on Home and the Services hub; the full version is /how-we-work.
+ */
+import FallHeading from './services/FallHeading.astro';
+import Arrow from './services/Arrow.astro';
+import { icon } from '../lib/icons.js';
+import { process, promise } from '../data/site.js';
+const { tint = false, heading = 'How we work' } = Astro.props;
+---
+<section class={`section how${tint ? ' section-tint' : ''}`} id="how-we-work">
+  <div class="wrap">
+    <div class="section-head">
+      <FallHeading text={heading} />
+      <p class="promise">{promise}</p>
+    </div>
+    <ol class="how-steps stagger reveal">
+      {process.map((s, i) => (
+        <li>
+          <div class="how-step-top">
+            <span class="how-num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+            <Fragment set:html={icon(s.icon, 44)} />
+          </div>
+          <h3>{s.title}</h3>
+          <p>{s.short}</p>
+        </li>
+      ))}
+    </ol>
+    <p class="section-body"><a class="svc-view" href="/how-we-work">See each step in full <Arrow /></a></p>
+  </div>
+</section>

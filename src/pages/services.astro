@@ -9,12 +9,12 @@ import BuildHero from '../components/services/BuildHero.astro';
 import FallHeading from '../components/services/FallHeading.astro';
 import ServiceCard from '../components/services/ServiceCard.astro';
 import Tiles from '../components/services/Tiles.astro';
-import Flow from '../components/services/Flow.astro';
 import CtaStrip from '../components/services/CtaStrip.astro';
 import Arrow from '../components/services/Arrow.astro';
 import { icon, scene } from '../lib/icons.js';
 import { site, commitments } from '../data/site.js';
-import { services, groups, popularRequests, howToChoose, howWeWork } from '../data/services.js';
+import { services, groups, popularRequests, howToChoose } from '../data/services.js';
+import HowWeWork from '../components/HowWeWork.astro';
 import { breadcrumbList, service, abs } from '../lib/schema.js';
 
 const crumbs = [
@@ -141,16 +141,7 @@ const schema = [
     </div>
   </section>
 
-  <section class={`section${bg(groups.length + 3)}`}>
-    <div class="wrap">
-      <div class="section-head">
-        <FallHeading text="How we work" />
-        <p class="lead">Five stages, in this order, on every project.</p>
-      </div>
-      <Flow steps={howWeWork.map((s) => ({ name: s.title, body: s.body }))} />
-      <p class="price-movers section-body">The delivery model — waterfall, iterative, incremental, agile and others — is chosen to fit each project. <a class="link" href="/services/software#models">See how we choose</a>.</p>
-    </div>
-  </section>
+  <HowWeWork tint={bg(groups.length + 3) !== ''} />
 
   <section class={`section${bg(groups.length + 4)}`}>
     <div class="wrap">

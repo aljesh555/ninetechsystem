@@ -691,6 +691,33 @@ pages:
 - "Get a quote" → "Request a proposal"; the shared closing strip no longer says
   "We'll".
 
+## How we work (founder's research, September 2026)
+
+The founder studied ten companies (international and Nepali) and found that all of
+them run the same six stages; what separates them is how much trust and clarity
+the presentation builds in. The site now carries the founder's six steps, in the
+founder's own words, under the promise: *"A written scope. A fixed price. Real
+dates. Signed before we start — and we stick to it. That's the whole deal."*
+
+- **One source:** `process`, `promise` and `trustBadges` in `src/data/site.js`
+  feed the new `/how-we-work` page, a section on Home, the Services hub, the About
+  accordion and `llms.txt`. The old five-step list (`steps`, `howWeWork`) is gone.
+- **Both sides of every step.** Each step on `/how-we-work` shows "What you get"
+  and "What we need from you" — the research's point that the best firms set
+  expectations on both sides, including what the client must supply (content and
+  feedback are the usual cause of delay).
+- **Human, not polished.** The founder's contractions and plain sentences were
+  kept; added lines avoid stacked dashes and "not X, but Y" constructions. No
+  invented statistics: the research's "95% sign-off" example is not copied,
+  because we have no figure of our own yet.
+- **Badges corrected to what is true:** "We reply within minutes" (the current
+  promise, not "2 hours"), and "Support after every launch" (not "30 days on every
+  project" — landing pages get 14, software and apps 60). "A free call" became
+  "a call or a meeting. There's no charge for it."
+- **Discoverability:** "How we work" is in the main menu, because Nepali buyers
+  look for this page. Schema: `HowTo` (six `HowToStep`s), `FAQPage` ("What if…"
+  questions drawn from the founder's promises), `BreadcrumbList`.
+
 ## Two bugs found after the first deploy
 
 **Unknown URLs returned the home page with HTTP 200.** Cloudflare Pages falls

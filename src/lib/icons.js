@@ -494,6 +494,21 @@ scenes.services = () => {
   );
 };
 
+scenes.process = () => {
+  // Six steps rising left to right; the last one amber — the finished job.
+  const step = (i) => {
+    const x = 0.7 + i * 1.5;
+    return box(x, 4.2, 0.6, 1, 1.6, 0.6 + i * 1.1, i === 5 ? AMBER : NAVY);
+  };
+  return (
+    part(box(0.2, 0.2, 0, 9.6, 9.6, 0.6, PLATFORM)) +
+    part(step(0) + step(1)) +
+    part(step(2) + step(3)) +
+    part(step(4)) +
+    part(step(5))
+  );
+};
+
 /** Inline SVG for a service or concept icon. Decorative: its heading names it. */
 export function icon(name, size = 80) {
   const body = draw[name]?.();

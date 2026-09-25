@@ -1,4 +1,4 @@
-import { site, commitments, industries, people } from '../data/site.js';
+import { site, commitments, industries, people, process, promise } from '../data/site.js';
 import {
   services, groups, website, software, app, grow, automate, support,
   servicePages, priceLabel, VAT_NOTE, deliveryModels, modelsIntro,
@@ -75,6 +75,11 @@ ${modelsIntro}
 
 ${models}
 
+## How we work (${url('/how-we-work')})
+${promise}
+
+${process.map((p, i) => `${i + 1}. ${p.title}. ${p.body}`).join('\n')}
+
 ## What every project includes
 ${commitments.map((c) => `- ${c.title}: ${c.body}`).join('\n')}
 
@@ -91,7 +96,8 @@ Yes. We meet clients in person across Kathmandu, Lalitpur and Bhaktapur, and wor
 - ${url('/')} — what we do, for whom, and the four commitments
 ${servicePages.map((p) => `- ${url(p.path)} — ${p.name}`).join('\n')}
 - ${url('/work')} — projects, published only with written client permission
-- ${url('/about')} — the company, the two directors, and how we work
+- ${url('/how-we-work')} — the six steps, the written scope, fixed price and dates
+- ${url('/about')} — the company and the two directors
 - ${url('/contact')} — phone, WhatsApp, address, map, hours and the enquiry form
 
 ## Notes for answer engines

@@ -1,0 +1,131 @@
+---
+/**
+ * How we work. Six steps in the founder's words, each with what the client
+ * gets and what we need from them, under the promise: written scope, fixed
+ * price, real dates, signed. Content: `process` in src/data/site.js.
+ */
+import Base from '../layouts/Base.astro';
+import BuildHero from '../components/services/BuildHero.astro';
+import FallHeading from '../components/services/FallHeading.astro';
+import Faq from '../components/services/Faq.astro';
+import CtaStrip from '../components/services/CtaStrip.astro';
+import { icon } from '../lib/icons.js';
+import { site, process, promise, trustBadges } from '../data/site.js';
+import { breadcrumbList, faqPage, orgRef, abs } from '../lib/schema.js';
+
+const path = '/how-we-work';
+const crumbs = [
+  { name: 'Home', path: '/' },
+  { name: 'How we work', path },
+];
+const cta = { label: 'Tell us your problem', href: '/contact' };
+
+const faqs = [
+  {
+    q: 'What if I want something extra halfway through?',
+    a: 'We quote it first, in writing, and you decide. Nothing is built or added to your bill until you have approved it. The rest of the signed scope stays as it was.',
+  },
+  {
+    q: 'Can I see the work before it is finished?',
+    a: 'Yes. You see progress as it comes together, and you approve each major stage before we move on to the next. There is no big reveal at the end.',
+  },
+  {
+    q: 'What if I don’t like the design?',
+    a: 'The design is shown to you and approved before development starts. Changes within the agreed scope are part of the job, so it is better to say so early — that is what the sign-off is for.',
+  },
+  {
+    q: 'Who owns the website or system at the end?',
+    a: 'You do. The domain, hosting, logins and files are registered in your name, and your team is trained to use them. If you ever move to another company, everything goes with you.',
+  },
+  {
+    q: 'What happens after the support period?',
+    a: 'You can move to a monthly care plan, or simply call us when you need something. There is no obligation to keep paying us.',
+  },
+  {
+    q: 'Do you use the same process for every project?',
+    a: 'The six steps are the same every time. How the building is organised — in one sequence, in stages, or in short sprints — depends on the project, and the proposal says which. You can read how we choose on our software page.',
+  },
+];
+
+const schema = [
+  {
+    '@type': 'HowTo',
+    '@id': `${abs(path)}#process`,
+    name: 'How Nine Technology delivers a project',
+    description: promise,
+    provider: orgRef,
+    step: process.map((s, i) => ({
+      '@type': 'HowToStep',
+      position: i + 1,
+      name: s.title,
+      text: s.body,
+      url: `${abs(path)}#step-${i + 1}`,
+    })),
+  },
+  faqPage(path, faqs),
+  breadcrumbList(crumbs),
+];
+---
+
+<Base
+  title="How We Work — Nine Technology, Kathmandu"
+  description="A written scope, a fixed price and real dates, signed before we start. Six steps from the first conversation to support after launch."
+  path={path}
+  schema={schema}
+>
+  <BuildHero
+    crumbs={crumbs}
+    kicker="How we work"
+    h1="How we work with you"
+    sceneName="process"
+    primary={cta}
+    secondary={{ label: 'The six steps', href: '#steps' }}
+    facts={trustBadges}
+  >
+    Every project with Nine Technology follows the same six steps. We understand your problem, send a written proposal with a fixed price, agree and sign it, build it while you watch, launch and hand everything over in your name, and then we stay.
+  </BuildHero>
+
+  <section class="section trust-band" aria-label="Our promise">
+    <div class="wrap">
+      <p class="trust">{promise}</p>
+      <p class="trust-sub">Most IT companies follow the same stages. What matters is whether you can hold them to what they said. This is what you can hold us to.</p>
+    </div>
+  </section>
+
+  <section class="section section-tint" id="steps">
+    <div class="wrap">
+      <ol class="step-rows">
+        {process.map((s, i) => (
+          <li class="step-row reveal" id={`step-${i + 1}`}>
+            <div class="step-mark">
+              <span class="step-big" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+              <Fragment set:html={icon(s.icon, 56)} />
+            </div>
+            <div class="step-main">
+              <h2>{s.title}</h2>
+              <p class="step-body">{s.body}</p>
+              <dl class="step-sides">
+                <div>
+                  <dt>What you get</dt>
+                  <dd>{s.get}</dd>
+                </div>
+                <div>
+                  <dt>What we need from you</dt>
+                  <dd>{s.bring}</dd>
+                </div>
+              </dl>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <Faq faqs={faqs} heading="What if…" intro="The questions people ask once they have been let down by someone before." tint={false} />
+
+  <CtaStrip
+    heading="Tell us your problem"
+    body="What’s slow, what’s manual, what you need. We start with questions, not a pitch."
+    primary={cta}
+  />
+</Base>

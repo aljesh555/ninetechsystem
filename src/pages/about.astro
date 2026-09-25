@@ -1,7 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import Slot from '../components/Slot.astro';
-import { site, people, commitments, steps } from '../data/site.js';
+import { site, people, commitments, process } from '../data/site.js';
 
 const schema = [
   ...people.map((p) => ({
@@ -64,10 +64,10 @@ const schema = [
     <div class="wrap split">
       <div class="split-head">
         <h2>How we work</h2>
-        <p>Five steps, in this order, on every project. Open any one to see what it involves.</p>
+        <p>Six steps, in this order, on every project. Open any one to see what it involves, or <a class="link" href="/how-we-work">read them in full</a>.</p>
       </div>
       <div class="accordion">
-        {steps.map((step, i) => (
+        {process.map((step, i) => (
           <details class="acc" open={i === 0}>
             <summary>
               <span class="acc-num" aria-hidden="true">{i + 1}</span>

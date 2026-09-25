@@ -34,13 +34,6 @@ export function priceLabel(price, note = 'Quoted') {
    software page.
    -------------------------------------------------------------------------- */
 
-export const howWeWork = [
-  { title: 'Consultation', body: 'We study how your business operates and what it needs.' },
-  { title: 'Proposal in writing', body: 'Scope, fixed price and timeline, approved by you before work begins.' },
-  { title: 'Delivery in stages', body: 'You review working progress at every stage, not only at the end.' },
-  { title: 'Launch and handover', body: 'Everything registered in your name, with training for your team.' },
-  { title: 'Support', body: 'Included after launch, then an optional monthly care plan.' },
-];
 
 /* --------------------------------------------------------------------------
    The thirteen services. `id` is also the contact form's ?need= value.
