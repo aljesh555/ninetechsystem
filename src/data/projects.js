@@ -33,9 +33,11 @@ export const projects = [
       { lead: 'Answers inside the results', text: 'The questions people ask before joining marked up as structured data, so search can answer them before the site is even opened.' },
       { lead: 'Published, not rented', text: 'A blog and a media section, so the gym builds an audience it owns instead of paying for reach every month.' },
       { lead: 'Reachable where they already are', text: 'Instagram, Facebook and TikTok connected, with WhatsApp enquiry on every screen.' },
+      { lead: 'Run by the gym, not by us', text: 'A custom admin behind its own login, so the team publish and update the site themselves as programmes, people and prices change.' },
     ],
     services: [
       { label: 'Business website', href: '/services/website#business' },
+      { label: 'Custom software', href: '/services/software' },
       { label: 'Search visibility', href: '/services/seo' },
     ],
     image: 'work-fitness-durbar',
@@ -56,9 +58,11 @@ export const projects = [
       { lead: 'Price answered up front', text: 'Membership plans set out in full, so cost stops being a message somebody has to reply to.' },
       { lead: 'Proof before price', text: 'Founder and coach profiles, the equipment and training zones, and a gallery of the floor, for the half of the decision that is about trust.' },
       { lead: 'Built for the phone', text: 'A light and a dark theme, and a layout that assumes mobile data rather than office wifi.' },
+      { lead: 'Run by the gym, not by us', text: 'A custom admin behind its own login, so plans, people and photographs stay current without a developer being involved in a text change.' },
     ],
     services: [
       { label: 'Business website', href: '/services/website#business' },
+      { label: 'Custom software', href: '/services/software' },
       { label: 'Search visibility', href: '/services/seo' },
     ],
     image: 'work-shakti-x-gym',
