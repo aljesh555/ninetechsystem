@@ -138,6 +138,33 @@ const graph = { '@context': 'https://schema.org', '@graph': [business, ...schema
           toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
         });
 
+        // Isometric heroes gain depth from the pointer: each piece shifts by
+        // a different amount, foreground furthest, which is what makes a flat
+        // isometric drawing read as a solid object. The SVG transform
+        // attribute is used rather than an inline style, because the site's
+        // Content-Security-Policy allows no inline styles. Mouse and trackpad
+        // only, and never under reduced motion.
+        const art = document.querySelector('.hero-art, .build-hero-art');
+        if (art && matchMedia('(hover: hover) and (pointer: fine)').matches
+            && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          const hero = art.closest('section');
+          const depths = [...art.querySelectorAll('.part > .depth')];
+          const factor = [0.6, 1.4, 1.7, 3, 3.6];
+          const move = (x, y) => {
+            for (const [i, g] of depths.entries()) {
+              const d = factor[i] ?? 1;
+              g.setAttribute('transform', `translate(${(x * d).toFixed(2)} ${(y * d * 0.6).toFixed(2)})`);
+            }
+          };
+          if (hero) {
+            hero.addEventListener('pointermove', (e) => {
+              const r = hero.getBoundingClientRect();
+              move((e.clientX - r.left) / r.width - 0.5, (e.clientY - r.top) / r.height - 0.5);
+            });
+            hero.addEventListener('pointerleave', () => move(0, 0));
+          }
+        }
+
         // Things settling into place. Once each, never replayed.
         const items = document.querySelectorAll('.reveal, .fall:not(.fall-now)');
         if (!items.length) return;

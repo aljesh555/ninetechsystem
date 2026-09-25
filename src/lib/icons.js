@@ -282,7 +282,7 @@ Object.assign(draw, {
    into place one after another — the building metaphor, once, on load. */
 
 const PLATFORM = { top: '#eef2f8', left: '#d5deeb', right: '#c3cfe0' };
-const part = (svg) => `<g class="part">${svg}</g>`;
+const part = (svg) => `<g class="part"><g class="depth">${svg}</g></g>`;
 
 const scenes = {
   website() {
@@ -490,9 +490,20 @@ scenes.services = () => {
       [6.3, 7.1, 7.9].map((a) => box(8.7, a, 0.7, 0.5, 0.45, 0.25)).join('') +
       on('top', chip, 0.4, 0.4, 2.5, 2.5, '#2a5189') +
       box(6.6, 6.6, 1.2, 1.3, 1.3, 0.7, AMBER),
-    )
+    ) +
+    signal()
   );
 };
+
+/**
+ * Three markers circling the platform between the four pieces: the four groups
+ * working as one connected system. Drawn at the origin and moved by CSS, so it
+ * costs nothing to animate and stops entirely under reduced motion.
+ */
+const signal = () =>
+  `<g class="signal">${[0, 1, 2]
+    .map((i) => `<path class="sig sig-${i + 1}" d="M-3.1 0L0 -1.8L3.1 0L0 1.8Z" fill="${AMBER.top}"/>`)
+    .join('')}</g>`;
 
 scenes.process = () => {
   // Six steps rising left to right; the last one amber — the finished job.

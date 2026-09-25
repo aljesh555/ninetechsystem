@@ -772,6 +772,34 @@ none. A CSS `decimal-leading-zero` counter tripped the banned-word check
 ("leading"); the numbers are written into the markup instead, so the check stays
 strict. Lighthouse mobile 99/100/100/100, LCP 1.8 s, CLS 0.
 
+### Hero motion: depth on the pointer, and the signal
+
+Two layers were added to the isometric hero scenes, both transform-and-opacity
+only, so they cost no layout work:
+
+1. **Depth on the pointer.** Each piece shifts by a different amount as the
+   cursor crosses the hero — the platform barely moves, the front pieces travel
+   about 8px — which is what makes a flat isometric drawing read as a solid
+   object. `part()` now wraps its contents in a `.depth` group so the assembly
+   animation (on `.part`) and the pointer depth (on `.depth`) never overwrite
+   each other's transform. Mouse and trackpad only, off under reduced motion.
+2. **The signal.** Three amber markers circle the platform between the four
+   pieces on a six-second loop, brightening as each passes a piece: four groups,
+   one connected system, running. Only on the `services` scene (Home and the
+   Services hub), where "one connected system" is the message; the single-service
+   scenes keep still.
+
+**The CSP caught a real bug.** The first version set CSS custom properties with
+`element.style.setProperty`, which our `style-src` (hashes, no `unsafe-inline`)
+blocks — the effect worked when driven from DevTools but would have silently
+failed for every visitor, and Lighthouse best-practices fell to 93 with a console
+violation. It now sets the SVG `transform` presentation attribute, which is not an
+inline style and is allowed. Lighthouse mobile is back to 99-100 across the hero
+pages with no failing audits.
+
+Three.js was again rejected: the smallest useful build is far over the JS budget,
+and it would compete with the hero for LCP.
+
 ## Two bugs found after the first deploy
 
 **Unknown URLs returned the home page with HTTP 200.** Cloudflare Pages falls

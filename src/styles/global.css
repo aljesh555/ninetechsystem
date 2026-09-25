@@ -1077,3 +1077,34 @@ h1 + .lead, h2 + .lead { margin-top: var(--s3); }
 .pledges h3 { font-size: 1.1875rem; }
 .pledges p { margin-top: var(--s2); color: var(--grey); }
 .company-note { margin-top: var(--s6); padding-top: var(--s4); border-top: 1px solid var(--rule); color: var(--grey); font-size: 0.9375rem; max-width: 46rem; }
+
+/* --- hero scenes: depth on the pointer, and the signal ---------------------
+   The assembly animation lives on .part; pointer depth lives on the inner
+   .depth group, so neither overwrites the other's transform. Foreground
+   pieces travel further than the platform, which is what gives an isometric
+   drawing real depth. */
+
+.scene .depth { transform-box: fill-box; transition: transform 0.5s var(--ease); }
+
+/* The signal only runs in a hero, never in the small group illustrations. */
+.signal { display: none; }
+.js .hero-art .signal, .js .build-hero-art .signal { display: block; animation: signal-in 0.8s ease 1.4s both; }
+.sig { transform-box: fill-box; animation: orbit 6s linear infinite, sig-pulse 1.5s ease-in-out infinite; }
+.sig-2 { animation-delay: -2s, -0.5s; }
+.sig-3 { animation-delay: -4s, -1s; }
+
+@keyframes signal-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes sig-pulse { 0%, 100% { opacity: 0.95; } 50% { opacity: 0.35; } }
+@keyframes orbit {
+  0%   { transform: translate(30.3px, 50.9px); }
+  25%  { transform: translate(40px, 56.5px); }
+  50%  { transform: translate(49.7px, 50.9px); }
+  75%  { transform: translate(40px, 45.3px); }
+  100% { transform: translate(30.3px, 50.9px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .signal { display: none !important; }
+  .scene .depth { transform: none !important; transition: none !important; }
+}
+@media print { .signal { display: none !important; } }
