@@ -449,6 +449,26 @@ scenes.automate = () => {
   );
 };
 
+scenes.support = () => {
+  const tower = B(1.2, 1.2, 0.6, 2.8, 2.8, 7);
+  const rows = [5.4, 3.8, 2.2];
+  const lockBody = B(5.2, 5.6, 0.6, 3, 2.2, 2.6);
+  const kit = B(5.4, 1.4, 0.6, 3.6, 2.2, 1.8);
+  return (
+    part(box(0.2, 0.2, 0, 9.6, 9.6, 0.6, PLATFORM)) +
+    part(
+      box(...tower) +
+      rows.map((v) => on('left', tower, 0.4, v, 0.9, v + 0.5, AMBER.left)).join('') +
+      rows.map((v) => on('left', tower, 1.2, v + 0.1, 2.4, v + 0.4, LIGHT_DIM)).join(''),
+    ) +
+    part(box(...kit) + box(5.3, 1.3, 2.4, 3.8, 2.4, 0.5) + box(6.6, 2.4, 2.9, 1.2, 0.4, 0.8) + on('left', kit, 1.4, 0.8, 2.2, 1.4, AMBER.left)) +
+    part(
+      box(...lockBody, AMBER) + on('left', lockBody, 1.2, 0.8, 1.8, 1.8, '#0e2a52') +
+      box(5.8, 6.4, 3.2, 0.5, 0.5, 1.8) + box(7.6, 6.4, 3.2, 0.5, 0.5, 1.8) + box(5.8, 6.4, 5, 2.3, 0.5, 0.5),
+    )
+  );
+};
+
 /** Inline SVG for a service or concept icon. Decorative: its heading names it. */
 export function icon(name, size = 80) {
   const body = draw[name]?.();

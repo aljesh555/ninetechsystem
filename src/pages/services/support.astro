@@ -1,68 +1,125 @@
 ---
-import GroupDetail from '../../components/services/GroupDetail.astro';
-import { support, carePlans, groups, npr, priceLabel, contactHref } from '../../data/services.js';
-import { offer, orgRef, abs } from '../../lib/schema.js';
+/**
+ * Support & Maintenance. Capability shown, no published price: care plans are
+ * scoped per client. `#hosting`, `#handle` and `#care-plans` are the anchors
+ * the hub cards link to. See DECISIONS.md.
+ */
+import Base from '../../layouts/Base.astro';
+import BuildHero from '../../components/services/BuildHero.astro';
+import FallHeading from '../../components/services/FallHeading.astro';
+import Tiles from '../../components/services/Tiles.astro';
+import Flow from '../../components/services/Flow.astro';
+import Faq from '../../components/services/Faq.astro';
+import CtaStrip from '../../components/services/CtaStrip.astro';
+import { support, contactHref } from '../../data/services.js';
+import { site } from '../../data/site.js';
+import { breadcrumbList, faqPage, orgRef, abs } from '../../lib/schema.js';
 
 const path = '/services/support';
-const [hosting, maintenance] = support.services.map((s) => npr(s.price.from));
-const plan = Object.fromEntries(carePlans.plans.map((p) => [p.name, npr(p.price.from)]));
+const crumbs = [
+  { name: 'Home', path: '/' },
+  { name: 'Services', path: '/services' },
+  { name: 'Support', path },
+];
+const cta = { label: support.cta.label, href: contactHref(support.cta.need) };
 
-const careSchema = {
-  '@type': 'Service',
-  name: 'Monthly care plans',
-  serviceType: 'Support',
-  description: 'Three levels of monthly website and software cover: hosting, updates, backups, small changes and a guaranteed response time.',
-  provider: orgRef,
-  url: abs(`${path}#care-plans`),
-  offers: carePlans.plans.map((p) => ({ ...offer(p.price, `${path}#care-plans`), name: p.name })),
-};
+// No offers: there is no published price yet.
+const schema = [
+  {
+    '@type': 'Service',
+    name: 'Website support and maintenance',
+    serviceType: 'Website and software maintenance',
+    description: support.answer,
+    provider: orgRef,
+    areaServed: site.areasServed.map((n) => ({ '@type': 'City', name: n })),
+    url: abs(path),
+    hasOfferCatalog: {
+      '@type': 'OfferCatalog',
+      name: 'Support and maintenance',
+      itemListElement: [...support.handle.map((h) => h.name), 'Monthly care plans'].map((name) => ({
+        '@type': 'Offer',
+        itemOffered: { '@type': 'Service', name },
+      })),
+    },
+  },
+  faqPage(path, support.faqs),
+  breadcrumbList(crumbs),
+];
 ---
 
-<GroupDetail
+<Base
+  title="Support & Maintenance — Nine Technology, Kathmandu"
+  description="Website and software support in Nepal: hosting, updates, security, backups and monthly care plans. Everything in your name, and a person who answers."
   path={path}
-  crumb="Support"
-  title="Hosting, Maintenance & Care Plans — Nine Technology"
-  description={`Domain and hosting from NPR ${hosting}/year, maintenance from NPR ${maintenance}/month, and care plans from NPR ${plan.Essential}/month. Everything in your name.`}
-  h1="Hosting, maintenance and care plans in Kathmandu"
-  lead={groups.find((g) => g.id === 'support').tagline}
-  group={support}
-  extraSchema={[careSchema]}
-  extraJump={[{ id: 'care-plans', name: 'Care plans' }]}
-  cta={{
-    heading: 'Already have a site that needs looking after?',
-    body: 'Tell us what it runs on and what keeps going wrong. We will tell you which plan fits, or whether you need one at all.',
-    primary: { label: 'Ask about a care plan', href: contactHref('care-plan') },
-  }}
+  schema={schema}
 >
-  <Fragment slot="answer">
-    Nine Technology keeps business websites and software in Nepal running: domain and hosting from NPR {hosting} a year, maintenance from NPR {maintenance} a month, and three monthly care plans — Essential NPR {plan.Essential}, Standard NPR {plan.Standard} and Complete NPR {plan.Complete}. Everything is registered in your name, not ours.
-  </Fragment>
+  <BuildHero
+    crumbs={crumbs}
+    kicker="Support — Support & maintenance"
+    h1="Website Support & Maintenance in Kathmandu"
+    sceneName="support"
+    primary={cta}
+    secondary={{ label: 'What we handle', href: '#handle' }}
+    facts={support.facts}
+  >
+    {support.answer}
+  </BuildHero>
 
-  <section class="section section-tint" id="care-plans">
+  <section class="section trust-band" aria-label="Our ownership commitment">
     <div class="wrap">
-      <div class="section-head">
-        <h2>Monthly care plans</h2>
-        <p class="lead">Three levels of monthly cover, so you know exactly what is handled and how fast we answer.</p>
-      </div>
-      <div class="plans">
-        {carePlans.plans.map((p) => (
-          <article class={`plan${p.featured ? ' plan-featured' : ''}`}>
-            {p.featured && <p class="plan-flag">{p.featured}</p>}
-            <h3>{p.name}</h3>
-            <p class="plan-price">{priceLabel(p.price)}</p>
-            <dl>
-              {carePlans.rows.map((row, i) => (
-                <div>
-                  <dt>{row}</dt>
-                  <dd>{p.values[i]}</dd>
-                </div>
-              ))}
-            </dl>
-          </article>
-        ))}
-      </div>
-      <p class="vat-note">Prices exclude 13% VAT. Plans are billed monthly.</p>
-      <a class="btn btn-primary section-body" href={contactHref('care-plan')}>Ask about a care plan</a>
+      <p class="trust">{support.trust}</p>
+      <p class="trust-sub">{support.intro}</p>
     </div>
   </section>
-</GroupDetail>
+
+  <section class="section section-tint" id="handle">
+    <div class="wrap">
+      <div class="section-head">
+        <FallHeading text="What we handle" />
+        <p class="lead">Everything that keeps a website, store or system healthy after launch.</p>
+      </div>
+      <Tiles items={support.handle} />
+    </div>
+  </section>
+
+  <section class="section" id="care-plans">
+    <div class="wrap">
+      <div class="section-head">
+        <FallHeading text="Care plans" />
+        <p class="lead">{support.carePlans}</p>
+      </div>
+      <h3 class="h4 section-body">How a plan is scoped</h3>
+      <Tiles items={support.planFactors} />
+    </div>
+  </section>
+
+  <section class="section section-tint" id="process">
+    <div class="wrap">
+      <div class="section-head">
+        <FallHeading text="How support works" />
+        <p class="lead">Five stages, from a first look at what you have to help whenever you need it.</p>
+      </div>
+      <Flow steps={support.process} />
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap split">
+      <div class="split-head">
+        <FallHeading text="How we price it" />
+      </div>
+      <div>
+        <p class="offer-intro">{support.pricing}</p>
+        <a class="btn btn-primary section-body" href={cta.href}>{cta.label}</a>
+      </div>
+    </div>
+  </section>
+
+  <Faq faqs={support.faqs} heading="Support questions" />
+
+  <CtaStrip
+    heading="Tell us what you need looked after"
+    body="Your website, store or system, where it is hosted, and what keeps going wrong. We will put together a support plan."
+    primary={cta}
+  />
+</Base>

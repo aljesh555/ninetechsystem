@@ -134,22 +134,25 @@ export const services = {
   },
   hosting: {
     name: 'Domain & hosting',
-    short: 'Set up, renewed on time, and in your name — not held in ours.',
-    price: { from: 8000, per: 'year' },
+    short: 'Domain, hosting, email and SSL — set up, renewed on time, and in your name, not held in ours.',
+    price: null,
+    priceNote: 'By proposal',
     href: '/services/support#hosting',
     icon: 'hosting',
   },
   maintenance: {
     name: 'Maintenance',
-    short: 'Updates, security, backups and small fixes before they become problems.',
-    price: { from: 4000, per: 'month' },
-    href: '/services/support#maintenance',
+    short: 'Updates, security patches, backups, monitoring and small fixes — handled before they become problems.',
+    price: null,
+    priceNote: 'By proposal',
+    href: '/services/support#handle',
     icon: 'maintenance',
   },
   'care-plan': {
     name: 'Care plans',
-    short: "Three levels of monthly cover, so you know what's handled and how fast we answer.",
-    price: { from: 5000, per: 'month' },
+    short: 'Monthly cover scoped to your website or system, so everything is handled and you always know who to call.',
+    price: null,
+    priceNote: 'By proposal',
     href: '/services/support#care-plans',
     icon: 'care',
   },
@@ -1055,54 +1058,65 @@ export const automate = {
   ],
 };
 
-export const carePlans = {
-  rows: ['Hosting, SSL and backups', 'Software updates', 'Small changes included', 'Response time', 'Monthly report'],
-  plans: [
-    { name: 'Essential', price: { from: 5000, per: 'month', exact: true }, values: ['Yes', 'Yes', '2 a month', 'Within 48 hours', 'No'] },
-    { name: 'Standard', price: { from: 10000, per: 'month', exact: true }, values: ['Yes', 'Yes', '5 a month', 'Within 24 hours', 'Yes'], featured: 'Most chosen' },
-    { name: 'Complete', price: { from: 18000, per: 'month', exact: true }, values: ['Yes', 'Yes', '10 a month', 'Same day', 'Yes, with priority'] },
-  ],
-};
-
 export const support = {
-  services: [
-    {
-      id: 'hosting',
-      name: 'Domain and hosting',
-      answer: 'Domain, hosting, email and SSL — set up, renewed on time, and in your name, not held in ours.',
-      price: services.hosting.price,
-      includes: ['Domain registration and renewal', 'Hosting', 'Business email', 'SSL certificate'],
-      excludes: [],
-      note: 'Everything registered in your name.',
-      priceMovers: 'What moves the price: the domain ending you choose, the number of email accounts, and the hosting size.',
-      cta: { label: 'Ask about hosting', need: 'hosting' },
-    },
-    {
-      id: 'maintenance',
-      name: 'Maintenance and updates',
-      answer: 'Updates, security, backups and small fixes handled before they become problems.',
-      price: services.maintenance.price,
-      includes: ['Software updates', 'Security patches', 'Backups', 'Small fixes'],
-      excludes: [],
-      cta: { label: 'Ask about maintenance', need: 'maintenance' },
-    },
+  // No published price for now: care plans are scoped per client. The earlier
+  // draft tiers are recorded in DECISIONS.md for when prices are confirmed.
+  intro: 'We do not disappear after launch. We keep your website, store or system running — updated, backed up, secure, and with someone who answers when you need help.',
+  answer: 'Nine Technology provides website and software support in Nepal — hosting, domain and SSL management, updates, security, backups, and monthly care plans, all kept in the client’s name.',
+  trust: 'Everything in your name — your domain, your hosting, your logins. We look after it; we never hold it hostage.',
+  facts: [
+    { icon: 'lock', value: 'In your name', label: 'Domain, hosting and logins' },
+    { icon: 'hosting', value: 'Kept running', label: 'Updates, backups, monitoring' },
+    { icon: 'chat', value: 'A person who answers', label: 'Not a ticket that disappears' },
+    { icon: 'maintenance', value: 'Small fixes handled', label: 'Content changes and fixes' },
   ],
+  handle: [
+    { id: 'hosting', icon: 'hosting', name: 'Domain, hosting, email & SSL', body: 'Set up and renewed on time, in your name — so nothing expires because a reminder was missed.' },
+    { icon: 'lock', name: 'Software updates & security patches', body: 'Applied regularly, so known weaknesses are closed and your software stays supported.' },
+    { icon: 'sheet', name: 'Regular backups', body: 'Taken on a schedule, so your site, store or system can be restored if something goes wrong.' },
+    { icon: 'gauge', name: 'Speed & uptime monitoring', body: 'Monitored, so a slow or offline site is noticed and dealt with, not discovered by a customer.' },
+    { icon: 'maintenance', name: 'Small content changes and fixes', body: 'Text, images, prices and small corrections, handled without a new project.' },
+    { icon: 'chat', name: 'A person who answers', body: 'Not a ticket that disappears. You reach someone who knows your website or system.' },
+  ],
+  carePlans: 'Monthly cover so everything is handled and you always know who to call. We scope a plan to your website or system and what you need looked after.',
+  planFactors: [
+    { icon: 'website', name: 'What you have', body: 'A website, an online store or a business system — and how it was built.' },
+    { icon: 'maintenance', name: 'What needs looking after', body: 'Hosting and renewals, updates and backups, monitoring, and how many changes you expect each month.' },
+    { icon: 'gauge', name: 'How quickly you need answers', body: 'Response times for fixes, agreed in writing as part of the plan.' },
+  ],
+  process: [
+    { name: 'Review what you have', body: 'Your website or system, where it is hosted, and who holds which login.' },
+    { name: 'Plan scoped', body: 'What we look after, how often, and response times, in writing.' },
+    { name: 'Set up in your name', body: 'Domain, hosting and accounts confirmed or moved into your name.' },
+    { name: 'Ongoing care', body: 'Updates, backups and monitoring, done on schedule.' },
+    { name: 'Help when you need it', body: 'Changes and fixes handled by a person who knows your setup.' },
+  ],
+  pricing: 'We scope a support plan to your website or system and what you need looked after. Tell us what you have, and we will put together a plan.',
+  cta: { label: 'Talk to us about support', need: 'support' },
   faqs: [
     {
-      q: 'Do you provide support after launch?',
-      a: 'Yes. Every project includes support after launch at no extra cost: 14 days on a landing page, 30 days on websites and stores, and 60 days on software and apps. After that you can move to a monthly care plan, or simply call us when you need something. There is no obligation to keep paying us.',
+      q: 'What does a care plan include?',
+      a: 'A care plan is scoped to your website or system. It can cover domain, hosting, email and SSL renewals, software updates and security patches, regular backups, speed and uptime monitoring, small content changes and fixes, and a person who answers when you need help. What is included is written into the plan.',
     },
     {
-      q: 'Is the domain registered in my name?',
-      a: 'Yes. The domain, the hosting and the business email are registered in your name, never ours, and you get the logins. If you ever move to another company, you take them with you.',
+      q: 'Do you host the website?',
+      a: 'Yes. We set up and manage hosting for websites, stores and systems, and renew it on time. The hosting account is registered in your name, not ours.',
     },
     {
-      q: 'Which care plan do I need?',
-      a: 'Essential covers hosting, updates, backups and 2 small changes a month with a 48-hour response. Standard, the one most businesses choose, adds 5 small changes a month, a 24-hour response and a monthly report. Complete is for businesses that change their site often and need a same-day response.',
+      q: 'Will the domain and hosting be in my name?',
+      a: 'Yes. Your domain, your hosting and your logins are registered in your name. We look after them; we never hold them hostage. If you ever move to another company, everything goes with you.',
     },
     {
-      q: 'Can I stop a care plan?',
-      a: 'Yes. There is no obligation to keep paying us, and the notice terms are written into the plan before you start. Everything stays in your name either way.',
+      q: 'What if something breaks?',
+      a: 'Call or message us and a person answers — not a ticket that disappears. We find the cause and fix it. On a care plan, fixes are handled under the plan’s terms; without one, we tell you what the fix involves before starting.',
+    },
+    {
+      q: 'How fast do you respond?',
+      a: 'We reply within minutes, Sunday to Friday, 10am to 5pm. Response times for fixes are agreed in writing as part of your care plan, so you know exactly what to expect.',
+    },
+    {
+      q: 'Can you maintain a website you did not build?',
+      a: 'Yes, after a quick review. We look at how the website was built, where it is hosted and who holds the logins, then tell you what a support plan would cover.',
     },
   ],
 };
@@ -1128,6 +1142,7 @@ export const needs = [
   { value: 'ai-agents', label: 'AI agents' },
   { value: 'hosting', label: 'Domain and hosting' },
   { value: 'maintenance', label: 'Maintenance and updates' },
+  { value: 'support', label: 'Support and maintenance' },
   { value: 'care-plan', label: 'A monthly care plan' },
   { value: 'not-sure', label: 'Not sure yet' },
 ];
@@ -1149,5 +1164,5 @@ export const servicePages = [
   { path: '/services/video-production', name: 'Video production' },
   { path: '/services/paid-ads', name: 'Paid advertising' },
   { path: '/services/automate', name: 'AI automation and AI agents: assistants and chatbots, agents, workflows, reports' },
-  { path: '/services/support', name: 'Domain and hosting, maintenance and care plans' },
+  { path: '/services/support', name: 'Website support and maintenance: hosting, updates, security, backups, care plans' },
 ];

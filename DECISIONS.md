@@ -635,6 +635,40 @@ Implementation notes:
 - The founder's meta description (175 characters) was trimmed to 153 to fit
   search results.
 
+### Support & Maintenance (settled for now — founder's decision)
+
+Capability shown, **no published price** — care plans scoped per client, prices to
+be added in a future update. Covers: domain/hosting/SSL/email, updates and
+security, backups, monitoring, small fixes, and real support. Trust line,
+placed prominently straight after the hero: "Everything in your name — your
+domain, your hosting, your logins. We look after it; we never hold it hostage."
+CTA "Talk to us about support" (`?need=support`).
+
+**Future:** add care plan tiers and prices. The earlier draft, removed from the
+site and kept here only for reference — *revisit and confirm hosting costs before
+publishing*:
+
+| Plan | Price | Small changes | Response time | Monthly report |
+|---|---|---|---|---|
+| Essential | NPR 5,000/mo | 2 a month | Within 48 hours | No |
+| Standard | NPR 10,000/mo | 5 a month | Within 24 hours | Yes |
+| Complete | NPR 18,000/mo | 10 a month | Same day | Yes, with priority |
+
+Domain and hosting was "from NPR 8,000/yr" and maintenance "from NPR 4,000/mo".
+
+Implementation notes:
+- One page, like Automate. The hub's three Support cards link to `#hosting`,
+  `#handle` and `#care-plans`. No prices in the page, the hub, JSON-LD
+  (`OfferCatalog` without prices) or `llms.txt`; the business `priceRange`
+  now derives from the remaining published prices.
+- "How fast do you respond?" is answered only with facts already published: the
+  reply promise (within minutes, Sunday–Friday 10am–5pm) and response times for
+  fixes agreed in writing in the care plan.
+- The founder's meta description was trimmed to 149 characters; "We don't
+  disappear" became "We do not disappear" for the company voice.
+- `GroupDetail.astro` and `ServiceBlock.astro` were removed: every services page
+  now uses the Build page system.
+
 ## Two bugs found after the first deploy
 
 **Unknown URLs returned the home page with HTTP 200.** Cloudflare Pages falls

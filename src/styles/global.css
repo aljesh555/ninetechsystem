@@ -939,3 +939,12 @@ h1 + .lead, h2 + .lead { margin-top: var(--s3); }
 .capability:hover { border-color: var(--navy); }
 .capability .group-head { font-size: 1.1875rem; }
 .catch-all { margin-top: var(--s4); font-family: var(--display); font-weight: 600; font-size: 1.0625rem; }
+
+/* Support: the ownership commitment, set large, straight after the hero. */
+.trust-band { padding-block: var(--s6); border-bottom: 1px solid var(--rule); }
+.trust {
+  font-family: var(--display); font-weight: 600; letter-spacing: -0.02em;
+  font-size: clamp(1.5rem, 3.4vw, 2.25rem); line-height: 1.25; max-width: 30ch;
+  padding-left: var(--s4); border-left: 4px solid var(--amber);
+}
+.trust-sub { margin-top: var(--s4); padding-left: calc(var(--s4) + 4px); color: var(--grey); font-size: 1.125rem; max-width: 40rem; }

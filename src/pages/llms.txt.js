@@ -1,6 +1,6 @@
 import { site, commitments, industries, people } from '../data/site.js';
 import {
-  services, groups, website, software, app, grow, automate, support, carePlans,
+  services, groups, website, software, app, grow, automate, support,
   servicePages, priceLabel, VAT_NOTE, deliveryModels, modelsIntro,
 } from '../data/services.js';
 
@@ -25,9 +25,6 @@ export async function GET() {
     .map((o) => `- ${o.name}: ${priceLabel(o.price, o.priceNote)}, ${o.time}. ${o.intro}`)
     .join('\n');
 
-  const plans = carePlans.plans
-    .map((p) => `- ${p.name}, ${priceLabel(p.price)}: ${carePlans.rows.map((row, i) => `${row}: ${p.values[i]}`).join('; ')}.`)
-    .join('\n');
 
   const models = Object.values(deliveryModels)
     .map((m) => `- ${m.name}: ${m.short} Phases: ${m.phases.join(', ')}. Best suited to: ${m.bestFor} Pricing: ${m.pricing}`)
@@ -69,8 +66,9 @@ ${hub}
 ### Website types in detail (${url('/services/website')})
 ${websiteTypes}
 
-### Monthly care plans (${url('/services/support#care-plans')})
-${plans}
+### Support and maintenance (${url('/services/support')})
+${support.intro} ${support.trust} Care plans are scoped per client; no prices are published yet.
+${support.handle.map((h) => `- ${h.name}: ${h.body}`).join('\n')}
 
 ## Delivery models
 ${modelsIntro}

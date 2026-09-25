@@ -5,7 +5,7 @@ const { items, cols = 3 } = Astro.props;
 ---
 <ul class={`tiles tiles-${cols} stagger reveal`}>
   {items.map((t) => (
-    <li>
+    <li id={t.id}>
       {t.icon && <Fragment set:html={icon(t.icon, 52)} />}
       <h3>{t.name}</h3>
       <p>{t.body}</p>
