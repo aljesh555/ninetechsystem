@@ -41,4 +41,29 @@ export const projects = [
     ],
     image: 'work-shakti-x-gym',
   },
+  {
+    slug: 'fitness-durbar',
+    client: 'Fitness Durbar',
+    sector: 'Gyms and fitness studios',
+    sectorHref: '/sectors#gyms',
+    location: 'Hattiban, Lalitpur',
+    year: '2026',
+    // Until fitnessdurbar.com is pointed at the site, the working address is
+    // the one we can link. Swap this the day the domain resolves.
+    url: 'https://fitness-durbar.pages.dev',
+    summary:
+      'A members-only gym does not compete on being the cheapest in Lalitpur, so the site is not built to sell on price. It is built to set a standard and let the reader decide whether they belong in it.',
+    built: [
+      'An editorial design that treats the gym as a name rather than a facility, because selectivity is the thing being sold and a discount layout would have argued against it.',
+      'The address, coordinates and opening hours marked up as a health club, so the gym can be placed and shown correctly in local search.',
+      'Membership tiers set out in full, so the level of commitment is clear before anyone makes contact.',
+      'Trainer profiles and member transformations, which is the evidence people actually weigh before joining a gym.',
+      'A day and a night theme, and a layout built for phones first.',
+    ],
+    services: [
+      { label: 'Business website', href: '/services/website#business' },
+      { label: 'Search visibility', href: '/services/seo' },
+    ],
+    image: 'work-fitness-durbar',
+  },
 ];
