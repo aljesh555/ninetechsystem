@@ -425,6 +425,30 @@ scenes.ads = () => {
   );
 };
 
+scenes.automate = () => {
+  const chip = B(3.4, 3.4, 0.6, 3.2, 3.2, 0.8);
+  const bubble = B(0.8, 0.8, 4.4, 3.6, 2.4, 1.8);
+  const pins = [3.9, 4.8, 5.7];
+  return (
+    part(box(0.2, 0.2, 0, 9.6, 9.6, 0.6, PLATFORM)) +
+    part(box(7.4, 1.2, 0.6, 1.6, 1.6, 1.6) + box(7.9, 2.8, 0.6, 0.6, 1.6, 0.2, AMBER)) +
+    part(
+      box(...chip) +
+      pins.map((a) => box(a, 6.6, 0.7, 0.5, 0.6, 0.3)).join('') +
+      pins.map((a) => box(6.6, a, 0.7, 0.6, 0.5, 0.3)).join('') +
+      on('top', chip, 0.4, 0.4, 2.8, 2.8, '#2a5189') +
+      box(4.3, 4.3, 1.4, 1.4, 1.4, 0.8, AMBER),
+    ) +
+    part(box(6.8, 6.6, 0.6, 0.6, 1.2, 0.2, AMBER) + box(7.4, 7.2, 0.6, 1.6, 1.6, 1.6, AMBER)) +
+    part(
+      box(...bubble) + box(1.4, 3.2, 3.6, 0.9, 0.9, 0.9) +
+      on('left', bubble, 0.6, 0.6, 1.2, 1.2, AMBER.left) +
+      on('left', bubble, 1.5, 0.6, 2.1, 1.2, AMBER.left) +
+      on('left', bubble, 2.4, 0.6, 3, 1.2, AMBER.left),
+    )
+  );
+};
+
 /** Inline SVG for a service or concept icon. Decorative: its heading names it. */
 export function icon(name, size = 80) {
   const body = draw[name]?.();

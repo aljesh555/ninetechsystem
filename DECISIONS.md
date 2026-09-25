@@ -606,6 +606,35 @@ so old links still land on the right card, which links on to the new page.
 Automate and Support still share one page each; they will be split the same way
 when the founder's new content for them arrives, to avoid building them twice.
 
+### AI Automation & AI Agents (settled for now — founder's decision)
+
+Consultative capability, **no published price** — scoped per job by the business's
+problem and the repetitive work being automated. Four listed groups: AI Assistants
+& Chatbots, AI Agents, Workflow Automation, Reports & Operations, plus a
+catch-all. Bilingual, the client owns it, we maintain it. CTA "Talk to us about
+automation" (`?need=automation`).
+
+**Future:** add real prices and packaged features once the market is researched
+and the first projects are delivered. **Priority:** build a chatbot demo on this
+site; research automation pricing (benchmark: setup NPR 15k–300k, monthly
+5k–25k). *Internal only — these figures are not published.*
+
+Implementation notes:
+- One page (`/services/automate`), not four: each group has 3–5 points today,
+  and four thin pages would rank worse than one complete one. Split per group,
+  as Grow was, once prices, packaged features and projects exist. Each group keeps
+  its own anchor (`#assistants`, `#agents`, `#workflows`, `#reports`), which the
+  four hub cards link to.
+- The previous "from NPR 40,000 / 25,000 setup" figures were removed everywhere
+  (pages, hub data, JSON-LD, `llms.txt`). The `Service` schema has an
+  `OfferCatalog` of the four groups and no prices.
+- "24/7" is written "24 hours a day, 7 days a week", and always about the
+  automation; the page says the team takes over when a person is needed. The
+  security check still blocks the literal "24/7", because the original brief
+  forbids promising round-the-clock human support.
+- The founder's meta description (175 characters) was trimmed to 153 to fit
+  search results.
+
 ## Two bugs found after the first deploy
 
 **Unknown URLs returned the home page with HTTP 200.** Cloudflare Pages falls

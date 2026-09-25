@@ -1,28 +1,136 @@
 ---
-import GroupDetail from '../../components/services/GroupDetail.astro';
-import { automate, groups, npr, contactHref } from '../../data/services.js';
+/**
+ * AI Automation & AI Agents. One page for now: capability shown, no published
+ * price, because each automation is scoped to the business's own repetitive
+ * work. The four groups keep their own anchors, so the hub cards and old
+ * links land on the right one. See DECISIONS.md.
+ */
+import Base from '../../layouts/Base.astro';
+import BuildHero from '../../components/services/BuildHero.astro';
+import FallHeading from '../../components/services/FallHeading.astro';
+import Tiles from '../../components/services/Tiles.astro';
+import Flow from '../../components/services/Flow.astro';
+import Faq from '../../components/services/Faq.astro';
+import CtaStrip from '../../components/services/CtaStrip.astro';
+import { icon } from '../../lib/icons.js';
+import { automate, contactHref } from '../../data/services.js';
+import { breadcrumbList, faqPage, orgRef, abs } from '../../lib/schema.js';
+import { site } from '../../data/site.js';
 
-const chat = npr(automate.services[0].price.from);
-const flow = npr(automate.services[1].price.from);
-const review = { label: 'Request a process assessment', href: contactHref('ai-agents') };
+const path = '/services/automate';
+const crumbs = [
+  { name: 'Home', path: '/' },
+  { name: 'Services', path: '/services' },
+  { name: 'Automate', path },
+];
+const cta = { label: automate.cta.label, href: contactHref(automate.cta.need) };
+
+// No offers: there is no published price yet.
+const schema = [
+  {
+    '@type': 'Service',
+    name: 'AI automation and AI agents',
+    serviceType: 'AI automation',
+    description: automate.answer,
+    provider: orgRef,
+    areaServed: site.areasServed.map((n) => ({ '@type': 'City', name: n })),
+    url: abs(path),
+    hasOfferCatalog: {
+      '@type': 'OfferCatalog',
+      name: 'AI automation services',
+      itemListElement: automate.groups.map((g) => ({
+        '@type': 'Offer',
+        itemOffered: { '@type': 'Service', name: g.name, url: abs(`${path}#${g.id}`) },
+      })),
+    },
+  },
+  faqPage(path, automate.faqs),
+  breadcrumbList(crumbs),
+];
 ---
 
-<GroupDetail
-  path="/services/automate"
-  crumb="Automate"
-  title="AI Chatbots & Automation in Kathmandu — Nine Technology"
-  description={`AI chat for WhatsApp, Messenger and websites in English and Nepali from NPR ${chat}, workflow automation from NPR ${flow}, custom AI agents, scoped by assessment.`}
-  h1="AI chat and business automation in Kathmandu"
-  lead={groups.find((g) => g.id === 'automate').tagline}
-  group={automate}
-  primaryCta={review}
-  cta={{
-    heading: 'Begin with a process assessment',
-    body: 'A 30 to 60 minute review of your daily operations, at no cost. You receive a written scope and price for what is worth automating — or an honest assessment that nothing is.',
-    primary: review,
-  }}
+<Base
+  title="AI Automation & AI Agents — Nine Technology, Kathmandu"
+  description="AI chatbots, workflow automation and AI agents for businesses in Nepal. WhatsApp assistants in Nepali and English, lead follow-up, invoicing and reports."
+  path={path}
+  schema={schema}
 >
-  <Fragment slot="answer">
-    Nine Technology automates the repetitive work of businesses in Nepal: AI chat that answers WhatsApp, Messenger and website messages in English and Nepali from NPR {chat} setup, workflow automation that connects your orders, sheets, reminders and reports from NPR {flow} setup, and custom AI agents scoped after a process assessment.
-  </Fragment>
-</GroupDetail>
+  <BuildHero
+    crumbs={crumbs}
+    kicker="Automate — AI automation & AI agents"
+    h1="AI Automation & AI Agents in Kathmandu"
+    sceneName="automate"
+    primary={cta}
+    secondary={{ label: 'What we can build', href: '#build' }}
+    facts={automate.facts}
+  >
+    {automate.answer}
+  </BuildHero>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <FallHeading text="Sound familiar?" />
+        <p class="lead">{automate.intro}</p>
+      </div>
+      <Tiles items={automate.familiar} />
+    </div>
+  </section>
+
+  <section class="section section-tint" id="build">
+    <div class="wrap">
+      <div class="section-head">
+        <FallHeading text="What we can build" />
+        <p class="lead">Four kinds of automation, often combined in one system.</p>
+      </div>
+      <div class="capabilities stagger reveal">
+        {automate.groups.map((g) => (
+          <article class="capability" id={g.id}>
+            <h3 class="group-head"><Fragment set:html={icon(g.icon, 44)} />{g.name}</h3>
+            <ul class="checks one">{g.items.map((i) => <li>{i}</li>)}</ul>
+          </article>
+        ))}
+      </div>
+      <p class="catch-all">{automate.catchAll}</p>
+    </div>
+  </section>
+
+  <section class="section" id="process">
+    <div class="wrap">
+      <div class="section-head">
+        <FallHeading text="How it works" />
+        <p class="lead">{automate.howItWorks}</p>
+      </div>
+      <Flow steps={automate.process} />
+    </div>
+  </section>
+
+  <section class="section section-tint">
+    <div class="wrap">
+      <div class="section-head">
+        <FallHeading text="What you get" />
+      </div>
+      <Tiles items={automate.getItems} cols={2} />
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap split">
+      <div class="split-head">
+        <FallHeading text="How we price it" />
+      </div>
+      <div>
+        <p class="offer-intro">{automate.pricing}</p>
+        <a class="btn btn-primary section-body" href={cta.href}>{cta.label}</a>
+      </div>
+    </div>
+  </section>
+
+  <Faq faqs={automate.faqs} heading="Automation questions" />
+
+  <CtaStrip
+    heading="Tell us which work repeats in your business"
+    body="How you work, the repetitive tasks, and where time is lost. We will come back with a plan and a price."
+    primary={cta}
+  />
+</Base>

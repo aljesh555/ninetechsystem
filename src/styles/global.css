@@ -931,3 +931,11 @@ h1 + .lead, h2 + .lead { margin-top: var(--s3); }
 .fee-rule th, .fee-rule td { text-align: left; padding: var(--s2) var(--s3) var(--s2) 0; border-bottom: 1px solid var(--rule); vertical-align: top; }
 .fee-rule th { font-weight: 400; color: var(--grey); }
 .fee-rule td { font-weight: 500; }
+
+/* Automate: capability groups */
+.capabilities { display: grid; gap: var(--s4); margin-top: var(--s5); }
+@media (min-width: 760px) { .capabilities { grid-template-columns: 1fr 1fr; } }
+.capability { padding: var(--s4); background: var(--white); border: 1px solid var(--rule); border-radius: var(--radius); scroll-margin-top: 104px; transition: border-color 0.15s ease; }
+.capability:hover { border-color: var(--navy); }
+.capability .group-head { font-size: 1.1875rem; }
+.catch-all { margin-top: var(--s4); font-family: var(--display); font-weight: 600; font-size: 1.0625rem; }
