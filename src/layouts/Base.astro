@@ -12,6 +12,7 @@ const {
   schema = [],
   preloadDisplay = false,
   noindex = false,
+  image,
 } = Astro.props;
 
 const canonical = new URL(path, site.url).href;
@@ -19,7 +20,11 @@ const canonical = new URL(path, site.url).href;
 // The cheapest published starting price, e.g. "NPR 4,000+". Derived, so it
 // moves with the price list.
 const lowest = Math.min(...Object.values(services).filter((s) => s.price).map((s) => s.price.from));
-const ogImage = new URL('/og.png', site.url).href;
+// The share card: guides carry their own, everything else the company one.
+// The Organization below deliberately keeps the company card on every page,
+// so the entity a crawler sees never changes with the route.
+const companyImage = new URL('/og.png', site.url).href;
+const ogImage = new URL(image ?? '/og.png', site.url).href;
 
 /** The business ships on every page as ONE entity — an Organization that is
  *  also a local ProfessionalService — so it looks identical to a crawler no
@@ -31,7 +36,7 @@ const business = {
   legalName: site.legalName,
   url: site.url,
   logo: `${site.url}/icon-512.png`,
-  image: ogImage,
+  image: companyImage,
   foundingDate: site.founded,
   telephone: site.phoneDisplay,
   email: site.email,

@@ -15,46 +15,13 @@ import sys
 sys.path.insert(0, str(pathlib.Path(__file__).parent))
 import font_sources
 
-from fontTools.ttLib import TTFont
-from fontTools.pens.svgPathPen import SVGPathPen
-from fontTools.pens.transformPen import TransformPen
-from fontTools.misc.transform import Identity
+from og_text import BRAND, Face, inner
 
 font_sources.ensure(["poppins600.woff2", "poppins700.woff2"])
 
 NAVY, AMBER, WHITE, MUTED = "#123566", "#FF9500", "#FFFFFF", "#9FB0C4"
-BRAND = pathlib.Path("assets/brand")
 W, H, M = 1200.0, 630.0, 88.0
 
-
-class Face:
-    def __init__(self, path):
-        self.font = TTFont(path)
-        self.upem = self.font["head"].unitsPerEm
-        self.cmap = self.font.getBestCmap()
-        self.gs = self.font.getGlyphSet()
-        self.hmtx = self.font["hmtx"]
-
-    def run(self, text, size, x, y, tracking=0.0):
-        scale = size / self.upem
-        d, pen_x = [], x
-        for ch in text:
-            name = self.cmap[ord(ch)]
-            pen = SVGPathPen(self.gs, ntos=lambda v: f"{v:.1f}".rstrip("0").rstrip("."))
-            self.gs[name].draw(TransformPen(pen, Identity.translate(pen_x, y).scale(scale, -scale)))
-            if seg := pen.getCommands():
-                d.append(seg)
-            pen_x += self.hmtx[name][0] * scale + tracking * size
-        return " ".join(d), pen_x - x
-
-
-def inner(path):
-    """The children of an SVG root, plus its viewBox, ready to be nested."""
-    svg = (BRAND / path).read_text()
-    vb = re.search(r'viewBox="([^"]+)"', svg).group(1)
-    body = re.sub(r"^.*?<svg[^>]*>", "", svg, flags=re.S)
-    body = re.sub(r"</svg>\s*$", "", body, flags=re.S)
-    return vb, body.strip()
 
 
 bold = Face("tmp-fonts/poppins700.woff2")

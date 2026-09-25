@@ -11,7 +11,7 @@
  * sharp writes no EXIF, so every output is clean.
  */
 import sharp from 'sharp';
-import { mkdir, writeFile, copyFile } from 'node:fs/promises';
+import { mkdir, writeFile, copyFile, readdir } from 'node:fs/promises';
 
 const OUT = 'public';
 await mkdir(OUT, { recursive: true });
@@ -39,6 +39,16 @@ await sharp('assets/brand/og.svg', { density: 300 })
   .png({ compressionLevel: 9 })
   .toFile(`${OUT}/og.png`);
 
+// One share card per guide, composed by scripts/build-post-og.py. Without
+// these every guide looks identical when it is pasted into a chat or a feed.
+const cards = (await readdir(`${OUT}/og`).catch(() => [])).filter((f) => f.endsWith('.svg'));
+for (const card of cards) {
+  await sharp(`${OUT}/og/${card}`, { density: 300 })
+    .resize(1200, 630)
+    .png({ compressionLevel: 9 })
+    .toFile(`${OUT}/og/${card.replace(/\.svg$/, '.png')}`);
+}
+
 await writeFile(
   `${OUT}/manifest.webmanifest`,
   JSON.stringify(
@@ -61,4 +71,4 @@ await writeFile(
   ) + '\n',
 );
 
-console.log('brand assets: favicons, og.png and manifest written to public/');
+console.log(`brand assets: favicons, og.png, ${cards.length} guide cards and manifest written to public/`);

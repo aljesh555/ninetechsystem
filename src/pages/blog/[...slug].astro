@@ -27,6 +27,7 @@ const { Content, headings } = await render(post);
 const sections = headings.filter((h) => h.depth === 2);
 const path = `/blog/${post.id}`;
 const published = post.data.date.toISOString().slice(0, 10);
+const card = `/og/${post.id}.png`;   // this guide's own share card
 const crumbs = [
   { name: 'Home', path: '/' },
   { name: 'Blog', path: '/blog' },
@@ -44,7 +45,7 @@ const schema = [
     inLanguage: 'en',
     author: orgRef,
     publisher: orgRef,
-    image: abs('/og.png'),
+    image: abs(card),
     mainEntityOfPage: { '@type': 'WebPage', '@id': abs(path) },
     articleSection: post.data.category,
     wordCount: post.body.trim().split(/\s+/).length,
@@ -54,7 +55,7 @@ const schema = [
 ];
 ---
 
-<Base title={`${post.data.title} — Nine Technology`} description={post.data.description} path={path} schema={schema}>
+<Base title={`${post.data.title} — Nine Technology`} description={post.data.description} path={path} image={card} schema={schema}>
   <article>
     <section class="page-head post-head">
       <div class="wrap">
