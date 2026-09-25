@@ -92,8 +92,8 @@ const schema = [
   <section class="section section-tint">
     <div class="wrap">
       <div class="section-head">
-        <FallHeading text="Leadership" />
-        <p class="lead">Nine Technology is led by two directors. Every project is scoped with one of them and delivered by our team, and the same people stay with it from the first consultation through to the support that follows launch.</p>
+        <FallHeading text="The directors" />
+        <p class="lead">{site.legalName} is owned and run by its two directors. Every project is scoped with one of them, delivered by our team, and remains their responsibility through to the support that follows launch.</p>
       </div>
       <ul class="people">
         {people.map((p) => (
@@ -121,15 +121,18 @@ const schema = [
         <FallHeading text="What we commit to" />
         <p class="lead">These four are in every contract we write, not just on this page.</p>
       </div>
-      <div class="commitments one-col">
-        {commitments.map((c) => (
-          <div class="commitment">
-            <Fragment set:html={icon(c.icon, 44)} />
+      <ol class="commitments cards stagger reveal">
+        {commitments.map((c, i) => (
+          <li class="commitment">
+            <div class="commitment-head">
+              <Fragment set:html={icon(c.icon, 44)} />
+              <span class="commitment-num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+            </div>
             <h3>{c.title}</h3>
             <p>{c.body}</p>
-          </div>
+          </li>
         ))}
-      </div>
+      </ol>
     </div>
   </section>
 
@@ -146,8 +149,8 @@ const schema = [
         <div><dt>Areas served</dt><dd>{site.areasServed.join(', ')} and the rest of Nepal</dd></div>
       </dl>
       <div class="office-pair">
-        <Slot name="office-exterior" alt="The Nine Technology office on Lazimpat Road, Kathmandu" ratio="3-2" sizes="(min-width: 900px) 440px, 100vw" />
-        <Slot name="office-interior" alt="Inside the Nine Technology office" ratio="3-2" sizes="(min-width: 900px) 440px, 100vw" />
+        <Slot name="office-exterior" alt="The Nine Technology office on Lazimpat Road, Kathmandu" ratio="3-2" sizes="(min-width: 900px) 440px, 100vw" caption="Our office on Lazimpat Road" />
+        <Slot name="office-interior" alt="Inside the Nine Technology office, Lazimpat, Kathmandu" ratio="3-2" sizes="(min-width: 900px) 440px, 100vw" caption="Where the work is done" />
       </div>
     </div>
   </section>

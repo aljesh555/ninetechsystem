@@ -394,6 +394,18 @@ html:not(.js) .menu-toggle { display: none; }
 .nine span { aspect-ratio: 1; background: var(--rule); }
 .nine span:nth-child(9) { background: var(--amber); }
 
+/* The four commitments as cards: one narrow column left too much air and made
+   four short promises look like an afterthought. */
+.commitments.cards { gap: var(--s4); margin-top: var(--s5); }
+@media (min-width: 760px) { .commitments.cards { grid-template-columns: 1fr 1fr; column-gap: var(--s4); } }
+.commitments.cards .commitment {
+  border: 1px solid var(--rule); border-top: 2px solid var(--navy);
+  border-radius: var(--radius); padding: var(--s4); background: var(--white);
+}
+.commitment-head { display: flex; align-items: center; justify-content: space-between; gap: var(--s3); }
+.commitment-num { font-family: var(--display); font-weight: 600; font-size: 1.25rem; color: var(--rule); }
+.commitments.cards .commitment h3 { margin-top: var(--s3); }
+
 /* The commitments carry an icon on About, so the eye can find one again. */
 .commitment > svg { margin-bottom: var(--s2); }
 
