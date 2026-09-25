@@ -154,21 +154,19 @@ const schema = [
     <div class="wrap">
       <div class="section-head">
         <FallHeading text="Sectors we work in" />
-        <p class="lead">Every sector has its own operational shape. These are the patterns we see repeatedly in Kathmandu, and what we build against them.</p>
+        <p class="lead">Every sector has its own operational shape. These are the patterns we see repeatedly in Kathmandu, and the systems we build against them.</p>
       </div>
-      <ol class="sectors stagger reveal">
-        {industries.map((i, n) => (
+      <ul class="sector-strip stagger reveal">
+        {industries.map((i) => (
           <li>
-            <p class="sector-index" aria-hidden="true">{String(n + 1).padStart(2, '0')}</p>
-            <h3>{i.name}</h3>
-            <p class="sector-pattern">{i.needs}</p>
-            <p class="sector-label">Typically involves</p>
-            <ul class="sector-uses">
-              {i.uses.map((u) => <li><a href={u.href}>{u.label}</a></li>)}
-            </ul>
+            <a href={`/sectors#${i.slug}`}>
+              <span class="sector-strip-name">{i.name}</span>
+              <span class="sector-strip-brief">{i.brief}</span>
+            </a>
           </li>
         ))}
-      </ol>
+      </ul>
+      <p class="section-body"><a class="svc-view" href="/sectors">What each sector needs, in detail <Arrow /></a></p>
       <p class="company-note">{site.legalName}, {site.address.street}, {site.address.city}. Case studies are published with each client’s written permission; in a consultation we will take you through the work directly. <a class="link" href="/about">About the company</a>.</p>
     </div>
   </section>

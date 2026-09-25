@@ -98,7 +98,9 @@ export const commitments = [
  */
 export const industries = [
   {
+    slug: 'restaurants',
     name: 'Restaurants and cafés',
+    brief: 'Ordering, delivery, social',
     needs: 'Online ordering with eSewa, Khalti and Fonepay, delivery zones and menu management, order handling that does not live in a notebook, and social content that fills tables midweek.',
     uses: [
       { label: 'Online store', href: '/services/website#ecommerce' },
@@ -108,7 +110,9 @@ export const industries = [
     ],
   },
   {
+    slug: 'hotels',
     name: 'Hotels and resorts',
+    brief: 'Direct booking, visibility, video',
     needs: 'Direct booking that reduces commission, property and room galleries, visibility for travellers researching before they arrive, and enquiry handling across time zones.',
     uses: [
       { label: 'Booking systems', href: '/services/website#booking' },
@@ -118,7 +122,9 @@ export const industries = [
     ],
   },
   {
+    slug: 'travel',
     name: 'Travel and trekking',
+    brief: 'Itineraries, enquiries, follow-up',
     needs: 'Itinerary structure built for seasonal demand, enquiry capture and qualification, bilingual follow-up that does not lapse, and content that answers the questions asked before booking.',
     uses: [
       { label: 'Business website', href: '/services/website#business' },
@@ -128,7 +134,9 @@ export const industries = [
     ],
   },
   {
+    slug: 'schools',
     name: 'Schools and colleges',
+    brief: 'Admissions, fees, records',
     needs: 'Admissions journeys with forms and downloads, notices and results, fee reminders, and management systems for records, attendance and reporting.',
     uses: [
       { label: 'Business website', href: '/services/website#business' },
@@ -138,7 +146,9 @@ export const industries = [
     ],
   },
   {
+    slug: 'clinics',
     name: 'Clinics and healthcare',
+    brief: 'Booking, reminders, credibility',
     needs: 'Appointment booking, practitioner profiles, patient reminders, and an accessible, credible presence for people deciding where to be treated.',
     uses: [
       { label: 'Booking systems', href: '/services/website#booking' },
@@ -148,7 +158,9 @@ export const industries = [
     ],
   },
   {
+    slug: 'retail',
     name: 'Retail and e-commerce',
+    brief: 'Storefront, payments, stock, ads',
     needs: 'Product discovery and search, local payments and cash on delivery, stock and order operations, mobile performance, and paid acquisition measured to cost per order.',
     uses: [
       { label: 'Online store', href: '/services/website#ecommerce' },
@@ -158,7 +170,9 @@ export const industries = [
     ],
   },
   {
+    slug: 'distributors',
     name: 'Distributors and wholesalers',
+    brief: 'Billing, inventory, reporting',
     needs: 'Billing, inventory and POS systems, order-to-invoice automation, dealer and staff access with roles, and daily sales reporting that compiles itself.',
     uses: [
       { label: 'Custom software', href: '/services/software' },
@@ -168,7 +182,9 @@ export const industries = [
     ],
   },
   {
+    slug: 'ngos',
     name: 'NGOs and development organisations',
+    brief: 'Programmes, documents, bilingual',
     needs: 'Programme and impact reporting, document libraries that stay findable, bilingual publishing, and a structure donors and partners can navigate.',
     uses: [
       { label: 'Business website', href: '/services/website#business' },

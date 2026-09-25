@@ -1131,3 +1131,20 @@ h1 + .lead, h2 + .lead { margin-top: var(--s3); }
   .scene .depth { transform: none !important; transition: none !important; }
 }
 @media print { .signal { display: none !important; } }
+
+/* Home: the compact sector strip. Every sector stays visible; the detail
+   lives on /sectors. */
+.sector-strip { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--s2); margin-top: var(--s5); }
+@media (min-width: 760px) { .sector-strip { grid-template-columns: repeat(4, 1fr); gap: var(--s3); } }
+.sector-strip a {
+  display: flex; flex-direction: column; gap: 2px; height: 100%;
+  padding: var(--s3); background: var(--white);
+  border: 1px solid var(--rule); border-top: 2px solid var(--navy);
+  border-radius: var(--radius); text-decoration: none;
+  transition: border-color 0.15s ease;
+}
+.sector-strip a:hover { border-color: var(--navy); }
+.sector-strip-name { font-family: var(--display); font-weight: 600; font-size: 0.9875rem; letter-spacing: -0.01em; }
+.sector-strip-brief { color: var(--grey); font-size: 0.8125rem; line-height: 1.45; }
+/* On /sectors the cards head with h2, so match the card heading size. */
+.sectors h2 { font-size: 1.1875rem; padding-right: var(--s5); }

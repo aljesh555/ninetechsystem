@@ -98,6 +98,7 @@ Yes. We meet clients in person across Kathmandu, Lalitpur and Bhaktapur, and wor
 ## Pages
 - ${url('/')} — what we build and run, the problems we solve, and the sectors we work in
 ${servicePages.map((p) => `- ${url(p.path)} — ${p.name}`).join('\n')}
+- ${url('/sectors')} — the eight sectors we work in and what each one needs
 - ${url('/work')} — projects, published only with written client permission
 - ${url('/how-we-work')} — the six steps, from understanding the business to documenting the solution and ongoing support
 - ${url('/about')} — the company and the two directors

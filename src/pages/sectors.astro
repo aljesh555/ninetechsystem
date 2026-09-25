@@ -1,0 +1,90 @@
+---
+/**
+ * Sectors we work in. The operational pattern for each, and the services it
+ * routes to. Home links here; each sector has an id so a link can land on it.
+ */
+import Base from '../layouts/Base.astro';
+import BuildHero from '../components/services/BuildHero.astro';
+import FallHeading from '../components/services/FallHeading.astro';
+import CtaStrip from '../components/services/CtaStrip.astro';
+import { site, industries } from '../data/site.js';
+import { breadcrumbList, abs } from '../lib/schema.js';
+
+const path = '/sectors';
+const crumbs = [
+  { name: 'Home', path: '/' },
+  { name: 'Sectors', path },
+];
+const consult = { label: 'Request a consultation', href: '/contact' };
+
+const facts = [
+  { icon: 'users', value: `${industries.length} sectors`, label: 'Patterns we see repeatedly' },
+  { icon: 'software', value: 'Built to the shape', label: 'Of how that business runs' },
+  { icon: 'store', value: 'Local by default', label: 'eSewa, Khalti, Nepali and English' },
+  { icon: 'maintenance', value: 'Supported after launch', label: 'By the team that built it' },
+];
+
+const schema = [
+  {
+    '@type': 'ItemList',
+    '@id': `${abs(path)}#sectors`,
+    name: 'Sectors Nine Technology works in',
+    itemListElement: industries.map((i, n) => ({
+      '@type': 'ListItem',
+      position: n + 1,
+      name: i.name,
+      description: i.needs,
+      url: `${abs(path)}#${i.slug}`,
+    })),
+  },
+  breadcrumbList(crumbs),
+];
+---
+
+<Base
+  title="Sectors We Work In — Nine Technology, Kathmandu"
+  description="Websites, software and automation for restaurants, hotels, travel, schools, clinics, retail, distributors and NGOs in Nepal, shaped to how each runs."
+  path={path}
+  schema={schema}
+>
+  <BuildHero
+    crumbs={crumbs}
+    kicker="Sectors"
+    h1="Sectors we work in"
+    sceneName="services"
+    primary={consult}
+    secondary={{ label: 'All services', href: '/services' }}
+    facts={facts}
+  >
+    Nine Technology builds for businesses across Nepal: restaurants and cafés, hotels and resorts, travel and trekking, schools and colleges, clinics, retail and e-commerce, distributors and wholesalers, and NGOs. Each sector has its own operational shape, and the systems we build follow it.
+  </BuildHero>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <FallHeading text="What each sector needs" />
+        <p class="lead">These are the patterns we see repeatedly in Kathmandu and across Nepal, and the services we build against them. If your sector is not listed, the underlying work is usually the same; tell us how the business runs.</p>
+      </div>
+      <ol class="sectors stagger reveal">
+        {industries.map((i, n) => (
+          <li id={i.slug}>
+            <p class="sector-index" aria-hidden="true">{String(n + 1).padStart(2, '0')}</p>
+            <h2>{i.name}</h2>
+            <p class="sector-pattern">{i.needs}</p>
+            <p class="sector-label">Typically involves</p>
+            <ul class="sector-uses">
+              {i.uses.map((u) => <li><a href={u.href}>{u.label}</a></li>)}
+            </ul>
+          </li>
+        ))}
+      </ol>
+      <p class="company-note">{site.legalName}, {site.address.street}, {site.address.city}. Case studies are published with each client’s written permission; in a consultation we will take you through the work directly.</p>
+    </div>
+  </section>
+
+  <CtaStrip
+    heading="Tell us how your business runs"
+    body="Describe the work that repeats and where it slows down. We will recommend what fits your sector, and send a written proposal."
+    primary={consult}
+  />
+</Base>

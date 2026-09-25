@@ -849,6 +849,27 @@ Changes:
   case studies are published only with written permission) moved under the
   sectors, where it still carries the local-search value.
 
+### Sectors: a compact strip on Home, and a page of their own
+
+The founder proposed either a right-to-left marquee or showing four with a
+"more" button. Both were declined, with reasons:
+
+- **A marquee** cannot be scanned. A visitor looking for "Clinics" has to wait
+  for it to drift past, the cards carry links whose targets would be moving, and
+  continuously moving content needs a pause control to satisfy WCAG 2.2.2. The
+  design plan also rules out auto-play.
+- **Showing four** fails the section's main job. If a visitor's sector is in the
+  hidden half, the page stops saying "we understand your business". Never hide
+  the thing the visitor is scanning for.
+
+Instead: all eight stay visible on Home as a compact strip (name plus a
+three-word summary, four across on desktop, two on phones), and the full
+treatment moved to a new `/sectors` page with the operational pattern and the
+service links for each. Home fell from 7,883px to 6,215px on desktop and from
+12,931px to 9,340px on a phone, every sector remains visible, and there is now a
+page that can rank for sector searches such as "school management software
+Nepal". `/sectors` is in the sitemap (17 URLs) and `llms.txt`.
+
 ## Two bugs found after the first deploy
 
 **Unknown URLs returned the home page with HTTP 200.** Cloudflare Pages falls
