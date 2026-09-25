@@ -1,9 +1,47 @@
 ---
+/**
+ * Home. In order: who we are and what we do (hero), the problems we solve,
+ * the four groups of work, how we work, who we work with, why work with us,
+ * and how to start. Icons appear only where they carry meaning: the three
+ * problems and the four groups (the process steps carry their own).
+ */
 import Base from '../layouts/Base.astro';
-import { site, commitments, industries } from '../data/site.js';
-import { groups, website, npr } from '../data/services.js';
 import HowWeWork from '../components/HowWeWork.astro';
-import { projects } from '../data/projects.js';
+import FallHeading from '../components/services/FallHeading.astro';
+import Arrow from '../components/services/Arrow.astro';
+import { icon, iconOnNavy, sceneOnNavy } from '../lib/icons.js';
+import { site, commitments, industries } from '../data/site.js';
+import { groups } from '../data/services.js';
+
+const consult = { label: 'Request a consultation', href: '/contact' };
+
+const heroFacts = [
+  { icon: 'website', value: 'Four service groups', label: 'Build, grow, automate, support' },
+  { icon: 'sheet', value: 'Documented before we start', label: 'Problem, solution, scope, timeline' },
+  { icon: 'lock', value: 'Everything in your name', label: 'Domain, hosting, logins, files' },
+  { icon: 'maintenance', value: 'Support after launch', label: 'From the team that built it' },
+];
+
+const problems = [
+  {
+    icon: 'chat',
+    pain: 'Enquiries arrive at 9pm. Nobody answers them until morning.',
+    fix: 'AI assistants reply instantly on WhatsApp and your website, in Nepali and English.',
+    link: { label: 'AI automation', href: '/services/automate#assistants' },
+  },
+  {
+    icon: 'sheet',
+    pain: 'Orders live in a notebook, and the notebook goes home with one person.',
+    fix: 'Business software keeps every order, customer and payment in one place your team can reach.',
+    link: { label: 'Custom software', href: '/services/software' },
+  },
+  {
+    icon: 'gauge',
+    pain: 'The monthly report gets typed by hand, out of three different files.',
+    fix: 'Reports are prepared from your data and sent automatically, daily or weekly.',
+    link: { label: 'Automatic reports', href: '/services/automate#reports' },
+  },
+];
 
 const schema = [
   {
@@ -19,138 +57,128 @@ const schema = [
 
 <Base
   title="Nine Technology — Websites, Software & AI Automation in Kathmandu"
-  description="We build websites, online stores, business software and AI automation for businesses in Kathmandu. Prices in writing, 30 days support, one team."
+  description="Websites, software, digital marketing and AI automation for businesses in Kathmandu. Documented before we start, supported after launch, by one team."
   path="/"
   preloadDisplay={true}
   schema={schema}
 >
   <section class="hero on-navy">
-    <div class="wrap hero-seq">
-      <p class="display">Your ambition,<br />our engineering<span class="stop" aria-hidden="true"></span><span class="sr-only">.</span></p>
-      <h1>Websites, software and AI automation for businesses in Kathmandu.</h1>
-      <div class="btn-row">
-        <a class="btn btn-primary" href="/contact">Get a quote</a>
-        <a class="btn btn-secondary" href={site.whatsapp} rel="noopener">Message us on WhatsApp</a>
+    <div class="wrap hero-grid">
+      <div class="hero-copy hero-seq">
+        <p class="display fall fall-now">
+          <span class="w">Your</span> <span class="w">ambition,</span><br />
+          <span class="w">our</span> <span class="w">engineering</span><span class="stop w" aria-hidden="true"></span><span class="sr-only">.</span>
+        </p>
+        <h1>Websites, software, digital marketing and AI automation for businesses in Kathmandu.</h1>
+        <div class="btn-row">
+          <a class="btn btn-primary" href={consult.href}>{consult.label}</a>
+          <a class="btn btn-secondary" href={site.whatsapp} rel="noopener">Message us on WhatsApp</a>
+        </div>
+        <p class="hero-note">{site.replyPromise}</p>
       </div>
-      <p class="hero-note">{site.replyPromise}</p>
+      <div class="hero-art"><Fragment set:html={sceneOnNavy('services')} /></div>
+    </div>
+    <div class="wrap">
+      <dl class="facts facts-dark">
+        {heroFacts.map((f) => (
+          <div>
+            <Fragment set:html={iconOnNavy(f.icon, 44)} />
+            <dt>{f.label}</dt>
+            <dd>{f.value}</dd>
+          </div>
+        ))}
+      </dl>
     </div>
   </section>
 
   <section class="section">
     <div class="wrap">
-      <div class="section-head reveal">
-        <h2>For businesses still running on paper, Excel and WhatsApp</h2>
-        <p class="lead">Most companies here build you a website and disappear. We build it, market it, and automate the work behind it — one team, one invoice, and we are still there after launch.</p>
+      <div class="section-head">
+        <FallHeading text="For businesses still running on paper, Excel and WhatsApp" />
+        <p class="lead">Most businesses we meet have outgrown the way they work. We build the systems that take the repetitive work off your team, and we stay to keep them running.</p>
       </div>
-      <ul class="problem-list stagger reveal">
-        <li>Enquiries arrive at 9pm. Nobody answers them until morning.</li>
-        <li>Orders live in a notebook, and the notebook goes home with one person.</li>
-        <li>The monthly report gets typed by hand, out of three different files.</li>
+      <ul class="problems stagger reveal">
+        {problems.map((p) => (
+          <li>
+            <Fragment set:html={icon(p.icon, 52)} />
+            <p class="problem-pain">{p.pain}</p>
+            <p class="problem-fix">{p.fix}</p>
+            <a class="svc-view" href={p.link.href}>{p.link.label} <Arrow /></a>
+          </li>
+        ))}
       </ul>
     </div>
   </section>
 
-  <section class="section section-tint">
-    <div class="wrap">
-      <div class="reveal">
-        <h2 class="bundle-head">Build it<span class="stop" aria-hidden="true"></span><span class="sr-only">.</span> Grow it<span class="stop" aria-hidden="true"></span><span class="sr-only">.</span> Automate it<span class="stop" aria-hidden="true"></span><span class="sr-only">.</span></h2>
-        <p class="lead">Three parts, one team, one invoice. Take all three or take one.</p>
-      </div>
-      <div class="bundle-grid stagger reveal">
-        <div class="bundle-part">
-          <h3>Build</h3>
-          <p>The website, store or system your business actually needs — and full admin access to it on day one.</p>
-        </div>
-        <div class="bundle-part">
-          <h3>Grow</h3>
-          <p>Search, social, video and ads that bring customers to it. Reported in enquiries, not likes.</p>
-        </div>
-        <div class="bundle-part">
-          <h3>Automate</h3>
-          <p>The replies, orders, reminders and reports your staff do by hand, handled by software instead.</p>
-        </div>
-      </div>
-      <p class="section-body"><a class="link" href="/services">See what is in each part</a></p>
-    </div>
-  </section>
-
-  <section class="section">
+  <section class="section section-tint" id="what-we-do">
     <div class="wrap">
       <div class="section-head reveal">
-        <h2>What we do</h2>
-        <p class="lead">Four groups of work. Standard work has a published price; everything is confirmed in writing before anything begins.</p>
+        <h2 class="bundle-head">
+          Build it<span class="stop" aria-hidden="true"></span><span class="sr-only">.</span>
+          Grow it<span class="stop" aria-hidden="true"></span><span class="sr-only">.</span>
+          Automate it<span class="stop" aria-hidden="true"></span><span class="sr-only">.</span>
+          Support it<span class="stop" aria-hidden="true"></span><span class="sr-only">.</span>
+        </h2>
+        <p class="lead">Four groups of work from one team. Take one, or all four, and deal with the same people from the first consultation to support after launch.</p>
       </div>
-      <div class="overview">
+      <div class="group-map stagger reveal">
         {groups.map((g) => (
-          <div class="overview-row">
-            <h3><a class="link" href={`/services#${g.id}`}>{g.name}</a></h3>
-            <p>{g.summary}</p>
-          </div>
+          <a class="group-tile" href={g.page?.href ?? `/services#${g.id}`}>
+            <Fragment set:html={icon(g.icon, 52)} />
+            <span class="group-tile-name">{g.name}</span>
+            <span class="group-tile-summary">{g.summary}</span>
+            <span class="svc-view">Explore <Arrow /></span>
+          </a>
         ))}
       </div>
-      <p class="section-body">Websites start from NPR {npr(website.offers[0].price.from)}. <a class="link" href="/services/website">See website prices</a> or <a class="link" href="/services">all services</a>.</p>
+      <p class="section-body"><a class="svc-view" href="/services">All services <Arrow /></a></p>
     </div>
   </section>
 
-  <HowWeWork tint />
-
-  <section class="section">
-    <div class="wrap">
-      <div class="section-head reveal">
-        <h2>Our work</h2>
-      </div>
-      {projects.length === 0 ? (
-        <div class="empty">
-          <h3>We are a new company</h3>
-          <p>Our first projects are being documented here. Message us and we will show you the work directly — screens, links and what each one changed for the business.</p>
-          <div class="btn-row">
-            <a class="btn btn-primary" href={site.whatsapp} rel="noopener">Message us on WhatsApp</a>
-            <a class="btn btn-secondary" href="/work">See the Work page</a>
-          </div>
-        </div>
-      ) : (
-        <p class="section-body"><a class="link" href="/work">See our work</a></p>
-      )}
-    </div>
-  </section>
+  <HowWeWork />
 
   <section class="section section-tint">
     <div class="wrap">
-      <div class="section-head reveal">
-        <h2>Why Nine</h2>
-        <p class="lead">Four things you can hold us to. They are in every contract we write.</p>
+      <div class="section-head">
+        <FallHeading text="Who we work with" />
+        <p class="lead">Businesses with real customers and too much manual work. This is what we most often do for each.</p>
       </div>
-      <div class="commitments">
-        {commitments.map((c) => (
-          <div class="commitment">
+      <ul class="industry-grid stagger reveal">
+        {industries.map((i) => (
+          <li>
+            <h3>{i.name}</h3>
+            <p>{i.needs}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <FallHeading text="Why work with Nine Technology" />
+        <p class="lead">Four commitments, written into every project we take on.</p>
+      </div>
+      <ol class="pledges stagger reveal">
+        {commitments.map((c, i) => (
+          <li>
+            <span class="pledge-num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
             <h3>{c.title}</h3>
             <p>{c.body}</p>
-          </div>
+          </li>
         ))}
-      </div>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="wrap">
-      <div class="section-head reveal">
-        <h2>Who we work with</h2>
-        <p class="lead">Businesses with real customers and too much manual work.</p>
-      </div>
-      <ul class="industries">
-        {industries.map((name) => (
-          <li>{name}<span class="sep">.</span> </li>
-        ))}
-      </ul>
+      </ol>
+      <p class="company-note">{site.legalName}, {site.address.street}, {site.address.city}. Case studies are published with each client’s written permission; in a consultation, we will walk you through our work directly. <a class="link" href="/about">About the company</a>.</p>
     </div>
   </section>
 
   <section class="section section-navy on-navy">
     <div class="wrap">
-      <h2>Tell us what you need</h2>
-      <p class="lead">Send a message and we will reply {site.replyTime}, {site.hoursShort}. The first consultation carries no cost and no obligation.</p>
+      <h2>Tell us about your project</h2>
+      <p class="lead">Share what you would like to build or improve. We reply {site.replyTime}, {site.hoursShort}, and the first consultation carries no cost and no obligation.</p>
       <div class="strip-actions">
-        <a class="btn btn-primary" href="/contact">Get a quote</a>
+        <a class="btn btn-primary" href={consult.href}>{consult.label}</a>
         <a class="btn btn-secondary" href={site.whatsapp} rel="noopener">Message us on WhatsApp</a>
       </div>
       <p class="strip-detail">

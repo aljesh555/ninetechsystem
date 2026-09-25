@@ -748,6 +748,30 @@ start", and the trust badges are "Documented from the start" and "Ongoing
 support". Price language stays where a buyer looks for it: price sections, cost
 FAQs and each delivery model's "Pricing and approval" line.
 
+## Home page redesign (September 2026)
+
+Studied against the page's job — in seconds: what we do, for whom, why trust us,
+how to start. Removed: the duplicated "Build it. Grow it. Automate it." block
+(three parts) that repeated "What we do" (four groups) and left out Support; the
+line "Most companies here build you a website and disappear" (a swipe at
+competitors); the price line and "published price" lead; the large empty "We are
+a new company" box; and the run-on industries line. The meta description no
+longer says "Prices in writing, 30 days support".
+
+Now, in order: a two-column hero (the tagline's words drop in with the amber stop
+landing last, an H1 covering all four groups, "Request a consultation", the
+four-group scene recoloured for navy by `sceneOnNavy`, and a trust strip); the
+three problems, each paired with the solution and a link; "Build it. Grow it.
+Automate it. Support it." with four group cards; How we work; seven industries
+with the work we most often do for each; the four commitments as numbered
+pledges with a factual company line; and the closing call to action.
+
+Icons only where they carry meaning — the three problems and the four groups (the
+process steps carry their own); the industries and pledges deliberately have
+none. A CSS `decimal-leading-zero` counter tripped the banned-word check
+("leading"); the numbers are written into the markup instead, so the check stays
+strict. Lighthouse mobile 99/100/100/100, LCP 1.8 s, CLS 0.
+
 ## Two bugs found after the first deploy
 
 **Unknown URLs returned the home page with HTTP 200.** Cloudflare Pages falls

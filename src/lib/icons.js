@@ -523,5 +523,24 @@ export function scene(name) {
   return `<svg class="scene" viewBox="0 -4 80 84" width="320" height="336" aria-hidden="true" focusable="false">${body}</svg>`;
 }
 
+/**
+ * The same scene recoloured for a navy ground: navy shapes would disappear
+ * against it, so they step up to lighter blues and the platform sinks into the
+ * background. Amber accents and screen panels are unchanged.
+ */
+const ON_NAVY = {
+  '#123566': '#4a74b0', '#1f4478': '#3a639e', '#3d6399': '#86a8d8', '#2a5189': '#5b84bf',
+  '#16386a': '#35598f', '#0e2a52': '#1f4478',
+  '#eef2f8': '#1d4677', '#d5deeb': '#173b66', '#c3cfe0': '#12325a',
+};
+export function sceneOnNavy(name) {
+  return scene(name).replace(/#[0-9a-f]{6}/gi, (c) => ON_NAVY[c.toLowerCase()] ?? c);
+}
+
+/** An icon recoloured for a navy ground, the same way as sceneOnNavy. */
+export function iconOnNavy(name, size = 80) {
+  return icon(name, size).replace(/#[0-9a-f]{6}/gi, (c) => ON_NAVY[c.toLowerCase()] ?? c);
+}
+
 export const iconNames = Object.keys(draw);
 export const sceneNames = Object.keys(scenes);

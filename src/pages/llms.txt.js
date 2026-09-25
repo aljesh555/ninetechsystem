@@ -84,7 +84,7 @@ ${process.map((p, i) => `${i + 1}. ${p.title}. ${p.body}`).join('\n')}
 ${commitments.map((c) => `- ${c.title}: ${c.body}`).join('\n')}
 
 ## Industries we work with
-${industries.map((i) => `- ${i}`).join('\n')}
+${industries.map((i) => `- ${i.name}: ${i.needs}`).join('\n')}
 
 ## Common questions
 ${faqs}

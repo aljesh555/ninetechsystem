@@ -91,14 +91,15 @@ export const commitments = [
   },
 ];
 
+/** Industries, each with the work we most often do for it (all from our services). */
 export const industries = [
-  'Restaurants and cafés',
-  'Hotels and resorts',
-  'Travel and trekking',
-  'Schools and colleges',
-  'Clinics',
-  'Retail and e-commerce',
-  'Distributors and wholesalers',
+  { name: 'Restaurants and cafés', needs: 'Online ordering with eSewa and Khalti, WhatsApp order handling, and reels that fill tables.' },
+  { name: 'Hotels and resorts', needs: 'Direct booking systems, search visibility for travellers, and video of the property.' },
+  { name: 'Travel and trekking', needs: 'Enquiry handling around the clock, itinerary websites, and follow-up that does not slip.' },
+  { name: 'Schools and colleges', needs: 'Admission websites, fee reminders, and management systems for records and reports.' },
+  { name: 'Clinics', needs: 'Appointment booking, reminders to patients, and a website patients can trust.' },
+  { name: 'Retail and e-commerce', needs: 'Online stores with local payments, stock management, and paid ads that bring buyers.' },
+  { name: 'Distributors and wholesalers', needs: 'Billing and inventory software, order-to-invoice automation, and daily sales reports.' },
 ];
 
 export const businessTypes = [

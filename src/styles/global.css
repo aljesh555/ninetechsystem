@@ -1030,3 +1030,50 @@ h1 + .lead, h2 + .lead { margin-top: var(--s3); }
 .step-sides div:last-child { border-left: 3px solid var(--amber); }
 .step-sides dt { font-size: 0.8125rem; font-weight: 500; color: var(--grey); }
 .step-sides dd { margin: 4px 0 0; font-size: 0.9875rem; line-height: 1.55; }
+
+/* ==========================================================================
+   Home
+   ========================================================================== */
+
+.hero-grid { display: grid; gap: var(--s5); align-items: center; }
+@media (min-width: 900px) { .hero-grid { grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: var(--s6); } }
+.hero-art { display: flex; justify-content: center; }
+.hero-art .scene { width: min(100%, 420px); height: auto; }
+@media (max-width: 899px) { .hero-art { display: none; } }
+/* The display line animates word by word; it must not also slide in as a block. */
+.js .hero-seq > .display { animation: none; }
+.hero .display .w { display: inline-block; }
+
+.facts-dark { border-top-color: rgba(255, 255, 255, 0.14); margin-top: var(--s6); }
+.facts-dark dd { color: var(--white); }
+.facts-dark dt { color: rgba(255, 255, 255, 0.68); }
+
+/* The three problems, each paired with its solution. */
+.problems { display: grid; gap: var(--s4); margin-top: var(--s5); }
+@media (min-width: 900px) { .problems { grid-template-columns: repeat(3, 1fr); } }
+.problems li { display: flex; flex-direction: column; padding: var(--s4); border: 1px solid var(--rule); border-radius: var(--radius); background: var(--white); }
+.problems svg { margin-bottom: var(--s3); }
+.problem-pain { font-family: var(--display); font-weight: 600; font-size: 1.125rem; line-height: 1.4; letter-spacing: -0.01em; }
+.problem-fix { margin-top: var(--s3); padding-top: var(--s3); border-top: 1px solid var(--rule); color: var(--grey); font-size: 0.9875rem; }
+.problems .svc-view { margin-top: auto; padding-top: var(--s3); }
+
+/* Industries: name and the work we most often do for it. */
+.industry-grid { display: grid; gap: var(--s4) var(--s5); margin-top: var(--s5); }
+@media (min-width: 640px) { .industry-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1000px) { .industry-grid { grid-template-columns: repeat(3, 1fr); } }
+.industry-grid li { padding-top: var(--s3); border-top: 2px solid var(--navy); }
+.industry-grid h3 { font-size: 1.125rem; }
+.industry-grid p { margin-top: var(--s1); color: var(--grey); font-size: 0.9375rem; }
+
+/* Commitments, set as numbered pledges. */
+.pledges { display: grid; gap: var(--s5); margin-top: var(--s5); }
+@media (min-width: 760px) { .pledges { grid-template-columns: repeat(2, 1fr); gap: var(--s5) var(--s7); } }
+.pledges li { position: relative; padding-left: 3.25rem; }
+.pledge-num {
+  position: absolute; left: 0; top: 0.1em;
+  font-family: var(--display); font-weight: 600; font-size: 1rem; color: var(--grey); letter-spacing: 0.04em;
+}
+.pledges li::after { content: ''; position: absolute; left: 0; top: 1.9em; width: 1.6rem; height: 3px; background: var(--amber); }
+.pledges h3 { font-size: 1.1875rem; }
+.pledges p { margin-top: var(--s2); color: var(--grey); }
+.company-note { margin-top: var(--s6); padding-top: var(--s4); border-top: 1px solid var(--rule); color: var(--grey); font-size: 0.9375rem; max-width: 46rem; }
