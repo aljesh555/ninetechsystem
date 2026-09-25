@@ -9,10 +9,9 @@
  */
 import Base from '../layouts/Base.astro';
 import Slot from '../components/Slot.astro';
-import Breadcrumb from '../components/services/Breadcrumb.astro';
+import BuildHero from '../components/services/BuildHero.astro';
 import FallHeading from '../components/services/FallHeading.astro';
 import CtaStrip from '../components/services/CtaStrip.astro';
-import Facts from '../components/services/Facts.astro';
 import { icon } from '../lib/icons.js';
 import { site } from '../data/site.js';
 import { projects } from '../data/projects.js';
@@ -68,15 +67,17 @@ const schema = [
   path={path}
   schema={schema}
 >
-  <section class="page-head">
-    <div class="wrap">
-      <Breadcrumb crumbs={crumbs} />
-      <p class="kicker">Work</p>
-      <FallHeading as="h1" text="Our work" stop now />
-      <p class="lead">A project appears here only once the client has given written permission to be named and shown. Every site linked below is live, so you can open it, load it on your own phone and judge the work rather than take our word for it.</p>
-      <Facts facts={facts} />
-    </div>
-  </section>
+  <BuildHero
+    crumbs={crumbs}
+    kicker="Work"
+    h1="Our work"
+    sceneName="work"
+    primary={consult}
+    secondary={{ label: 'All services', href: '/services' }}
+    facts={facts}
+  >
+    A project appears here only once the client has given written permission to be named and shown. Every site linked below is live, so you can open it, load it on your own phone and judge the work rather than take our word for it.
+  </BuildHero>
 
   {projects.length === 0 ? (
     <section class="section">

@@ -5,8 +5,7 @@
  * needed and every guide looks like it belongs to this company.
  */
 import Base from '../../layouts/Base.astro';
-import Breadcrumb from '../../components/services/Breadcrumb.astro';
-import FallHeading from '../../components/services/FallHeading.astro';
+import BuildHero from '../../components/services/BuildHero.astro';
 import CtaStrip from '../../components/services/CtaStrip.astro';
 import Arrow from '../../components/services/Arrow.astro';
 import { scene } from '../../lib/icons.js';
@@ -22,6 +21,13 @@ const crumbs = [
 const posts = await getPosts();
 const [featured, ...rest] = posts;
 const categories = [...new Set(posts.map((p) => p.data.category))];
+
+const facts = [
+  { icon: 'sheet', value: `${posts.length} guides`, label: 'And more as the questions come in' },
+  { icon: 'users', value: 'Written for buyers', label: 'Not for other developers' },
+  { icon: 'search', value: 'Answer first', label: 'The short answer, then the detail' },
+  { icon: 'chat', value: 'No sign-up', label: 'Nothing gated, no sales sequence' },
+];
 
 const schema = [
   {
@@ -49,19 +55,28 @@ const schema = [
   path={path}
   schema={schema}
 >
-  <section class="page-head">
-    <div class="wrap">
-      <Breadcrumb crumbs={crumbs} />
-      <p class="kicker">Guides</p>
-      <FallHeading as="h1" text="Answers to the questions we are asked" stop now />
-      <p class="lead">Written for the person deciding, not for other developers. What things cost in Nepal, what to check before you sign, and what tends to go wrong. No sign-up, no sales sequence.</p>
-      {categories.length > 0 && (
+  <BuildHero
+    crumbs={crumbs}
+    kicker="Guides"
+    h1="Answers to the questions we are asked"
+    sceneName="guides"
+    primary={{ label: 'Request a consultation', href: '/contact' }}
+    secondary={{ label: 'See what we do', href: '/services' }}
+    facts={facts}
+  >
+    Written for the person deciding, not for other developers. What things cost in Nepal, what to check before you sign, and what tends to go wrong.
+  </BuildHero>
+
+  {categories.length > 0 && (
+    <section class="section section-tint">
+      <div class="wrap">
+        <p class="kicker">Topics covered</p>
         <ul class="chips" aria-label="Topics covered">
           {categories.map((c) => <li>{c}</li>)}
         </ul>
-      )}
-    </div>
-  </section>
+      </div>
+    </section>
+  )}
 
   {posts.length === 0 ? (
     <section class="section">

@@ -546,6 +546,58 @@ export function icon(name, size = 80) {
 }
 
 /** A hero scene, drawn larger, with its pieces grouped for the drop-in. */
+/** Delivered work: the site raised on its own plinth, a second beside it, and
+ *  the amber mark of a project that is live. */
+scenes.work = () => {
+  const plinth = B(2, 2.8, 0.6, 5.4, 3.8, 0.9);
+  const screen = B(2.4, 3.2, 1.5, 4.6, 0.7, 4.8);
+  const second = B(7.6, 1.4, 0.6, 1.8, 1.8, 3);
+  const badge = B(1.2, 7.4, 0.6, 3, 1.8, 0.5);
+  return (
+    part(box(0.2, 0.2, 0, 9.6, 9.6, 0.6, PLATFORM)) +
+    part(box(...plinth, PLATFORM)) +
+    part(
+      box(...screen) +
+      on('left', screen, 0.4, 3.8, 2.8, 4.4, AMBER.left) +
+      on('left', screen, 0.4, 2.9, 4.2, 3.4, LIGHT) +
+      on('left', screen, 0.4, 2.1, 4.2, 2.6, LIGHT_DIM) +
+      on('left', screen, 0.4, 1.3, 3.4, 1.8, LIGHT_DIM) +
+      on('left', screen, 0.4, 0.5, 4.2, 1, LIGHT_DIM),
+    ) +
+    part(
+      box(...second) +
+      on('left', second, 0.3, 1.9, 1.5, 2.5, AMBER.left) +
+      on('left', second, 0.3, 1.1, 1.5, 1.6, LIGHT_DIM),
+    ) +
+    part(box(...badge, AMBER) + on('top', badge, 0.4, 0.4, 2, 0.9, '#fff3dc'))
+  );
+};
+
+/** A guide: the article standing open, the ones already written stacked in
+ *  front of it, and a marker for the one being read. */
+scenes.guides = () => {
+  const page = B(1, 1.8, 0.6, 5.6, 0.7, 6.4);
+  const stack = B(1.4, 6.4, 0.6, 4.2, 2.4, 0.45);
+  const top = B(1.7, 6.7, 1.05, 3.6, 1.8, 0.45);
+  return (
+    part(box(0.2, 0.2, 0, 9.6, 9.6, 0.6, PLATFORM)) +
+    part(
+      box(...page) +
+      on('left', page, 0.5, 5.2, 3.4, 5.9, AMBER.left) +
+      on('left', page, 0.5, 4.2, 5.1, 4.7, LIGHT) +
+      on('left', page, 0.5, 3.4, 5.1, 3.9, LIGHT_DIM) +
+      on('left', page, 0.5, 2.6, 4.4, 3.1, LIGHT_DIM) +
+      on('left', page, 0.5, 1.8, 5.1, 2.3, LIGHT_DIM) +
+      on('left', page, 0.5, 1.0, 3.2, 1.5, LIGHT_DIM),
+    ) +
+    part(
+      box(...stack) + on('top', stack, 0.4, 0.4, 2.8, 1, LIGHT) +
+      box(...top, AMBER) + on('top', top, 0.4, 0.4, 2.4, 0.9, '#fff3dc'),
+    ) +
+    part(box(7.4, 2.2, 0.6, 1.2, 1.2, 3.4, AMBER))
+  );
+};
+
 export function scene(name) {
   const body = scenes[name]?.();
   if (!body) throw new Error(`No scene named "${name}"`);
