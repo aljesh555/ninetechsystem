@@ -1058,12 +1058,12 @@ h1 + .lead, h2 + .lead { margin-top: var(--s3); }
 .problems .svc-view { margin-top: auto; padding-top: var(--s3); }
 
 /* Industries: name and the work we most often do for it. */
-.industry-grid { display: grid; gap: var(--s4) var(--s5); margin-top: var(--s5); }
-@media (min-width: 640px) { .industry-grid { grid-template-columns: repeat(2, 1fr); } }
-@media (min-width: 1000px) { .industry-grid { grid-template-columns: repeat(3, 1fr); } }
-.industry-grid li { padding-top: var(--s3); border-top: 2px solid var(--navy); }
-.industry-grid h3 { font-size: 1.125rem; }
-.industry-grid p { margin-top: var(--s1); color: var(--grey); font-size: 0.9375rem; }
+/* Sectors, set as a specification sheet: name left, capability right. */
+.sectors { margin-top: var(--s5); border-top: 1px solid var(--rule); }
+.sectors > div { display: grid; gap: var(--s1) var(--s5); padding-block: var(--s4); border-bottom: 1px solid var(--rule); }
+@media (min-width: 760px) { .sectors > div { grid-template-columns: 15rem 1fr; align-items: baseline; } }
+.sectors dt { font-family: var(--display); font-weight: 600; font-size: 1.0625rem; letter-spacing: -0.01em; }
+.sectors dd { margin: 0; color: var(--grey); max-width: 52ch; }
 
 /* Commitments, set as numbered pledges. */
 .pledges { display: grid; gap: var(--s5); margin-top: var(--s5); }

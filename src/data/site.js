@@ -91,15 +91,58 @@ export const commitments = [
   },
 ];
 
-/** Industries, each with the work we most often do for it (all from our services). */
+/**
+ * Sectors, each with the operational pattern we build for it. Written as
+ * capability, not as a friendly summary: these are the things a buyer in that
+ * sector already knows they need.
+ */
 export const industries = [
-  { name: 'Restaurants and cafés', needs: 'Online ordering with eSewa and Khalti, WhatsApp order handling, and reels that fill tables.' },
-  { name: 'Hotels and resorts', needs: 'Direct booking systems, search visibility for travellers, and video of the property.' },
-  { name: 'Travel and trekking', needs: 'Enquiry handling around the clock, itinerary websites, and follow-up that does not slip.' },
-  { name: 'Schools and colleges', needs: 'Admission websites, fee reminders, and management systems for records and reports.' },
-  { name: 'Clinics', needs: 'Appointment booking, reminders to patients, and a website patients can trust.' },
-  { name: 'Retail and e-commerce', needs: 'Online stores with local payments, stock management, and paid ads that bring buyers.' },
-  { name: 'Distributors and wholesalers', needs: 'Billing and inventory software, order-to-invoice automation, and daily sales reports.' },
+  {
+    name: 'Restaurants and cafés',
+    needs: 'Online ordering with eSewa, Khalti and Fonepay, delivery zones and menu management, order handling that does not live in a notebook, and social content that fills tables midweek.',
+  },
+  {
+    name: 'Hotels and resorts',
+    needs: 'Direct booking that reduces commission, property and room galleries, visibility for travellers researching before they arrive, and enquiry handling across time zones.',
+  },
+  {
+    name: 'Travel and trekking',
+    needs: 'Itinerary structure built for seasonal demand, enquiry capture and qualification, bilingual follow-up that does not lapse, and content that answers the questions asked before booking.',
+  },
+  {
+    name: 'Schools and colleges',
+    needs: 'Admissions journeys with forms and downloads, notices and results, fee reminders, and management systems for records, attendance and reporting.',
+  },
+  {
+    name: 'Clinics and healthcare',
+    needs: 'Appointment booking, practitioner profiles, patient reminders, and an accessible, credible presence for people deciding where to be treated.',
+  },
+  {
+    name: 'Retail and e-commerce',
+    needs: 'Product discovery and search, local payments and cash on delivery, stock and order operations, mobile performance, and paid acquisition measured to cost per order.',
+  },
+  {
+    name: 'Distributors and wholesalers',
+    needs: 'Billing, inventory and POS systems, order-to-invoice automation, dealer and staff access with roles, and daily sales reporting that compiles itself.',
+  },
+  {
+    name: 'NGOs and development organisations',
+    needs: 'Programme and impact reporting, document libraries that stay findable, bilingual publishing, and a structure donors and partners can navigate.',
+  },
+];
+
+/** The disciplines behind the four groups. Precise, and checkable on this site. */
+export const disciplines = [
+  'Information architecture',
+  'Core Web Vitals performance',
+  'Structured data and answer-engine optimisation',
+  'eSewa, Khalti and Fonepay integration',
+  'Role-based access control',
+  'Workflow orchestration',
+  'Bilingual Nepali and English content',
+  'Analytics and attribution',
+  'App store submission and compliance',
+  'Backups, monitoring and recovery',
 ];
 
 export const businessTypes = [

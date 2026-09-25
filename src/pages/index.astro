@@ -1,45 +1,46 @@
 ---
 /**
- * Home. In order: who we are and what we do (hero), the problems we solve,
- * the four groups of work, how we work, who we work with, why work with us,
- * and how to start. Icons appear only where they carry meaning: the three
- * problems and the four groups (the process steps carry their own).
+ * Home. In order: what we build and run (hero), the position we take, the
+ * operational problems we solve, the four groups and the disciplines behind
+ * them, how we work, the sectors we work in, what we commit to, and how to
+ * start. Icons appear only where they carry meaning: the three problems and
+ * the four groups (the process steps carry their own).
  */
 import Base from '../layouts/Base.astro';
 import HowWeWork from '../components/HowWeWork.astro';
 import FallHeading from '../components/services/FallHeading.astro';
 import Arrow from '../components/services/Arrow.astro';
 import { icon, iconOnNavy, sceneOnNavy } from '../lib/icons.js';
-import { site, commitments, industries } from '../data/site.js';
+import { site, commitments, industries, disciplines } from '../data/site.js';
 import { groups } from '../data/services.js';
 
 const consult = { label: 'Request a consultation', href: '/contact' };
 
 const heroFacts = [
-  { icon: 'website', value: 'Four service groups', label: 'Build, grow, automate, support' },
+  { icon: 'website', value: 'Design to operations', label: 'Build, market, automate, support' },
   { icon: 'sheet', value: 'Documented before we start', label: 'Problem, solution, scope, timeline' },
-  { icon: 'lock', value: 'Everything in your name', label: 'Domain, hosting, logins, files' },
-  { icon: 'maintenance', value: 'Support after launch', label: 'From the team that built it' },
+  { icon: 'lock', value: 'Registered in your name', label: 'Domain, hosting, logins, code' },
+  { icon: 'maintenance', value: 'Supported after launch', label: 'By the team that built it' },
 ];
 
 const problems = [
   {
     icon: 'chat',
     pain: 'Enquiries arrive at 9pm. Nobody answers them until morning.',
-    fix: 'AI assistants reply instantly on WhatsApp and your website, in Nepali and English.',
+    fix: 'Conversational AI on WhatsApp, Messenger and the website, in Nepali and English, with handover rules so qualified enquiries reach your team.',
     link: { label: 'AI automation', href: '/services/automate#assistants' },
   },
   {
     icon: 'sheet',
     pain: 'Orders live in a notebook, and the notebook goes home with one person.',
-    fix: 'Business software keeps every order, customer and payment in one place your team can reach.',
+    fix: 'A single system of record for orders, customers and payments, with role-based access, so the business does not depend on one person being present.',
     link: { label: 'Custom software', href: '/services/software' },
   },
   {
     icon: 'gauge',
     pain: 'The monthly report gets typed by hand, out of three different files.',
-    fix: 'Reports are prepared from your data and sent automatically, daily or weekly.',
-    link: { label: 'Automatic reports', href: '/services/automate#reports' },
+    fix: 'Scheduled reporting built on live data from the systems you already use, delivered daily or weekly without anyone compiling it.',
+    link: { label: 'Workflow automation', href: '/services/automate#reports' },
   },
 ];
 
@@ -57,7 +58,7 @@ const schema = [
 
 <Base
   title="Nine Technology — Websites, Software & AI Automation in Kathmandu"
-  description="Websites, software, digital marketing and AI automation for businesses in Kathmandu. Documented before we start, supported after launch, by one team."
+  description="We build and run the digital systems businesses in Kathmandu depend on: websites, custom software, marketing and AI automation, engineered to work as one."
   path="/"
   preloadDisplay={true}
   schema={schema}
@@ -69,7 +70,7 @@ const schema = [
           <span class="w">Your</span> <span class="w">ambition,</span><br />
           <span class="w">our</span> <span class="w">engineering</span><span class="stop w" aria-hidden="true"></span><span class="sr-only">.</span>
         </p>
-        <h1>Websites, software, digital marketing and AI automation for businesses in Kathmandu.</h1>
+        <h1>We build and run the digital systems businesses in Kathmandu depend on: websites, custom software, marketing and AI automation, engineered to work as one.</h1>
         <div class="btn-row">
           <a class="btn btn-primary" href={consult.href}>{consult.label}</a>
           <a class="btn btn-secondary" href={site.whatsapp} rel="noopener">Message us on WhatsApp</a>
@@ -91,11 +92,18 @@ const schema = [
     </div>
   </section>
 
-  <section class="section">
+  <section class="section trust-band" aria-label="Our position">
+    <div class="wrap">
+      <p class="trust">Most businesses here run on systems nobody designed. A website from one vendor, a spreadsheet from another, and a WhatsApp thread holding the two together.</p>
+      <p class="trust-sub">We design the whole of it: the system your records live in, the channels that bring people to it, and the automation that runs the work in between. Then we operate it with you. That is the difference between commissioning a website and building an operation that can grow.</p>
+    </div>
+  </section>
+
+  <section class="section section-tint">
     <div class="wrap">
       <div class="section-head">
         <FallHeading text="For businesses still running on paper, Excel and WhatsApp" />
-        <p class="lead">Most businesses we meet have outgrown the way they work. We build the systems that take the repetitive work off your team, and we stay to keep them running.</p>
+        <p class="lead">Three patterns we are called in for most often, and what replaces each one.</p>
       </div>
       <ul class="problems stagger reveal">
         {problems.map((p) => (
@@ -110,7 +118,7 @@ const schema = [
     </div>
   </section>
 
-  <section class="section section-tint" id="what-we-do">
+  <section class="section" id="what-we-do">
     <div class="wrap">
       <div class="section-head reveal">
         <h2 class="bundle-head">
@@ -119,7 +127,7 @@ const schema = [
           Automate it<span class="stop" aria-hidden="true"></span><span class="sr-only">.</span>
           Support it<span class="stop" aria-hidden="true"></span><span class="sr-only">.</span>
         </h2>
-        <p class="lead">Four groups of work from one team. Take one, or all four, and deal with the same people from the first consultation to support after launch.</p>
+        <p class="lead">Four disciplines under one team and one architecture. Take one or take all four; the same people stay with you from the first consultation through to support after launch.</p>
       </div>
       <div class="group-map stagger reveal">
         {groups.map((g) => (
@@ -131,34 +139,38 @@ const schema = [
           </a>
         ))}
       </div>
+      <div class="section-body">
+        <h3 class="h4">What that involves in practice</h3>
+        <ul class="chips">{disciplines.map((d) => <li>{d}</li>)}</ul>
+      </div>
       <p class="section-body"><a class="svc-view" href="/services">All services <Arrow /></a></p>
     </div>
   </section>
 
-  <HowWeWork />
-
-  <section class="section section-tint">
-    <div class="wrap">
-      <div class="section-head">
-        <FallHeading text="Who we work with" />
-        <p class="lead">Businesses with real customers and too much manual work. This is what we most often do for each.</p>
-      </div>
-      <ul class="industry-grid stagger reveal">
-        {industries.map((i) => (
-          <li>
-            <h3>{i.name}</h3>
-            <p>{i.needs}</p>
-          </li>
-        ))}
-      </ul>
-    </div>
-  </section>
+  <HowWeWork tint />
 
   <section class="section">
     <div class="wrap">
       <div class="section-head">
-        <FallHeading text="Why work with Nine Technology" />
-        <p class="lead">Four commitments, written into every project we take on.</p>
+        <FallHeading text="Sectors we work in" />
+        <p class="lead">Every sector has its own operational shape. These are the patterns we see repeatedly in Kathmandu, and what we build against them.</p>
+      </div>
+      <dl class="sectors stagger reveal">
+        {industries.map((i) => (
+          <div>
+            <dt>{i.name}</dt>
+            <dd>{i.needs}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+  </section>
+
+  <section class="section section-tint">
+    <div class="wrap">
+      <div class="section-head">
+        <FallHeading text="What we commit to in writing" />
+        <p class="lead">Four commitments, written into every engagement we take on.</p>
       </div>
       <ol class="pledges stagger reveal">
         {commitments.map((c, i) => (
@@ -169,14 +181,14 @@ const schema = [
           </li>
         ))}
       </ol>
-      <p class="company-note">{site.legalName}, {site.address.street}, {site.address.city}. Case studies are published with each client’s written permission; in a consultation, we will walk you through our work directly. <a class="link" href="/about">About the company</a>.</p>
+      <p class="company-note">{site.legalName}, {site.address.street}, {site.address.city}. Case studies are published with each client’s written permission; in a consultation we will take you through the work directly. <a class="link" href="/about">About the company</a>.</p>
     </div>
   </section>
 
   <section class="section section-navy on-navy">
     <div class="wrap">
       <h2>Tell us about your project</h2>
-      <p class="lead">Share what you would like to build or improve. We reply {site.replyTime}, {site.hoursShort}, and the first consultation carries no cost and no obligation.</p>
+      <p class="lead">Describe what you need to build or improve. We reply {site.replyTime}, {site.hoursShort}, and the first consultation carries no cost and no obligation.</p>
       <div class="strip-actions">
         <a class="btn btn-primary" href={consult.href}>{consult.label}</a>
         <a class="btn btn-secondary" href={site.whatsapp} rel="noopener">Message us on WhatsApp</a>

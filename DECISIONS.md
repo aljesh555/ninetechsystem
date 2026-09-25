@@ -800,6 +800,40 @@ pages with no failing audits.
 Three.js was again rejected: the smallest useful build is far over the JS budget,
 and it would compete with the hero for LCP.
 
+### Home: raising the register (founder's direction)
+
+The founder judged the Home page too plain for the company: "words are simple,
+sentence is simple, vision is simple". The comparison they gave (bitmicrosys.com)
+demonstrates expertise through precise professional vocabulary — "high-intent
+pages", "content clusters", "information hierarchy" — where ours explained things
+in consumer-plain terms ("reels that fill tables", "a website patients can
+trust"). Friendly, but it read small.
+
+The distinction now held throughout: **empty marketing words stay banned**
+(world-class, cutting-edge, leading — the security check enforces this), but
+**domain precision is expected**, because it is what proves the discipline is
+understood. Plain is not the same as simple.
+
+Changes:
+- **H1** states what the company does, not a list of services: "We build and run
+  the digital systems businesses in Kathmandu depend on: websites, custom
+  software, marketing and AI automation, engineered to work as one."
+- **A positioning band** after the hero, set large: most businesses here run on
+  systems nobody designed, and we design the whole of it and then operate it.
+  This is the "vision" the founder found missing.
+- **The three problems** now name the remedy in practitioner terms: a system of
+  record with role-based access; conversational AI with handover rules;
+  scheduled reporting on live data.
+- **A disciplines list** under the four groups (information architecture, Core
+  Web Vitals, structured data and answer-engine optimisation, payment
+  integration, role-based access control, workflow orchestration, analytics and
+  attribution, store compliance, backups and monitoring) — every one of them
+  checkable on this site.
+- **Sectors** rewritten as operational patterns and set as a specification sheet
+  (name left, capability right), with NGOs and development organisations added,
+  which is a significant sector in Nepal. Eight sectors.
+- Disciplines and sectors added to `llms.txt`.
+
 ## Two bugs found after the first deploy
 
 **Unknown URLs returned the home page with HTTP 200.** Cloudflare Pages falls

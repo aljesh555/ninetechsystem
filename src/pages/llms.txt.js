@@ -1,4 +1,4 @@
-import { site, commitments, industries, people, process, promise } from '../data/site.js';
+import { site, commitments, industries, disciplines, people, process, promise } from '../data/site.js';
 import {
   services, groups, website, software, app, grow, automate, support,
   servicePages, priceLabel, VAT_NOTE, deliveryModels, modelsIntro,
@@ -83,7 +83,10 @@ ${process.map((p, i) => `${i + 1}. ${p.title}. ${p.body}`).join('\n')}
 ## What every project includes
 ${commitments.map((c) => `- ${c.title}: ${c.body}`).join('\n')}
 
-## Industries we work with
+## Disciplines we practise
+${disciplines.map((d) => `- ${d}`).join('\n')}
+
+## Sectors we work in
 ${industries.map((i) => `- ${i.name}: ${i.needs}`).join('\n')}
 
 ## Common questions
