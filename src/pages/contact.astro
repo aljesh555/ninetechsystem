@@ -2,26 +2,44 @@
 import Base from '../layouts/Base.astro';
 import { Picture } from 'astro:assets';
 import Slot from '../components/Slot.astro';
+import BuildHero from '../components/services/BuildHero.astro';
+import FallHeading from '../components/services/FallHeading.astro';
+import { icon } from '../lib/icons.js';
 import mapImage from '../images/map-lazimpat.png';
 import { site, businessTypes } from '../data/site.js';
 import { needs, needAliases } from '../data/services.js';
 import { PHONE_CHARS, MIN_FILL_MS } from '../../functions/api/contact.js';
+import { breadcrumbList, abs } from '../lib/schema.js';
+
+const path = '/contact';
+const crumbs = [
+  { name: 'Home', path: '/' },
+  { name: 'Contact', path },
+];
+
+const facts = [
+  { icon: 'chat', value: 'We reply within minutes', label: site.hoursShort },
+  { icon: 'store', value: 'Lazimpat Road', label: 'Come in during opening hours' },
+  { icon: 'sheet', value: 'A written proposal', label: 'Before any work begins' },
+  { icon: 'coins', value: 'No cost, no obligation', label: 'For the first consultation' },
+];
+
+// What follows an enquiry, taken from the process we publish in full.
+const next = [
+  { icon: 'chat', title: 'We reply', body: `By phone or WhatsApp on the number you give us, ${site.replyTime} during ${site.hoursShort}.` },
+  { icon: 'calendar', title: 'We consult', body: 'A conversation about how the business runs, where time is lost and what you want to achieve. By call or at your office, at no cost.' },
+  { icon: 'sheet', title: 'We document', body: 'A written proposal: the problem, the solution we recommend, the scope, the timeline and the cost. Nothing begins before you approve it.' },
+];
 
 const schema = [
   {
     '@type': 'ContactPage',
-    '@id': `${site.url}/contact#page`,
-    url: `${site.url}/contact`,
+    '@id': `${abs(path)}#page`,
+    url: abs(path),
     name: 'Contact Nine Technology',
     about: { '@id': `${site.url}/#organization` },
   },
-  {
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home', item: site.url },
-      { '@type': 'ListItem', position: 2, name: 'Contact', item: `${site.url}/contact` },
-    ],
-  },
+  breadcrumbList(crumbs),
 ];
 ---
 
@@ -31,29 +49,24 @@ const schema = [
   path="/contact"
   schema={schema}
 >
-  <section class="page-head">
-    <div class="wrap">
-      <h1>Talk to us</h1>
-      <p class="lead">Call, message on WhatsApp, or send the form below. {site.replyPromise} Initial consultations carry no cost and no obligation.</p>
+  <BuildHero
+    crumbs={crumbs}
+    kicker="Contact"
+    h1="Talk to us"
+    sceneName="contact"
+    primary={{ label: `Call ${site.phoneDisplay}`, href: site.phoneHref }}
+    secondary={{ label: 'Message us on WhatsApp', href: site.whatsapp }}
+    facts={facts}
+  >
+    Call, message on WhatsApp, or send the form below. {site.replyPromise} The first consultation carries no cost and no obligation.
+  </BuildHero>
 
-      <div class="contact-direct">
-        <a class="contact-big" href={site.phoneHref}>
-          <span class="label">Call us</span>
-          <span class="value">{site.phoneDisplay}</span>
-        </a>
-        <a class="contact-big" href={site.whatsapp} rel="noopener">
-          <span class="label">WhatsApp</span>
-          <span class="value">Message us</span>
-        </a>
-      </div>
-      <p class="np contact-nepali" lang="ne">नेपालीमा कुरा गर्न चाहनुहुन्छ? फोन गर्नुहोस् वा WhatsApp गर्नुहोस्।</p>
-    </div>
-  </section>
+  <p class="wrap np contact-nepali" lang="ne">नेपालीमा कुरा गर्न चाहनुहुन्छ? फोन गर्नुहोस् वा WhatsApp गर्नुहोस्।</p>
 
   <section class="section">
     <div class="wrap contact-grid">
       <div>
-        <h2>Send a message</h2>
+        <FallHeading text="Send a message" />
         <p class="lead">Tell us what the business does and what you need. The more specific you are, the more useful our first reply will be.</p>
 
         <form class="form" id="contact-form" method="post" action="/api/contact" data-phone={site.phoneDisplay} data-phone-chars={PHONE_CHARS.source} data-min-ms={MIN_FILL_MS} data-need-aliases={JSON.stringify(needAliases)} novalidate>
@@ -109,7 +122,7 @@ const schema = [
       </div>
 
       <div>
-        <h2>Where we are</h2>
+        <FallHeading text="Where we are" />
         <a class="map" href={site.mapLink} rel="noopener" aria-label="Open Nine Technology’s location in Google Maps">
           <Picture src={mapImage} alt="Map showing Nine Technology on Lazimpat Road, Kathmandu" widths={[400, 800, 1200]} sizes="(min-width: 900px) 520px, 100vw" formats={['avif', 'webp']} loading="lazy" decoding="async" />
         </a>
@@ -140,10 +153,32 @@ const schema = [
           </div>
           <div>
             <dt>Areas we serve</dt>
-            <dd>Kathmandu, Lalitpur and Bhaktapur in person, and remote work anywhere in Nepal.</dd>
+            <dd>{site.areasServed.join(', ')} in person, and remote work anywhere in Nepal.</dd>
           </div>
         </dl>
       </div>
+    </div>
+  </section>
+
+  <section class="section section-tint">
+    <div class="wrap">
+      <div class="section-head">
+        <FallHeading text="What happens next" />
+        <p class="lead">The same three steps follow every enquiry, whether it arrives by form, phone or WhatsApp.</p>
+      </div>
+      <ol class="next-steps stagger reveal">
+        {next.map((n, i) => (
+          <li>
+            <div class="next-head">
+              <Fragment set:html={icon(n.icon, 48)} />
+              <span class="next-num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+            </div>
+            <h3>{n.title}</h3>
+            <p>{n.body}</p>
+          </li>
+        ))}
+      </ol>
+      <p class="section-body"><a class="link" href="/how-we-work">See how we work in full</a></p>
     </div>
   </section>
 

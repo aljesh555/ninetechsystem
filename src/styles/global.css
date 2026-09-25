@@ -394,6 +394,18 @@ html:not(.js) .menu-toggle { display: none; }
 .nine span { aspect-ratio: 1; background: var(--rule); }
 .nine span:nth-child(9) { background: var(--amber); }
 
+/* What follows an enquiry, on /contact. */
+.next-steps { display: grid; gap: var(--s4); margin-top: var(--s2); }
+@media (min-width: 760px) { .next-steps { grid-template-columns: repeat(3, 1fr); } }
+.next-steps li {
+  padding: var(--s4); background: var(--white); border: 1px solid var(--rule);
+  border-top: 2px solid var(--navy); border-radius: var(--radius);
+}
+.next-head { display: flex; align-items: center; justify-content: space-between; gap: var(--s3); }
+.next-num { font-family: var(--display); font-weight: 600; font-size: 1.25rem; color: var(--rule); }
+.next-steps h3 { margin-top: var(--s3); font-size: 1.125rem; }
+.next-steps p { margin-top: var(--s2); color: var(--grey); font-size: 0.9375rem; }
+
 /* The four commitments as cards: one narrow column left too much air and made
    four short promises look like an afterthought. */
 .commitments.cards { gap: var(--s4); margin-top: var(--s5); }

@@ -546,6 +546,26 @@ export function icon(name, size = 80) {
 }
 
 /** A hero scene, drawn larger, with its pieces grouped for the drop-in. */
+/** Contact: the phone, and the replies coming back off it. */
+scenes.contact = () => {
+  const phone = B(2.2, 3.4, 0.6, 3.4, 0.9, 6.2);
+  const reply = B(6.4, 1.4, 4.6, 2.8, 2.4, 0.6);
+  const note = B(6.6, 4.6, 2.2, 2.4, 2, 0.55);
+  return (
+    part(box(0.2, 0.2, 0, 9.6, 9.6, 0.6, PLATFORM)) +
+    part(
+      box(...phone) +
+      on('left', phone, 0.3, 0.7, 3.1, 5.6, LIGHT) +
+      on('left', phone, 0.6, 4.4, 2.8, 5.1, AMBER.left) +
+      on('left', phone, 0.6, 3.3, 2.8, 3.8, LIGHT_DIM) +
+      on('left', phone, 0.6, 2.3, 2.2, 2.8, LIGHT_DIM) +
+      on('left', phone, 0.6, 1.3, 2.8, 1.8, LIGHT_DIM),
+    ) +
+    part(box(...reply, AMBER) + on('top', reply, 0.5, 0.5, 2.3, 1.1, '#fff3dc')) +
+    part(box(...note) + on('top', note, 0.4, 0.4, 2, 0.9, LIGHT))
+  );
+};
+
 /** The company: the building, the wing beside it, and the signboard out front. */
 scenes.company = () => {
   const block = B(1, 1.4, 0.6, 4.2, 4.2, 5.6);
