@@ -46,18 +46,17 @@ export const projects = [
     client: 'Fitness Durbar',
     sector: 'Gyms and fitness studios',
     sectorHref: '/sectors#gyms',
-    location: 'Hattiban, Lalitpur',
+    location: 'Hattiban, Velpa Marga, Lalitpur',
     year: '2026',
-    // Until fitnessdurbar.com is pointed at the site, the working address is
-    // the one we can link. Swap this the day the domain resolves.
-    url: 'https://fitness-durbar.pages.dev',
+    url: 'https://fitnessdurbar.com.np',
     summary:
-      'A members-only gym does not compete on being the cheapest in Lalitpur, so the site is not built to sell on price. It is built to set a standard and let the reader decide whether they belong in it.',
+      'A gym is chosen on proof: who will train you, what it costs, and whether people starting where you are have got anywhere. The site puts those three in front of the visitor rather than making them ask for any of them.',
     built: [
-      'An editorial design that treats the gym as a name rather than a facility, because selectivity is the thing being sold and a discount layout would have argued against it.',
-      'The address, coordinates and opening hours marked up as a health club, so the gym can be placed and shown correctly in local search.',
-      'Membership tiers set out in full, so the level of commitment is clear before anyone makes contact.',
-      'Trainer profiles and member transformations, which is the evidence people actually weigh before joining a gym.',
+      'Opening hours, map coordinates and the full address including its landmark marked up for search, so the gym can be placed on the map and shown as open or closed at the moment someone looks.',
+      'Programmes, trainers, pricing and member transformations each given a section of their own, so a visitor can go straight to the one question they arrived with.',
+      'The questions people ask before joining marked up as structured data, so the answers can be shown in search results without the visitor opening the site.',
+      'A blog and a media section, so the gym can publish on its own terms instead of depending on paid reach.',
+      'Instagram, Facebook and TikTok connected, and WhatsApp enquiry reachable from every screen, because those are the channels a gym in Lalitpur is actually contacted through.',
       'A day and a night theme, and a layout built for phones first.',
     ],
     services: [
