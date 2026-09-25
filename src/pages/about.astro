@@ -14,7 +14,6 @@ import BuildHero from '../components/services/BuildHero.astro';
 import FallHeading from '../components/services/FallHeading.astro';
 import HowWeWork from '../components/HowWeWork.astro';
 import CtaStrip from '../components/services/CtaStrip.astro';
-import Arrow from '../components/services/Arrow.astro';
 import { icon } from '../lib/icons.js';
 import { site, people, commitments } from '../data/site.js';
 import { breadcrumbList, abs } from '../lib/schema.js';
@@ -93,8 +92,8 @@ const schema = [
   <section class="section section-tint">
     <div class="wrap">
       <div class="section-head">
-        <FallHeading text="The people" />
-        <p class="lead">Two directors. You will deal with one of them directly, not an account manager, and the same person stays with the project from the first consultation through to support after launch.</p>
+        <FallHeading text="Leadership" />
+        <p class="lead">Nine Technology is led by two directors. Every project is scoped with one of them and delivered by our team, and the same people stay with it from the first consultation through to the support that follows launch.</p>
       </div>
       <ul class="people">
         {people.map((p) => (
@@ -107,7 +106,6 @@ const schema = [
               <h3>{p.name}</h3>
               <p class="title">{p.title}</p>
               {p.role && <p class="person-role">{p.role}</p>}
-              <a class="svc-view" href={consult.href}>Talk to {p.name.split(' ')[0]} <Arrow /></a>
             </div>
           </li>
         ))}
