@@ -74,8 +74,8 @@ export const people = [
 
 export const commitments = [
   {
-    title: 'Scope and price in writing, before we start',
-    body: 'You approve a written scope and a fixed price before any work begins. If the scope changes, we quote the change first.',
+    title: 'Everything documented before we start',
+    body: 'The problem, the solution, the scope, the timeline and the cost are agreed in writing before any work begins. If anything changes, we document it and agree it with you first.',
   },
   {
     title: 'You get admin access to everything',
@@ -118,12 +118,12 @@ export const businessTypes = [
  * `short` is the one-line version; `get` and `bring` are both sides of each
  * step, so the client knows what they receive and what we need from them.
  */
-export const promise = 'A written scope. A fixed price. Agreed dates. Signed before work begins, and honoured through to delivery.';
+export const promise = 'Before any work begins, we document the problem, the solution, the scope and the timeline. Both sides sign it, and we deliver what was agreed.';
 
 export const process = [
   {
     icon: 'chat',
-    title: 'We understand your requirements',
+    title: 'We understand your business',
     short: 'A consultation about how your business runs, where time is lost, and what you need to achieve.',
     body: 'Every engagement begins with a consultation, by call or at your office, at no cost. We learn how your business operates, where time is lost, what is still done by hand, and what you want to achieve. Our aim is to recommend the right solution for your business, not the most expensive one.',
     get: 'A clear understanding of the problem and our honest recommendation, including when a simpler solution will do the job.',
@@ -131,18 +131,18 @@ export const process = [
   },
   {
     icon: 'sheet',
-    title: 'You receive a written proposal and a fixed price',
-    short: 'Scope, inclusions and exclusions, dated milestones and one fixed price, in writing, before any work begins.',
-    body: 'We then send a written proposal setting out the problem, the scope of work, what is and is not included, a timeline with dated milestones, and a fixed price. You know the full cost before any work begins.',
-    get: 'A written proposal covering the scope, inclusions and exclusions, dated milestones and a fixed price.',
-    bring: 'A careful review of the proposal, and any questions you have before you approve it.',
+    title: 'We document the problem and the solution',
+    short: 'A written proposal: the problem as we understand it, the solution we recommend, the scope, the milestones and the cost.',
+    body: 'We then prepare a written proposal. It documents the problem as we understand it, the solution we recommend and why, the scope of work, what is and is not included, a timeline with milestones, and the cost. Everything is clear before any work begins.',
+    get: 'A proposal document: the problem, the recommended solution and the reasoning behind it, the scope, inclusions and exclusions, milestones and cost.',
+    bring: 'A careful review. The document should describe your business accurately, so tell us about anything that needs correcting or clarifying before you approve it.',
   },
   {
     icon: 'lock',
-    title: 'We agree and sign the scope',
-    short: 'Price, work and dates are fixed. Any additional work is quoted and approved by you before it begins.',
-    body: 'When you are satisfied with the proposal, both parties sign it. The signed scope fixes the price, the work and the dates. Any additional work you request later is quoted separately and proceeds only with your written approval, so nothing is added to your invoice without your agreement.',
-    get: 'A signed scope. The price, the work and the dates change only with your written approval.',
+    title: 'We confirm the scope together',
+    short: 'Both sides sign the proposal. It becomes the reference for the whole project, and any change is agreed first.',
+    body: 'When you are satisfied with the proposal, both parties sign it. The signed document becomes the reference for the whole project: the work, the timeline and the cost are agreed. If you later need something additional, we document and quote it first, and it proceeds only with your approval.',
+    get: 'A signed project document that both sides work from. Any change to the work, the timeline or the cost is agreed in writing first.',
     bring: 'Your signature, and the initial payment set out in the proposal.',
   },
   {
@@ -173,8 +173,8 @@ export const process = [
 
 /** Trust badges shown with the process. */
 export const trustBadges = [
-  { icon: 'sheet', value: 'Fixed price, in writing', label: 'Agreed before any work begins' },
+  { icon: 'sheet', value: 'Documented from the start', label: 'Problem, solution, scope, timeline' },
   { icon: 'lock', value: 'Everything in your name', label: 'Domain, hosting, logins and files' },
   { icon: 'chat', value: 'We reply within minutes', label: 'Sunday–Friday, 10am–5pm' },
-  { icon: 'maintenance', value: 'Support after every launch', label: 'Followed by optional care plans' },
+  { icon: 'maintenance', value: 'Ongoing support', label: 'From launch onwards' },
 ];

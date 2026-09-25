@@ -356,7 +356,7 @@ export const website = {
   ],
   process: [
     { name: 'Consultation', body: 'We learn about the business, its customers and any site you have today.' },
-    { name: 'Proposal', body: 'The recommended format, scope, fixed price and timeline, in writing.' },
+    { name: 'Proposal', body: 'The problem, the recommended format, the scope, the timeline and the cost, documented.' },
     { name: 'Design', body: 'The design is presented and approved before development begins.' },
     { name: 'Development', body: 'Built, tested on real phones, and reviewed with you in stages.' },
     { name: 'Launch and handover', body: 'Live on your domain, in your name, with training for your team.' },
@@ -416,7 +416,7 @@ export const website = {
 
 export const software = {
   facts: [
-    { icon: 'sheet', value: 'Scoped in writing', label: 'Fixed scope and price' },
+    { icon: 'sheet', value: 'Documented scope', label: 'Problem, solution and timeline' },
     { icon: 'workflow', value: 'Delivered in stages', label: 'Working software at each stage' },
     { icon: 'maintenance', value: '60 days', label: 'Post-launch support' },
     { icon: 'lock', value: 'Yours', label: 'Code, data and accounts in your name' },

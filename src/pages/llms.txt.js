@@ -96,7 +96,7 @@ Yes. We meet clients in person across Kathmandu, Lalitpur and Bhaktapur, and wor
 - ${url('/')} — what we do, for whom, and the four commitments
 ${servicePages.map((p) => `- ${url(p.path)} — ${p.name}`).join('\n')}
 - ${url('/work')} — projects, published only with written client permission
-- ${url('/how-we-work')} — the six steps, the written scope, fixed price and dates
+- ${url('/how-we-work')} — the six steps, from understanding the business to documenting the solution and ongoing support
 - ${url('/about')} — the company and the two directors
 - ${url('/contact')} — phone, WhatsApp, address, map, hours and the enquiry form
 

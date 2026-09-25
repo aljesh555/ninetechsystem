@@ -734,6 +734,20 @@ heading is "Common questions"; the button is "Request a consultation". The same
 "a person who answers" wording was replaced on the Support page. No contractions
 or dashes remain in the six steps.
 
+### Lead with documentation, not price (founder's direction)
+
+"Fixed price, in writing" as a headline made the relationship sound as if it were
+about money. The headlines now lead with understanding and documentation; cost is
+one item inside the document. The promise reads: "Before any work begins, we
+document the problem, the solution, the scope and the timeline. Both sides sign
+it, and we deliver what was agreed." Step 2 is "We document the problem and the
+solution" (the proposal records the problem as we understand it, the recommended
+solution and why, the scope, milestones and cost); step 3 is "We confirm the scope
+together". The Home/About/hub commitment is "Everything documented before we
+start", and the trust badges are "Documented from the start" and "Ongoing
+support". Price language stays where a buyer looks for it: price sections, cost
+FAQs and each delivery model's "Pricing and approval" line.
+
 ## Two bugs found after the first deploy
 
 **Unknown URLs returned the home page with HTTP 200.** Cloudflare Pages falls
