@@ -1065,13 +1065,13 @@ export const automate = {
 export const support = {
   // No published price for now: care plans are scoped per client. The earlier
   // draft tiers are recorded in DECISIONS.md for when prices are confirmed.
-  intro: 'We do not disappear after launch. We keep your website, store or system running — updated, backed up, secure, and with someone who answers when you need help.',
+  intro: 'Our work does not end at launch. We keep your website, store or system running: updated, backed up, secure, and supported by a team that responds when you need help.',
   answer: 'Nine Technology provides website and software support in Nepal — hosting, domain and SSL management, updates, security, backups, and monthly care plans, all kept in the client’s name.',
   trust: 'Everything in your name — your domain, your hosting, your logins. We look after it; we never hold it hostage.',
   facts: [
     { icon: 'lock', value: 'In your name', label: 'Domain, hosting and logins' },
     { icon: 'hosting', value: 'Kept running', label: 'Updates, backups, monitoring' },
-    { icon: 'chat', value: 'A person who answers', label: 'Not a ticket that disappears' },
+    { icon: 'chat', value: 'Our team responds', label: 'Direct contact, no ticket queues' },
     { icon: 'maintenance', value: 'Small fixes handled', label: 'Content changes and fixes' },
   ],
   handle: [
@@ -1080,7 +1080,7 @@ export const support = {
     { icon: 'sheet', name: 'Regular backups', body: 'Taken on a schedule, so your site, store or system can be restored if something goes wrong.' },
     { icon: 'gauge', name: 'Speed & uptime monitoring', body: 'Monitored, so a slow or offline site is noticed and dealt with, not discovered by a customer.' },
     { icon: 'maintenance', name: 'Small content changes and fixes', body: 'Text, images, prices and small corrections, handled without a new project.' },
-    { icon: 'chat', name: 'A person who answers', body: 'Not a ticket that disappears. You reach someone who knows your website or system.' },
+    { icon: 'chat', name: 'A team that responds', body: 'You reach our team directly, people who know your website or system, and we see every request through to resolution.' },
   ],
   carePlans: 'Monthly cover so everything is handled and you always know who to call. We scope a plan to your website or system and what you need looked after.',
   planFactors: [
@@ -1093,14 +1093,14 @@ export const support = {
     { name: 'Plan scoped', body: 'What we look after, how often, and response times, in writing.' },
     { name: 'Set up in your name', body: 'Domain, hosting and accounts confirmed or moved into your name.' },
     { name: 'Ongoing care', body: 'Updates, backups and monitoring, done on schedule.' },
-    { name: 'Help when you need it', body: 'Changes and fixes handled by a person who knows your setup.' },
+    { name: 'Help when you need it', body: 'Changes and fixes handled by our team, who already know your setup.' },
   ],
   pricing: 'We scope a support plan to your website or system and what you need looked after. Tell us what you have, and we will put together a plan.',
   cta: { label: 'Talk to us about support', need: 'support' },
   faqs: [
     {
       q: 'What does a care plan include?',
-      a: 'A care plan is scoped to your website or system. It can cover domain, hosting, email and SSL renewals, software updates and security patches, regular backups, speed and uptime monitoring, small content changes and fixes, and a person who answers when you need help. What is included is written into the plan.',
+      a: 'A care plan is scoped to your website or system. It can cover domain, hosting, email and SSL renewals, software updates and security patches, regular backups, speed and uptime monitoring, small content changes and fixes, and direct access to our team when you need help. What is included is written into the plan.',
     },
     {
       q: 'Do you host the website?',
@@ -1112,7 +1112,7 @@ export const support = {
     },
     {
       q: 'What if something breaks?',
-      a: 'Call or message us and a person answers — not a ticket that disappears. We find the cause and fix it. On a care plan, fixes are handled under the plan’s terms; without one, we tell you what the fix involves before starting.',
+      a: 'Contact our team by phone or WhatsApp. We identify the cause and resolve it. On a care plan, fixes are handled under the plan’s terms; without one, we explain what the fix involves before starting.',
     },
     {
       q: 'How fast do you respond?',

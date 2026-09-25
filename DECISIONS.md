@@ -718,6 +718,22 @@ dates. Signed before we start — and we stick to it. That's the whole deal."*
   look for this page. Schema: `HowTo` (six `HowToStep`s), `FAQPage` ("What if…"
   questions drawn from the founder's promises), `BreadcrumbList`.
 
+### How we work: professional revision (founder's direction)
+
+The founder judged the first version too casual for a company: "a person who
+answers" sounded like one individual, not a team that takes responsibility. The
+six steps were rewritten in a professional company voice, keeping every
+commitment: "We understand your requirements", "You receive a written proposal
+and a fixed price", "We agree and sign the scope", "We build, and you see the
+progress", "We launch and hand over", "We continue to support you" — the last now
+says our team responds, identifies and resolves issues, stays available, and aims
+to be a long-term technology partner. The promise became "A written scope. A
+fixed price. Agreed dates. Signed before work begins, and honoured through to
+delivery." The line under it no longer takes a swipe at competitors; the FAQ
+heading is "Common questions"; the button is "Request a consultation". The same
+"a person who answers" wording was replaced on the Support page. No contractions
+or dashes remain in the six steps.
+
 ## Two bugs found after the first deploy
 
 **Unknown URLs returned the home page with HTTP 200.** Cloudflare Pages falls
