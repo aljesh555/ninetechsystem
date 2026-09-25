@@ -1,7 +1,36 @@
 ---
+/**
+ * About. In order: who we are (hero), where the name comes from, the two
+ * people you will actually deal with, how we work, what we commit to in
+ * writing, and the company's own details.
+ *
+ * The six steps are the shared compact component, not a third copy of them:
+ * Home and the Services hub render the same one, and /how-we-work holds the
+ * full version.
+ */
 import Base from '../layouts/Base.astro';
 import Slot from '../components/Slot.astro';
-import { site, people, commitments, process } from '../data/site.js';
+import BuildHero from '../components/services/BuildHero.astro';
+import FallHeading from '../components/services/FallHeading.astro';
+import HowWeWork from '../components/HowWeWork.astro';
+import CtaStrip from '../components/services/CtaStrip.astro';
+import { icon } from '../lib/icons.js';
+import { site, people, commitments } from '../data/site.js';
+import { breadcrumbList, abs } from '../lib/schema.js';
+
+const path = '/about';
+const crumbs = [
+  { name: 'Home', path: '/' },
+  { name: 'About', path },
+];
+const consult = { label: 'Request a consultation', href: '/contact' };
+
+const facts = [
+  { icon: 'users', value: 'Two directors', label: 'You deal with one of them directly' },
+  { icon: 'store', value: 'Lazimpat, Kathmandu', label: 'An office you can visit' },
+  { icon: 'calendar', value: `Founded ${site.founded}`, label: site.legalName },
+  { icon: 'lock', value: 'Registered in your name', label: 'Domain, hosting, logins, code' },
+];
 
 const schema = [
   ...people.map((p) => ({
@@ -12,38 +41,37 @@ const schema = [
   })),
   {
     '@type': 'AboutPage',
-    '@id': `${site.url}/about#page`,
-    url: `${site.url}/about`,
+    '@id': `${abs(path)}#page`,
+    url: abs(path),
     name: 'About Nine Technology',
     about: { '@id': `${site.url}/#organization` },
   },
-  {
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home', item: site.url },
-      { '@type': 'ListItem', position: 2, name: 'About', item: `${site.url}/about` },
-    ],
-  },
+  breadcrumbList(crumbs),
 ];
 ---
 
 <Base
   title="About Nine Technology — IT Company in Lazimpat, Kathmandu"
   description="Nine Technology is an IT company on Lazimpat Road, Kathmandu, founded in 2026. Meet the two directors and see how we scope, build and support projects."
-  path="/about"
+  path={path}
   schema={schema}
 >
-  <section class="page-head">
-    <div class="wrap">
-      <h1>An IT company in Lazimpat, built to stay</h1>
-      <p class="lead">Nine Technology builds websites, software and AI automation for businesses in Kathmandu, and then keeps them running. We were founded in 2026 because most businesses here are still running on paper and WhatsApp, and the companies that built their websites stopped answering the phone.</p>
-    </div>
-  </section>
+  <BuildHero
+    crumbs={crumbs}
+    kicker="About"
+    h1="An IT company in Lazimpat, built to stay"
+    sceneName="company"
+    primary={consult}
+    secondary={{ label: 'See our work', href: '/work' }}
+    facts={facts}
+  >
+    Nine Technology builds websites, software and AI automation for businesses in Kathmandu, and then keeps them running. We were founded in {site.founded} because most businesses here are still running on paper and WhatsApp, and the companies that built their websites stopped answering the phone.
+  </BuildHero>
 
   <section class="section">
-    <div class="wrap split">
-      <div class="split-head">
-        <h2>Why “Nine”</h2>
+    <div class="wrap">
+      <div class="section-head">
+        <FallHeading text="Why “Nine”" />
       </div>
       <div class="nava">
         <div class="nine" aria-hidden="true">
@@ -52,7 +80,7 @@ const schema = [
           <span></span><span></span><span></span>
         </div>
         <div class="prose">
-          <p>In Sanskrit, <i lang="sa">nava</i> means both <i>nine</i> and <i>new</i>. Nine is completion — the last number before a new cycle begins.</p>
+          <p>In Sanskrit, <i lang="sa">nava</i> means <i>nine</i>. In Nepali, <i lang="ne">nava</i> means <i>new</i>. Nine is completion — the last number before a new cycle begins.</p>
           <p>In Nepal it is Navadurga, and the nine nights of Dashain. Rooted in the old, built for the new, and finished properly.</p>
           <p>That is also why the full stop in our logo is a solid square. A job is either finished or it is not.</p>
         </div>
@@ -61,50 +89,10 @@ const schema = [
   </section>
 
   <section class="section section-tint">
-    <div class="wrap split">
-      <div class="split-head">
-        <h2>How we work</h2>
-        <p>Six steps, in this order, on every project. Open any one to see what it involves, or <a class="link" href="/how-we-work">read them in full</a>.</p>
-      </div>
-      <div class="accordion">
-        {process.map((step, i) => (
-          <details class="acc" open={i === 0}>
-            <summary>
-              <span class="acc-num" aria-hidden="true">{i + 1}</span>
-              <span class="acc-title">{step.title}</span>
-              <svg class="acc-chev" width="14" height="9" viewBox="0 0 14 9" fill="none" aria-hidden="true" focusable="false">
-                <path d="M1 1.5L7 7.5L13 1.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </summary>
-            <p>{step.body}</p>
-          </details>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="wrap split">
-      <div class="split-head">
-        <h2>What we commit to</h2>
-        <p>These four are in every contract we write, not just on this page.</p>
-      </div>
-      <div class="commitments one-col">
-        {commitments.map((c) => (
-          <div class="commitment">
-            <h3>{c.title}</h3>
-            <p>{c.body}</p>
-          </div>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <section class="section section-tint">
-    <div class="wrap split">
-      <div class="split-head">
-        <h2>The people</h2>
-        <p>Two directors. You will deal with one of them directly, not an account manager.</p>
+    <div class="wrap">
+      <div class="section-head">
+        <FallHeading text="The people" />
+        <p class="lead">Two directors. You will deal with one of them directly, not an account manager, and the same person stays with the project from the first consultation through to support after launch.</p>
       </div>
       <div class="people">
         {people.map((p) => (
@@ -118,22 +106,48 @@ const schema = [
     </div>
   </section>
 
-  <section class="section">
-    <div class="wrap split">
-      <div class="split-head">
-        <h2>The company</h2>
+  <HowWeWork />
+
+  <section class="section section-tint">
+    <div class="wrap">
+      <div class="section-head">
+        <FallHeading text="What we commit to" />
+        <p class="lead">These four are in every contract we write, not just on this page.</p>
       </div>
-      <div class="prose">
-        <p>{site.legalName}</p>
-        <p>{site.address.display}</p>
-        <p>Founded {site.founded}</p>
-        <Slot name="office-exterior" alt="The Nine Technology office on Lazimpat Road, Kathmandu" ratio="3-2" class="section-body" sizes="(min-width: 900px) 640px, 100vw" />
-        <Slot name="office-interior" alt="Inside the Nine Technology office" ratio="3-2" class="section-body" sizes="(min-width: 900px) 640px, 100vw" />
-        <div class="btn-row section-body">
-          <a class="btn btn-primary" href="/contact">Get a quote</a>
-          <a class="btn btn-secondary" href={site.whatsapp} rel="noopener">Message us on WhatsApp</a>
-        </div>
+      <div class="commitments one-col">
+        {commitments.map((c) => (
+          <div class="commitment">
+            <Fragment set:html={icon(c.icon, 44)} />
+            <h3>{c.title}</h3>
+            <p>{c.body}</p>
+          </div>
+        ))}
       </div>
     </div>
   </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <FallHeading text="The company" />
+        <p class="lead">Registered, addressed and reachable. If you would rather talk in person, the office is on Lazimpat Road and you are welcome to come in.</p>
+      </div>
+      <dl class="company-facts">
+        <div><dt>Registered name</dt><dd>{site.legalName}</dd></div>
+        <div><dt>Address</dt><dd>{site.address.display}</dd></div>
+        <div><dt>Founded</dt><dd>{site.founded}</dd></div>
+        <div><dt>Areas served</dt><dd>{site.areasServed.join(', ')} and the rest of Nepal</dd></div>
+      </dl>
+      <div class="office-pair">
+        <Slot name="office-exterior" alt="The Nine Technology office on Lazimpat Road, Kathmandu" ratio="3-2" sizes="(min-width: 900px) 440px, 100vw" />
+        <Slot name="office-interior" alt="Inside the Nine Technology office" ratio="3-2" sizes="(min-width: 900px) 440px, 100vw" />
+      </div>
+    </div>
+  </section>
+
+  <CtaStrip
+    heading="Tell us about your project"
+    body="Describe what you need to build or improve. The first consultation carries no cost and no obligation, and you will have a written proposal before any work begins."
+    primary={consult}
+  />
 </Base>

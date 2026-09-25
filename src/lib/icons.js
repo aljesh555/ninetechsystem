@@ -546,6 +546,27 @@ export function icon(name, size = 80) {
 }
 
 /** A hero scene, drawn larger, with its pieces grouped for the drop-in. */
+/** The company: the building, the wing beside it, and the signboard out front. */
+scenes.company = () => {
+  const block = B(1, 1.4, 0.6, 4.2, 4.2, 5.6);
+  const wing = B(5.8, 3.4, 0.6, 3, 2.6, 3);
+  const sign = B(1.6, 7, 0.6, 3.4, 0.6, 2.2);
+  return (
+    part(box(0.2, 0.2, 0, 9.6, 9.6, 0.6, PLATFORM)) +
+    part(
+      box(...block) +
+      [4.2, 2.8, 1.4].map((v) => on('left', block, 0.5, v, 1.7, v + 0.9, LIGHT)).join('') +
+      [4.2, 2.8, 1.4].map((v) => on('left', block, 2.3, v, 3.7, v + 0.9, LIGHT_DIM)).join(''),
+    ) +
+    part(
+      box(...wing) +
+      on('left', wing, 0.4, 1.6, 2.6, 2.4, LIGHT) +
+      on('left', wing, 0.4, 0.5, 2.6, 1.2, LIGHT_DIM),
+    ) +
+    part(box(...sign, AMBER) + on('left', sign, 0.4, 0.6, 3, 1.6, '#fff3dc'))
+  );
+};
+
 /** Delivered work: the site raised on its own plinth, a second beside it, and
  *  the amber mark of a project that is live. */
 scenes.work = () => {

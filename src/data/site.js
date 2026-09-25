@@ -75,18 +75,22 @@ export const people = [
 
 export const commitments = [
   {
+    icon: 'sheet',
     title: 'Everything documented before we start',
     body: 'The problem, the solution, the scope, the timeline and the cost are agreed in writing before any work begins. If anything changes, we document it and agree it with you first.',
   },
   {
+    icon: 'lock',
     title: 'You get admin access to everything',
     body: 'Domain, hosting, logins and files are registered in your name and handed over with training. Not held in ours.',
   },
   {
+    icon: 'care',
     title: 'Support included on every project',
     body: '30 days after launch on websites and stores, 60 on software and apps, 14 on a landing page. Included in the price, not sold back to you afterwards.',
   },
   {
+    icon: 'maintenance',
     title: 'We stay after launch',
     body: 'One team builds it, markets it and maintains it. One invoice, one number to call.',
   },
