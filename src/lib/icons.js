@@ -520,6 +520,24 @@ scenes.process = () => {
   );
 };
 
+scenes.payments = () => {
+  const phone = B(1, 4.4, 0.6, 2.6, 0.7, 5.2);
+  const term = B(5.8, 1.2, 0.6, 3.2, 2.6, 1.4);
+  const coin = (z, col) => box(5.9, 5.7, z, 2.6, 2.6, 0.8, col);
+  return (
+    part(box(0.2, 0.2, 0, 9.6, 9.6, 0.6, PLATFORM)) +
+    part(
+      box(...phone) +
+      on('left', phone, 0.25, 0.6, 2.35, 4.7, LIGHT) +
+      on('left', phone, 0.5, 3.1, 2.1, 4.3, AMBER.left) +
+      on('left', phone, 0.5, 1.4, 2.1, 1.9, LIGHT_DIM) +
+      on('left', phone, 0.5, 0.9, 1.5, 1.2, LIGHT_DIM),
+    ) +
+    part(box(...term) + on('top', term, 0.4, 0.4, 2.8, 1.4, '#2a5189') + box(6.3, 1.7, 2, 2.2, 1.5, 0.3, AMBER)) +
+    part(coin(0.6, NAVY) + coin(1.5, NAVY) + coin(2.4, AMBER))
+  );
+};
+
 /** Inline SVG for a service or concept icon. Decorative: its heading names it. */
 export function icon(name, size = 80) {
   const body = draw[name]?.();

@@ -1163,22 +1163,107 @@ h1 + .lead, h2 + .lead { margin-top: var(--s3); }
    ========================================================================== */
 
 .post-meta {
-  display: flex; flex-wrap: wrap; gap: var(--s2);
+  display: flex; flex-wrap: wrap; align-items: center; gap: var(--s2);
   font-size: 0.875rem; color: var(--grey);
 }
-.page-head .post-meta { margin-bottom: var(--s3); }
-
-.post-list { border-top: 1px solid var(--rule); }
-.post-list > li { padding-block: var(--s5); border-bottom: 1px solid var(--rule); }
-.post-list h2 { font-size: clamp(1.375rem, 3vw, 1.75rem); margin-top: var(--s2); }
-.post-list h2 a, .post-list h3 a { text-decoration: none; }
-.post-list h2 a:hover, .post-list h3 a:hover {
-  text-decoration: underline; text-decoration-thickness: 2px;
-  text-underline-offset: 0.18em; text-decoration-color: var(--amber);
+.post-badge {
+  padding: 2px var(--s2); background: #fff1dc; color: var(--navy);
+  border-radius: var(--radius); font-weight: 500; font-size: 0.8125rem;
 }
+.post-link { text-decoration: none; }
+.post-link::after { content: ''; position: absolute; inset: 0; border-radius: var(--radius); }
 .post-excerpt { margin-top: var(--s2); color: var(--grey); }
-.post-list-compact > li { padding-block: var(--s4); }
-.post-list-compact h3 { font-size: 1.125rem; margin-top: var(--s1); }
+
+/* The artwork. One isometric scene per guide, so no stock photography. */
+.post-art { display: flex; justify-content: center; align-items: center; background: var(--off-white); border-radius: var(--radius); }
+.post-art .scene { width: 100%; max-width: 190px; height: auto; }
+.post-art-lg .scene { max-width: 320px; }
+
+/* The newest guide, at full width. */
+.post-featured {
+  position: relative; display: grid; gap: var(--s4); margin-top: var(--s2);
+  padding: var(--s4); background: var(--white);
+  border: 1px solid var(--rule); border-top: 2px solid var(--navy);
+  border-radius: var(--radius); transition: border-color 0.15s ease;
+}
+.post-featured:hover { border-color: var(--navy); }
+@media (min-width: 860px) { .post-featured { grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); gap: var(--s6); align-items: center; padding: var(--s5); } }
+.post-featured h2 { font-size: clamp(1.5rem, 3.4vw, 2.1rem); margin-top: var(--s2); }
+.post-takeaways { margin-top: var(--s3); display: grid; gap: var(--s1); }
+.post-takeaways li { position: relative; padding-left: 1.4rem; font-size: 0.9375rem; color: var(--grey); }
+.post-takeaways li::before { content: ''; position: absolute; left: 2px; top: 0.6em; width: 6px; height: 6px; background: var(--amber); }
+.post-featured .svc-view { margin-top: var(--s4); }
+
+/* The rest, as cards. */
+.post-grid { display: grid; gap: var(--s4); margin-top: var(--s4); }
+@media (min-width: 720px) { .post-grid { grid-template-columns: repeat(2, 1fr); } }
+.post-card {
+  position: relative; display: flex; flex-direction: column;
+  padding: var(--s4); background: var(--white);
+  border: 1px solid var(--rule); border-radius: var(--radius);
+  transition: border-color 0.15s ease;
+}
+.post-card:hover { border-color: var(--navy); }
+.post-card .post-art { margin-bottom: var(--s3); padding-block: var(--s3); }
+.post-card h2, .post-card h3 { font-size: 1.1875rem; margin-top: var(--s2); }
+.post-card .svc-view { margin-top: auto; padding-top: var(--s3); }
+
+/* Article head: title and standfirst beside the artwork. */
+.post-head-grid { display: grid; gap: var(--s5); align-items: center; }
+@media (min-width: 900px) { .post-head-grid { grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: var(--s6); } }
+.post-head h1 { font-size: clamp(1.9rem, 4.4vw, 2.9rem); max-width: 22ch; }
+.post-standfirst { margin-top: var(--s4); font-size: 1.1875rem; line-height: 1.6; color: var(--grey); max-width: var(--measure); }
+@media (max-width: 899px) { .post-head .post-art { display: none; } }
+
+/* The article, with a contents rail that follows on wide screens. */
+.post-layout { display: grid; gap: var(--s5); }
+@media (min-width: 1100px) {
+  .post-layout { grid-template-columns: 13rem minmax(0, 40rem); gap: var(--s7); justify-content: center; }
+}
+.post-toc { display: none; }
+@media (min-width: 1100px) { .post-toc { display: block; position: sticky; top: 120px; align-self: start; } }
+.post-toc-title { font-size: 0.8125rem; font-weight: 500; color: var(--grey); margin-bottom: var(--s2); }
+.post-toc ol { border-left: 2px solid var(--rule); }
+.post-toc li + li { margin-top: 2px; }
+.post-toc a {
+  display: block; padding: 6px var(--s3); margin-left: -2px;
+  border-left: 2px solid transparent; font-size: 0.9375rem;
+  color: var(--grey); text-decoration: none;
+}
+.post-toc a:hover { color: var(--navy); border-left-color: var(--amber); }
+
+/* What the guide covers, for readers who are scanning. */
+.post-short {
+  padding: var(--s4); background: var(--off-white);
+  border-left: 3px solid var(--amber); border-radius: var(--radius);
+}
+.post-short-title { font-family: var(--display); font-weight: 600; font-size: 1.0625rem; }
+.post-short ul { margin-top: var(--s3); display: grid; gap: var(--s2); }
+.post-short li { position: relative; padding-left: 1.5rem; font-size: 0.9875rem; line-height: 1.55; }
+.post-short li::before {
+  content: ''; position: absolute; left: 2px; top: 0.35em;
+  width: 11px; height: 6px; border: solid var(--amber-press); border-width: 0 0 2px 2px;
+  transform: rotate(-45deg);
+}
+
+.post-faq { margin-top: var(--s7); }
+.post-faq h2 { font-size: clamp(1.375rem, 3vw, 1.75rem); padding-top: var(--s4); border-top: 1px solid var(--rule); }
+.post-faq .accordion { margin-top: var(--s4); border-top: 0; }
+
+.post-author {
+  display: grid; gap: var(--s3); margin-top: var(--s6); padding: var(--s4);
+  background: var(--off-white); border: 1px solid var(--rule); border-radius: var(--radius);
+}
+@media (min-width: 640px) { .post-author { grid-template-columns: 48px 1fr; gap: var(--s4); } }
+.post-author-name { font-family: var(--display); font-weight: 600; font-size: 1.0625rem; }
+.post-author p + p { margin-top: var(--s2); }
+.post-author p:not(.post-author-name) { color: var(--grey); font-size: 0.9375rem; }
+
+/* ==========================================================================
+   Blog
+   ========================================================================== */
+
+
 
 /* Long-form body copy. The measure is the same 34em used everywhere. */
 .post-body { margin-top: var(--s2); }

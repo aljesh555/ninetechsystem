@@ -3,6 +3,18 @@ title: "How much does a website cost in Nepal?"
 description: "What a landing page, a business website and an online store cost, what moves the price up or down, and the costs that continue after launch."
 date: 2026-09-25
 category: "Costs"
+art: "website"
+takeaways:
+  - "Landing pages are NPR 20,000 to 35,000, business websites 50,000 to 1,20,000, and online stores 90,000 to 2,50,000. All exclude 13% VAT."
+  - "Most of the variation comes from five things: pages and templates, payments or logins, whether the content exists, how much is custom design, and integrations."
+  - "Domain, hosting, payment provider fees and maintenance continue every year. A quote that ignores them is incomplete."
+faqs:
+  - q: "Is VAT included in these prices?"
+    a: "No. Every figure quoted here excludes 13% VAT, which is added to the invoice."
+  - q: "Can the price change once we have agreed it?"
+    a: "Only if the scope changes. The signed proposal fixes the price, and any additional work is quoted in writing and proceeds only with your approval."
+  - q: "What is usually not included in a website price?"
+    a: "Content writing, professional photography and a bilingual Nepali version are quoted separately, because they are content work rather than build work."
 service: { label: "Website design and development", href: "/services/website" }
 ---
 

@@ -3,6 +3,18 @@ title: "Who should own your domain, hosting and logins?"
 description: "You should. Here is how to check what is registered in your name today, what to ask a vendor before you sign, and what to do if you are already locked out."
 date: 2026-09-25
 category: "Buying advice"
+art: "support"
+takeaways:
+  - "Your domain, hosting account, administrator logins and files should be registered to your business, not to whoever built the site."
+  - "You can check the domain registrant yourself with a WHOIS lookup, and check your own access by trying to add a user in the admin area."
+  - "Put the ownership questions in the proposal rather than in conversation. A straightforward supplier answers them without hesitation."
+faqs:
+  - q: "How do I check who owns my domain?"
+    a: "Run a WHOIS lookup on any registrar's website, or run whois yourdomain.com in a terminal. It shows the registrant organisation and the expiry date. If privacy protection hides the contact details, your provider can confirm the registrant on request."
+  - q: "Can I move my website to another provider?"
+    a: "If the domain, hosting and logins are in your name, yes. That is exactly why they should be registered to your business from the start."
+  - q: "What if the previous developer will not hand anything over?"
+    a: "Start with the registrar rather than the developer, and gather your evidence first: invoices, correspondence, and anything showing the domain was bought on your behalf. Registrars have a process for disputed registrations."
 service: { label: "Support and maintenance", href: "/services/support" }
 ---
 

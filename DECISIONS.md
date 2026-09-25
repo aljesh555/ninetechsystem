@@ -905,6 +905,27 @@ the build. Reading time is computed from the word count. `BlogPosting` and
 `/rss.xml` (hand-rolled, no dependency), and posts in the sitemap (22 URLs) and
 `llms.txt`.
 
+**Design, second pass.** The founder judged the first version well short of the
+reference. Studying one of its article pages showed what it had that ours did
+not: a hero image, an italic standfirst, dividers between sections, an author
+block, and a clear "read article" affordance on the index.
+
+Ours now has all of that and four things the reference does not:
+
+- **Artwork per guide, generated not photographed.** Each post names an
+  isometric scene in its frontmatter, so every guide looks like it belongs to
+  this company and no stock photography is bought. A `payments` scene was added
+  for the eSewa guide.
+- **An "In short" box** of two to five takeaways above the article, because the
+  reader is a business owner scanning, not a developer settling in.
+- **A contents rail** that follows the reader on screens above 1100px, built
+  from the article's own H2s.
+- **A questions block per guide**, carrying `FAQPage` schema, which is the part
+  most likely to win a rich result.
+
+The index leads with the newest guide at full width, with two of its takeaways,
+and the rest follow as cards. Every card carries "Read article".
+
 **Header.** Adding Blog made seven nav items, which wrapped between 900px and
 1100px. Labels stay; the bar tightens its spacing and logo in that range
 instead. Checked at 900, 1000, 1120 and 1280px.

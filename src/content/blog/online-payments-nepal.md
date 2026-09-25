@@ -3,6 +3,18 @@ title: "Taking online payments in Nepal: eSewa, Khalti and Fonepay"
 description: "What each provider is for, what the merchant accounts cost you, what integration involves, and why cash on delivery still belongs in your checkout."
 date: 2026-09-25
 category: "Payments"
+art: "payments"
+takeaways:
+  - "You need your own merchant account with each provider. It is issued to your business and cannot be shared with or borrowed from your developer."
+  - "Expect a one-time setup fee of roughly NPR 20,000 to 30,000 and about one to two percent per transaction, paid directly to the provider."
+  - "Payments must be verified on the server, not assumed from the customer returning to a success page. Keep cash on delivery as an option."
+faqs:
+  - q: "Which providers should I accept?"
+    a: "Most stores we build accept eSewa, Khalti and Fonepay together, because the cost of adding another is small once the checkout is built, and each one you leave out is a customer who has to be persuaded to pay another way."
+  - q: "Who receives the money?"
+    a: "You do. The merchant accounts are issued to your business and settle into your bank account. Your developer should never hold them."
+  - q: "Should I still offer cash on delivery?"
+    a: "Yes. It still converts customers who will not pay in advance to a shop they do not yet know. If it brings failed deliveries, confirm orders by WhatsApp or SMS before dispatch rather than removing the option."
 service: { label: "Online stores", href: "/services/website#ecommerce" }
 ---
 

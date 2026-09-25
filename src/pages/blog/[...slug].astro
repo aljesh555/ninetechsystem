@@ -1,13 +1,18 @@
 ---
-/** One blog post. Content comes from src/content/blog/<slug>.md. */
+/**
+ * One guide. Structure, in order: breadcrumb, meta, title, standfirst,
+ * artwork, what it covers in short, a contents rail that follows on desktop,
+ * the article, its questions, the related service, and who wrote it.
+ */
 import { render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import Breadcrumb from '../../components/services/Breadcrumb.astro';
 import CtaStrip from '../../components/services/CtaStrip.astro';
 import Arrow from '../../components/services/Arrow.astro';
+import { scene, icon } from '../../lib/icons.js';
 import { getPosts, readingTime, formatDate } from '../../lib/blog.js';
 import { site } from '../../data/site.js';
-import { breadcrumbList, abs, orgRef } from '../../lib/schema.js';
+import { breadcrumbList, faqPage, abs, orgRef } from '../../lib/schema.js';
 
 export async function getStaticPaths() {
   const posts = await getPosts();
@@ -18,8 +23,10 @@ export async function getStaticPaths() {
 }
 
 const { post, more } = Astro.props;
-const { Content } = await render(post);
+const { Content, headings } = await render(post);
+const sections = headings.filter((h) => h.depth === 2);
 const path = `/blog/${post.id}`;
+const published = post.data.date.toISOString().slice(0, 10);
 const crumbs = [
   { name: 'Home', path: '/' },
   { name: 'Blog', path: '/blog' },
@@ -32,58 +39,116 @@ const schema = [
     '@id': `${abs(path)}#post`,
     headline: post.data.title,
     description: post.data.description,
-    datePublished: post.data.date.toISOString().slice(0, 10),
-    dateModified: post.data.date.toISOString().slice(0, 10),
+    datePublished: published,
+    dateModified: published,
     inLanguage: 'en',
     author: orgRef,
     publisher: orgRef,
     image: abs('/og.png'),
     mainEntityOfPage: { '@type': 'WebPage', '@id': abs(path) },
     articleSection: post.data.category,
+    wordCount: post.body.trim().split(/\s+/).length,
   },
+  ...(post.data.faqs.length ? [faqPage(path, post.data.faqs)] : []),
   breadcrumbList(crumbs),
 ];
 ---
 
 <Base title={`${post.data.title} — Nine Technology`} description={post.data.description} path={path} schema={schema}>
   <article>
-    <section class="page-head">
-      <div class="wrap narrow">
+    <section class="page-head post-head">
+      <div class="wrap">
         <Breadcrumb crumbs={crumbs} />
-        <p class="post-meta">
-          <time datetime={post.data.date.toISOString().slice(0, 10)}>{formatDate(post.data.date)}</time>
-          <span aria-hidden="true">·</span>{post.data.category}
-          <span aria-hidden="true">·</span>{readingTime(post.body)} min read
-        </p>
-        <h1>{post.data.title}</h1>
-        <p class="lead">{post.data.description}</p>
+        <div class="post-head-grid">
+          <div>
+            <p class="post-meta">
+              <time datetime={published}>{formatDate(post.data.date)}</time>
+              <span aria-hidden="true">·</span>{post.data.category}
+              <span aria-hidden="true">·</span>{readingTime(post.body)} min read
+            </p>
+            <h1>{post.data.title}</h1>
+            <p class="post-standfirst">{post.data.description}</p>
+          </div>
+          <div class="post-art post-art-lg"><Fragment set:html={scene(post.data.art)} /></div>
+        </div>
       </div>
     </section>
 
     <section class="section">
-      <div class="wrap narrow">
-        <div class="post-body">
-          <Content />
-        </div>
-
-        {post.data.service && (
-          <p class="post-service">
-            Related service: <a class="link" href={post.data.service.href}>{post.data.service.label}</a>
-          </p>
+      <div class="wrap post-layout">
+        {sections.length > 2 && (
+          <aside class="post-toc">
+            <nav aria-labelledby="on-this-page">
+              <p class="post-toc-title" id="on-this-page">On this page</p>
+              <ol>
+                {sections.map((h) => <li><a href={`#${h.slug}`}>{h.text}</a></li>)}
+              </ol>
+            </nav>
+          </aside>
         )}
+
+        <div class="post-main">
+          <aside class="post-short" aria-labelledby="in-short">
+            <p class="post-short-title" id="in-short">In short</p>
+            <ul>
+              {post.data.takeaways.map((t) => <li>{t}</li>)}
+            </ul>
+          </aside>
+
+          <div class="post-body">
+            <Content />
+          </div>
+
+          {post.data.faqs.length > 0 && (
+            <section class="post-faq" aria-labelledby="post-questions">
+              <h2 id="post-questions">Questions</h2>
+              <div class="accordion faq-acc">
+                {post.data.faqs.map((f, i) => (
+                  <details class="acc" open={i === 0}>
+                    <summary>
+                      <span class="acc-title">{f.q}</span>
+                      <svg class="acc-chev" width="14" height="9" viewBox="0 0 14 9" fill="none" aria-hidden="true" focusable="false">
+                        <path d="M1 1.5L7 7.5L13 1.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                    </summary>
+                    <p>{f.a}</p>
+                  </details>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {post.data.service && (
+            <p class="post-service">
+              Related service: <a class="link" href={post.data.service.href}>{post.data.service.label}</a>
+            </p>
+          )}
+
+          <aside class="post-author">
+            <div class="post-author-mark"><Fragment set:html={icon('website', 48)} /></div>
+            <div>
+              <p class="post-author-name">Written by {site.name}</p>
+              <p>We build and run the digital systems businesses in Kathmandu depend on: websites, custom software, marketing and AI automation. This guide draws on the work we do for clients across {site.areasServed.join(', ')} and the rest of Nepal.</p>
+              <p><a class="link" href="/about">About the company</a> · <a class="link" href="/how-we-work">How we work</a></p>
+            </div>
+          </aside>
+        </div>
       </div>
     </section>
   </article>
 
   {more.length > 0 && (
     <section class="section section-tint">
-      <div class="wrap narrow">
+      <div class="wrap">
         <h2 class="h3">More guides</h2>
-        <ol class="post-list post-list-compact">
+        <ol class="post-grid stagger reveal">
           {more.map((p) => (
-            <li>
+            <li class="post-card">
+              <div class="post-art"><Fragment set:html={scene(p.data.art)} /></div>
               <p class="post-meta">{p.data.category}<span aria-hidden="true">·</span>{readingTime(p.body)} min read</p>
-              <h3><a href={`/blog/${p.id}`}>{p.data.title}</a></h3>
+              <h3><a class="post-link" href={`/blog/${p.id}`}>{p.data.title}</a></h3>
+              <p class="post-excerpt">{p.data.description}</p>
+              <span class="svc-view" aria-hidden="true">Read article <Arrow /></span>
             </li>
           ))}
         </ol>

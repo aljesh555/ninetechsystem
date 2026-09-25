@@ -3,6 +3,18 @@ title: "Website or mobile app: which does your business actually need?"
 description: "Most businesses that ask for an app need a website. Here is the test we apply, what each option costs in time and money, and when a native app genuinely earns its place."
 date: 2026-09-25
 category: "Buying advice"
+art: "app"
+takeaways:
+  - "Ask one question: will a customer open this more than once a week? If not, a mobile website or progressive web app is the right answer."
+  - "A native app is justified by daily use, push notifications, real offline use, in-app payments, or the app being the product itself."
+  - "Native means store approval on every release, developer accounts paid by you, and updates every year to stay accepted."
+faqs:
+  - q: "What is a progressive web app?"
+    a: "A website built to behave like an app. It loads in a browser, works on Android and iPhone from one build, can be added to the home screen, and needs no store approval."
+  - q: "How long does a native app take to build?"
+    a: "Usually eight to sixteen weeks for both platforms, depending on the features. A progressive web app is measured in weeks."
+  - q: "Who pays the App Store and Play Store fees?"
+    a: "You do, directly to Apple and Google. The developer accounts are registered in your name, and Apple's renews annually."
 service: { label: "Mobile app development", href: "/services/app" }
 ---
 

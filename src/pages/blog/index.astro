@@ -1,13 +1,15 @@
 ---
 /**
- * The blog index. Newest first, with the date, category and reading time, in
- * the manner of a reading list rather than a magazine. Posts live in
- * src/content/blog/ as markdown.
+ * The blog index. The newest guide leads at full width; the rest follow as
+ * cards. Each carries its own isometric artwork, so no stock photography is
+ * needed and every guide looks like it belongs to this company.
  */
 import Base from '../../layouts/Base.astro';
 import Breadcrumb from '../../components/services/Breadcrumb.astro';
 import FallHeading from '../../components/services/FallHeading.astro';
 import CtaStrip from '../../components/services/CtaStrip.astro';
+import Arrow from '../../components/services/Arrow.astro';
+import { scene } from '../../lib/icons.js';
 import { getPosts, readingTime, formatDate } from '../../lib/blog.js';
 import { site } from '../../data/site.js';
 import { breadcrumbList, abs, orgRef } from '../../lib/schema.js';
@@ -18,6 +20,7 @@ const crumbs = [
   { name: 'Blog', path },
 ];
 const posts = await getPosts();
+const [featured, ...rest] = posts;
 const categories = [...new Set(posts.map((p) => p.data.category))];
 
 const schema = [
@@ -60,27 +63,49 @@ const schema = [
     </div>
   </section>
 
-  <section class="section">
-    <div class="wrap narrow">
-      {posts.length === 0 ? (
-        <p class="lead">The first guides are being written and will appear here shortly.</p>
-      ) : (
-        <ol class="post-list">
-          {posts.map((p) => (
-            <li>
-              <p class="post-meta">
-                <time datetime={p.data.date.toISOString().slice(0, 10)}>{formatDate(p.data.date)}</time>
-                <span aria-hidden="true">·</span>{p.data.category}
-                <span aria-hidden="true">·</span>{readingTime(p.body)} min read
-              </p>
-              <h2><a href={`/blog/${p.id}`}>{p.data.title}</a></h2>
-              <p class="post-excerpt">{p.data.description}</p>
-            </li>
-          ))}
-        </ol>
-      )}
-    </div>
-  </section>
+  {posts.length === 0 ? (
+    <section class="section">
+      <div class="wrap narrow"><p class="lead">The first guides are being written and will appear here shortly.</p></div>
+    </section>
+  ) : (
+    <section class="section">
+      <div class="wrap">
+        <article class="post-featured reveal">
+          <div class="post-art post-art-lg"><Fragment set:html={scene(featured.data.art)} /></div>
+          <div class="post-featured-copy">
+            <p class="post-meta">
+              <span class="post-badge">Latest</span>
+              <time datetime={featured.data.date.toISOString().slice(0, 10)}>{formatDate(featured.data.date)}</time>
+              <span aria-hidden="true">·</span>{featured.data.category}
+              <span aria-hidden="true">·</span>{readingTime(featured.body)} min read
+            </p>
+            <h2><a class="post-link" href={`/blog/${featured.id}`}>{featured.data.title}</a></h2>
+            <p class="post-excerpt">{featured.data.description}</p>
+            <ul class="post-takeaways">
+              {featured.data.takeaways.slice(0, 2).map((t) => <li>{t}</li>)}
+            </ul>
+            <span class="svc-view" aria-hidden="true">Read article <Arrow /></span>
+          </div>
+        </article>
+
+        {rest.length > 0 && (
+          <ol class="post-grid stagger reveal">
+            {rest.map((p) => (
+              <li class="post-card">
+                <div class="post-art"><Fragment set:html={scene(p.data.art)} /></div>
+                <p class="post-meta">
+                  {p.data.category}<span aria-hidden="true">·</span>{readingTime(p.body)} min read
+                </p>
+                <h2><a class="post-link" href={`/blog/${p.id}`}>{p.data.title}</a></h2>
+                <p class="post-excerpt">{p.data.description}</p>
+                <span class="svc-view" aria-hidden="true">Read article <Arrow /></span>
+              </li>
+            ))}
+          </ol>
+        )}
+      </div>
+    </section>
+  )}
 
   <CtaStrip
     heading="A question we have not covered?"
