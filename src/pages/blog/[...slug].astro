@@ -8,6 +8,7 @@ import { render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import Breadcrumb from '../../components/services/Breadcrumb.astro';
 import CtaStrip from '../../components/services/CtaStrip.astro';
+import FallHeading from '../../components/services/FallHeading.astro';
 import Arrow from '../../components/services/Arrow.astro';
 import { scene, icon } from '../../lib/icons.js';
 import { getPosts, readingTime, formatDate } from '../../lib/blog.js';
@@ -67,7 +68,7 @@ const schema = [
               <span aria-hidden="true">·</span>{post.data.category}
               <span aria-hidden="true">·</span>{readingTime(post.body)} min read
             </p>
-            <h1>{post.data.title}</h1>
+            <FallHeading as="h1" text={post.data.title} now />
             <p class="post-standfirst">{post.data.description}</p>
           </div>
           <div class="post-art post-art-lg"><Fragment set:html={scene(post.data.art)} /></div>
@@ -101,8 +102,8 @@ const schema = [
           </div>
 
           {post.data.faqs.length > 0 && (
-            <section class="post-faq" aria-labelledby="post-questions">
-              <h2 id="post-questions">Questions</h2>
+            <section class="post-faq" aria-label="Questions about this guide">
+              <FallHeading text="Questions" />
               <div class="accordion faq-acc">
                 {post.data.faqs.map((f, i) => (
                   <details class="acc" open={i === 0}>
@@ -126,7 +127,7 @@ const schema = [
           )}
 
           <aside class="post-author">
-            <div class="post-author-mark"><Fragment set:html={icon('website', 48)} /></div>
+            <div class="post-author-mark"><Fragment set:html={icon('users', 48)} /></div>
             <div>
               <p class="post-author-name">Written by {site.name}</p>
               <p>We build and run the digital systems businesses in Kathmandu depend on: websites, custom software, marketing and AI automation. This guide draws on the work we do for clients across {site.areasServed.join(', ')} and the rest of Nepal.</p>
@@ -141,7 +142,7 @@ const schema = [
   {more.length > 0 && (
     <section class="section section-tint">
       <div class="wrap">
-        <h2 class="h3">More guides</h2>
+        <FallHeading text="More guides" class="h3" />
         <ol class="post-grid stagger reveal">
           {more.map((p) => (
             <li class="post-card">

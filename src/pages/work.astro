@@ -12,6 +12,8 @@ import Slot from '../components/Slot.astro';
 import Breadcrumb from '../components/services/Breadcrumb.astro';
 import FallHeading from '../components/services/FallHeading.astro';
 import CtaStrip from '../components/services/CtaStrip.astro';
+import Facts from '../components/services/Facts.astro';
+import { icon } from '../lib/icons.js';
 import { site } from '../data/site.js';
 import { projects } from '../data/projects.js';
 import { breadcrumbList, abs, orgRef } from '../lib/schema.js';
@@ -22,6 +24,20 @@ const crumbs = [
   { name: 'Work', path },
 ];
 const consult = { label: 'Request a consultation', href: '/contact' };
+
+const facts = [
+  { icon: 'launch', value: 'Live sites', label: 'Open them and judge for yourself' },
+  { icon: 'lock', value: 'Shown with permission', label: 'Named only when the client agrees' },
+  { icon: 'software', value: 'Run by the client', label: 'Each one has its own admin' },
+  { icon: 'search', value: 'Built to be found', label: 'Marked up for local search' },
+];
+
+// What a consultation covers, in the order we would actually go through it.
+const showYou = [
+  { icon: 'website', text: 'The live site or system opened on a phone, so you can see how it loads on mobile data rather than on office wifi.' },
+  { icon: 'software', text: 'The admin side: the part you would use every day to change prices, add people or answer enquiries.' },
+  { icon: 'coins', text: 'What it cost, how long it took, and what changed for the business afterwards.' },
+];
 
 const schema = [
   ...(projects.length
@@ -58,6 +74,7 @@ const schema = [
       <p class="kicker">Work</p>
       <FallHeading as="h1" text="Our work" stop now />
       <p class="lead">A project appears here only once the client has given written permission to be named and shown. Every site linked below is live, so you can open it, load it on your own phone and judge the work rather than take our word for it.</p>
+      <Facts facts={facts} />
     </div>
   </section>
 
@@ -107,17 +124,20 @@ const schema = [
   )}
 
   <section class="section section-tint">
-    <div class="wrap split">
-      <div class="split-head">
-        <h2>What we would show you</h2>
-        <p>More than fits on a page. Ask, and we will take you through it on a call or in person.</p>
+    <div class="wrap">
+      <div class="section-head">
+        <FallHeading text="What we would show you" />
+        <p class="lead">More than fits on a page. Ask, and we will take you through it on a call or in person.</p>
       </div>
-      <div class="prose">
-        <p>The live site or system opened on a phone, so you can see how it loads on mobile data rather than on office wifi.</p>
-        <p>The admin side: the part you would actually use every day to change prices, add products or answer enquiries.</p>
-        <p>What it cost, how long it took, and what changed for the business afterwards.</p>
-        <p class="section-body"><a class="link" href="/services">See what we do</a></p>
-      </div>
+      <ul class="show-you stagger reveal">
+        {showYou.map((item) => (
+          <li>
+            <Fragment set:html={icon(item.icon, 52)} />
+            <p>{item.text}</p>
+          </li>
+        ))}
+      </ul>
+      <p class="section-body"><a class="link" href="/services">See what we do</a></p>
     </div>
   </section>
 

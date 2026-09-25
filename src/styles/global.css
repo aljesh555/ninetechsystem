@@ -934,6 +934,12 @@ h1 + .lead, h2 + .lead { margin-top: var(--s3); }
 .case-foot { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s3); margin-top: var(--s5); }
 .case-chips { margin-top: 0; }
 
+/* What a consultation covers, on /work. One icon per point. */
+.show-you { display: grid; gap: var(--s4); margin-top: var(--s2); }
+@media (min-width: 760px) { .show-you { grid-template-columns: repeat(3, 1fr); gap: var(--s5); } }
+.show-you li { padding: var(--s4); background: var(--white); border: 1px solid var(--rule); border-radius: var(--radius); }
+.show-you p { margin-top: var(--s3); color: var(--grey); }
+
 .sector-proof { margin-top: var(--s3); }
 
 .case-built li::before {
