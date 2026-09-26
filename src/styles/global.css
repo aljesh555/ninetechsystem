@@ -422,14 +422,17 @@ html:not(.js) .menu-toggle { display: none; }
 .commitment > svg { margin-bottom: var(--s2); }
 
 /* The company's own details, and the two office photographs side by side. */
-.company-facts { display: grid; gap: 0; margin-top: var(--s5); }
+/* The registered details beside the place itself: a list alone said the
+   company exists, the map shows you where to find it. */
+.company-grid { display: grid; gap: var(--s5); margin-top: var(--s5); align-items: start; }
+@media (min-width: 900px) { .company-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr); gap: var(--s6); } }
+.company-where .map { margin-top: 0; }
+.company-facts { display: grid; gap: 0; margin-top: 0; }
 .company-facts > div { display: grid; gap: 2px; border-top: 1px solid var(--rule); padding-block: var(--s3); }
 @media (min-width: 640px) { .company-facts > div { grid-template-columns: 200px 1fr; gap: var(--s4); } }
 .company-facts dt { color: var(--grey); font-size: 0.9375rem; }
 .company-facts dd { font-weight: 500; }
 .company-director { display: block; }
-.office-pair { display: grid; gap: var(--s4); margin-top: var(--s5); }
-@media (min-width: 760px) { .office-pair { grid-template-columns: 1fr 1fr; gap: var(--s5); } }
 
 /* --- image slots --------------------------------------------------------- */
 

@@ -9,7 +9,9 @@
  * full version.
  */
 import Base from '../layouts/Base.astro';
+import { Picture } from 'astro:assets';
 import Slot from '../components/Slot.astro';
+import mapImage from '../images/map-lazimpat.png';
 import BuildHero from '../components/services/BuildHero.astro';
 import FallHeading from '../components/services/FallHeading.astro';
 import HowWeWork from '../components/HowWeWork.astro';
@@ -117,19 +119,30 @@ const schema = [
         <FallHeading text="The company" />
         <p class="lead">Registered, addressed and reachable. If you would rather talk in person, the office is on Lazimpat Road and you are welcome to come in.</p>
       </div>
-      <dl class="company-facts">
-        <div><dt>Registered name</dt><dd>{site.legalName}</dd></div>
-        <div>
-          <dt>Directors</dt>
-          <dd>{people.map((d) => <span class="company-director">{d.name}, {d.title}</span>)}</dd>
+      <div class="company-grid">
+        <dl class="company-facts">
+          <div><dt>Registered name</dt><dd>{site.legalName}</dd></div>
+          <div>
+            <dt>Directors</dt>
+            <dd>{people.map((d) => <span class="company-director">{d.name}, {d.title}</span>)}</dd>
+          </div>
+          <div><dt>Address</dt><dd>{site.address.display}</dd></div>
+          <div><dt>Founded</dt><dd>{site.founded}</dd></div>
+          <div><dt>Areas served</dt><dd>{site.areasServed.join(', ')} and the rest of Nepal</dd></div>
+          <div><dt>Opening hours</dt><dd>{site.hours}</dd></div>
+        </dl>
+
+        <div class="company-where">
+          <a class="map" href={site.mapLink} rel="noopener" aria-label="Open Nine Technology’s location in Google Maps">
+            <Picture src={mapImage} alt="Map showing Nine Technology on Lazimpat Road, Kathmandu" widths={[400, 800, 1200]} sizes="(min-width: 900px) 480px, 100vw" formats={['avif', 'webp']} loading="lazy" decoding="async" />
+          </a>
+          <p class="slot-caption">Map data © OpenStreetMap contributors. Tap the map to open directions.</p>
+          {/* Optional: grey frames would say less than nothing until the
+              photographs exist. See IMAGES.md. */}
+          <Slot name="office-exterior" alt="The Nine Technology office on Lazimpat Road, Kathmandu" ratio="3-2" optional class="section-body" sizes="(min-width: 900px) 480px, 100vw" caption="Our office on Lazimpat Road" />
+          <Slot name="office-interior" alt="Inside the Nine Technology office, Lazimpat, Kathmandu" ratio="3-2" optional class="section-body" sizes="(min-width: 900px) 480px, 100vw" caption="Where the work is done" />
+          <p class="section-body"><a class="link" href="/contact">Get directions and opening hours</a></p>
         </div>
-        <div><dt>Address</dt><dd>{site.address.display}</dd></div>
-        <div><dt>Founded</dt><dd>{site.founded}</dd></div>
-        <div><dt>Areas served</dt><dd>{site.areasServed.join(', ')} and the rest of Nepal</dd></div>
-      </dl>
-      <div class="office-pair">
-        <Slot name="office-exterior" alt="The Nine Technology office on Lazimpat Road, Kathmandu" ratio="3-2" sizes="(min-width: 900px) 440px, 100vw" caption="Our office on Lazimpat Road" />
-        <Slot name="office-interior" alt="Inside the Nine Technology office, Lazimpat, Kathmandu" ratio="3-2" sizes="(min-width: 900px) 440px, 100vw" caption="Where the work is done" />
       </div>
     </div>
   </section>
