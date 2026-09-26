@@ -208,7 +208,7 @@ a { color: inherit; }
    carries the phone number, WhatsApp and the menu, so the wordmark goes alone.
    Both are the founder's own arrangements — neither is assembled here. */
 .brand-full { display: none; }
-.brand-full svg { width: 186px; height: auto; aspect-ratio: 735 / 294; }
+.brand-full svg { width: 186px; height: auto; aspect-ratio: 681 / 294; }
 .brand-wm svg { width: 118px; height: auto; aspect-ratio: 608 / 259; }
 @media (min-width: 900px) {
   .brand-full { display: block; }
@@ -223,21 +223,25 @@ a { color: inherit; }
   .nav-desktop a { font-size: 0.9375rem; text-decoration: none; padding-block: var(--s1); }
   .nav-desktop a:hover { color: var(--navy); text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 0.3em; text-decoration-color: var(--amber); }
   .nav-desktop a[aria-current] { font-weight: 500; }
-  .nav-desktop a, .nav-desktop .btn { white-space: nowrap; }
-  .nav-desktop .btn { min-height: 42px; margin-left: var(--s2); }
+  .nav-desktop a { white-space: nowrap; }
 }
 /* Seven items plus the button need tighter spacing before the bar is wide
    enough to hold them comfortably. */
 @media (min-width: 900px) and (max-width: 1119px) {
   .nav-desktop { gap: var(--s3); }
   .nav-desktop a { font-size: 0.875rem; }
-  .nav-desktop .btn { padding: 0 1rem; margin-left: var(--s1); font-size: 0.9375rem; }
+  .header-action { padding: 0 1rem; font-size: 0.9375rem; }
   .brand-full svg { width: 160px; }
 }
 
-/* Mobile: the phone number and WhatsApp never hide behind the menu. */
+/* The direct routes sit in the bar at every width, never behind the menu.
+   On a phone that is the number, WhatsApp and the menu button; on a wide
+   screen it is the number and the action, since a local business is called
+   as often as it is written to. */
 .header-direct { display: flex; align-items: center; gap: var(--s2); margin-left: auto; }
-@media (min-width: 900px) { .header-direct { display: none; } }
+.header-action { min-height: 42px; white-space: nowrap; }
+@media (max-width: 899px) { .header-action { display: none; } }
+@media (min-width: 900px) { .header-direct { gap: var(--s3); margin-left: var(--s3); } }
 .header-tel {
   display: inline-flex; align-items: center; gap: 6px;
   font-size: 0.8125rem; font-weight: 500; text-decoration: none;
@@ -249,6 +253,16 @@ a { color: inherit; }
 }
 .header-icon:hover { background: var(--off-white); }
 .menu-toggle { background: none; border: 1px solid var(--rule); border-radius: var(--radius); width: 44px; height: 44px; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; }
+
+/* Placed after the rules above, which are unconditional and would otherwise
+   win on source order. Seven links, the number, WhatsApp and the action only
+   fit together on a wide bar; between 900 and 1199 the links and the action
+   take the room, and the direct routes stay on the contact page and in the
+   footer. */
+@media (min-width: 900px) and (max-width: 1199px) {
+  .header-tel, .header-icon { display: none; }
+}
+@media (min-width: 1200px) { .header-tel { font-size: 0.875rem; } }
 
 /* The menu only collapses when JavaScript is there to open it again. */
 .nav-mobile { border-top: 1px solid var(--rule); padding-block: var(--s3) var(--s4); }
@@ -580,7 +594,7 @@ html:not(.js) .menu-toggle { display: none; }
 .footer-all { color: var(--amber); }
 .footer-cta { margin-top: var(--s4); width: 100%; justify-content: center; }
 .footer .mark { display: block; width: 168px; margin-bottom: var(--s4); }
-.footer .mark svg { width: 100%; height: auto; aspect-ratio: 735 / 294; }
+.footer .mark svg { width: 100%; height: auto; aspect-ratio: 681 / 294; }
 .footer h2 { font-family: var(--sans); font-size: 0.8125rem; font-weight: 500; color: rgba(255, 255, 255, 0.55); letter-spacing: 0; margin-bottom: var(--s3); }
 .footer a { text-decoration: none; }
 .footer a:hover { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 0.25em; text-decoration-color: var(--amber); }

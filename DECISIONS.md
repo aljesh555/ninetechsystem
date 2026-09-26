@@ -968,3 +968,27 @@ long-lived caching.
 | Security grep of `dist/` | clean |
 | JSON-LD | 31 nodes across 6 pages, all parse, all typed, no dangling `@id` references |
 | Reduced motion | every screenshot in this build was taken with it forced on |
+
+### The lockup closes up
+
+As delivered, the gap between the 9 and the wordmark measured 114 units
+against a symbol 201 wide: 57% of the symbol's own width. At header size the
+two halves read as two marks sitting near each other rather than one lockup,
+which is what the founder saw.
+
+`scripts/prepare-brand.mjs` now moves the wordmark 54 units left, bringing the
+gap to 30% of the symbol, and takes the same 54 units off `TIGHT_FULL`. The
+artwork is not redrawn: the wordmark is translated as a group, and the source
+files in `assets/brand/source/` remain exactly as delivered. The shift is
+applied after svgo, which is what reduces the delivered fifteen paths in
+nested groups to a symbol followed by the wordmark.
+
+`aspect-ratio` on `.brand-full svg` and `.footer .mark svg` follows the new
+viewBox at 681 / 294.
+
+### "Get a quote" becomes "Start a project"
+
+The header asked for a price before the site had said anything. It also
+contradicted the position every other page takes, which is that the work
+begins with a consultation and a written proposal, not a number. The action
+now names the thing the visitor wants to do.

@@ -47,7 +47,15 @@ const OUT = 'assets/brand';
 
 // Measured from the rendered artwork; see DECISIONS.md.
 const TIGHT_WORDMARK = '91 88 608 259';
-const TIGHT_FULL = '23 23 735 294';
+const TIGHT_FULL = '23 23 681 294';
+
+// As delivered, the gap between the 9 and the wordmark is 114 units against a
+// symbol 201 wide — 57% of the symbol's own width, so the two halves read as
+// two marks rather than one lockup. Closing it by 54 units brings the gap to
+// roughly 30% of the symbol, which is where a lockup holds together. The
+// artwork itself is untouched: the wordmark is moved, not redrawn, and
+// TIGHT_FULL above loses the same 54 units of width.
+const LOCKUP_CLOSE = 54;
 
 const clean = (svg) =>
   svg
@@ -91,7 +99,25 @@ for (const name of (await readdir(SRC)).filter((f) => f.endsWith('.svg')).sort()
       .replace(/viewBox="[^"]*"/, `viewBox="${box}"`);
   }
 
-  svg = decorative(svgo(svg, name)) + '\n';
+  svg = svgo(svg, name);
+
+  if (name.startsWith('logo-full')) {
+    // Applied after svgo, which is what reduces the delivered fifteen paths in
+    // nested groups to a symbol followed by the wordmark. The symbol is the
+    // first path; everything after it, the full stop included, moves together.
+    const parts = svg.match(/<path[^>]*\/>/g) ?? [];
+    if (parts.length < 2) {
+      console.warn(`  ! ${name}: expected a symbol then a wordmark, found ${parts.length} paths`);
+    } else {
+      const [symbol, ...word] = parts;
+      svg = svg.replace(
+        /<path[\s\S]*<\/svg>/,
+        `${symbol}<g transform="translate(-${LOCKUP_CLOSE} 0)">${word.join('')}</g></svg>`,
+      );
+    }
+  }
+
+  svg = decorative(svg) + '\n';
   await writeFile(join(OUT, name), svg);
   total += svg.length;
   console.log(`  ${name.padEnd(30)} ${String(raw.length).padStart(6)} -> ${String(svg.length).padStart(5)} bytes`);
