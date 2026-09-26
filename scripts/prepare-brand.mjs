@@ -47,15 +47,15 @@ const OUT = 'assets/brand';
 
 // Measured from the rendered artwork; see DECISIONS.md.
 const TIGHT_WORDMARK = '91 88 608 259';
-const TIGHT_FULL = '23 23 681 294';
+const TIGHT_FULL = '23 23 665 294';
 
 // As delivered, the gap between the 9 and the wordmark is 114 units against a
 // symbol 201 wide — 57% of the symbol's own width, so the two halves read as
 // two marks rather than one lockup. Closing it by 54 units brings the gap to
-// roughly 30% of the symbol, which is where a lockup holds together. The
+// roughly 22% of the symbol, which is where a lockup holds together. The
 // artwork itself is untouched: the wordmark is moved, not redrawn, and
 // TIGHT_FULL above loses the same 54 units of width.
-const LOCKUP_CLOSE = 54;
+const LOCKUP_CLOSE = 70;
 
 const clean = (svg) =>
   svg
