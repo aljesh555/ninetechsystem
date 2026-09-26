@@ -68,15 +68,15 @@ export const nav = [
  */
 export const people = [
   {
-    name: 'Anis Raut',
-    title: 'Managing Director',
-    slot: 'portrait-anis',
-    role: '',
-  },
-  {
     name: 'Raju Thapa',
     title: 'Director',
     slot: 'portrait-raju',
+    role: '',
+  },
+  {
+    name: 'Anis Raut',
+    title: 'Managing Director',
+    slot: 'portrait-anis',
     role: '',
   },
 ];
