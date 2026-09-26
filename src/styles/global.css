@@ -432,7 +432,6 @@ html:not(.js) .menu-toggle { display: none; }
 @media (min-width: 640px) { .company-facts > div { grid-template-columns: 200px 1fr; gap: var(--s4); } }
 .company-facts dt { color: var(--grey); font-size: 0.9375rem; }
 .company-facts dd { font-weight: 500; }
-.company-director { display: block; }
 
 /* --- image slots --------------------------------------------------------- */
 

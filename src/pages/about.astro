@@ -122,14 +122,11 @@ const schema = [
       <div class="company-grid">
         <dl class="company-facts">
           <div><dt>Registered name</dt><dd>{site.legalName}</dd></div>
-          <div>
-            <dt>Directors</dt>
-            <dd>{people.map((d) => <span class="company-director">{d.name}, {d.title}</span>)}</dd>
-          </div>
-          <div><dt>Address</dt><dd>{site.address.display}</dd></div>
+          <div><dt>Founders</dt><dd>{people.map((d) => d.name).join(' and ')}</dd></div>
           <div><dt>Founded</dt><dd>{site.founded}</dd></div>
-          <div><dt>Areas served</dt><dd>{site.areasServed.join(', ')} and the rest of Nepal</dd></div>
+          <div><dt>Address</dt><dd>{site.address.display}</dd></div>
           <div><dt>Opening hours</dt><dd>{site.hours}</dd></div>
+          <div><dt>Areas served</dt><dd>{site.areasServed.join(', ')} and the rest of Nepal</dd></div>
         </dl>
 
         <div class="company-where">
