@@ -262,7 +262,21 @@ html:not(.js) .menu-toggle { display: none; }
 
 /* --- hero ---------------------------------------------------------------- */
 
-.hero { background: var(--navy); color: var(--white); padding-block: var(--s7) var(--s8); }
+.hero { background: var(--navy); color: var(--white); padding-block: var(--s7) var(--s8); position: relative; overflow: hidden; }
+
+/* The isometric grid the artwork is drawn on, continued behind it: the same
+   30 degree axes as every scene, so the hero reads as one drawing rather than
+   a picture pasted onto a flat panel. Masked to fade out before it reaches
+   the headline, where lines behind type would only make it harder to read. */
+.hero::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background-image:
+    repeating-linear-gradient(30deg, rgba(255, 255, 255, 0.07) 0 1px, transparent 1px 74px),
+    repeating-linear-gradient(-30deg, rgba(255, 255, 255, 0.07) 0 1px, transparent 1px 74px);
+  -webkit-mask-image: radial-gradient(120% 105% at 78% 42%, #000 8%, transparent 70%);
+  mask-image: radial-gradient(120% 105% at 78% 42%, #000 8%, transparent 70%);
+}
+.hero > * { position: relative; }
 @media (min-width: 720px) { .hero { padding-block: var(--s8); } }
 .hero .display { max-width: 14ch; }
 .hero h1 {
