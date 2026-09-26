@@ -68,33 +68,37 @@ const schema = [
         <p class="lead">Tell us what the business does and what you need. The more specific you are, the more useful our first reply will be.</p>
 
         <form class="form" id="contact-form" method="post" action="/api/contact" data-phone={site.phoneDisplay} data-phone-chars={PHONE_CHARS.source} data-min-ms={MIN_FILL_MS} data-need-aliases={JSON.stringify(needAliases)} novalidate>
-          <div class="field">
-            <label for="name">Your name</label>
-            <input id="name" name="name" type="text" autocomplete="name" required maxlength="80" />
+          <div class="field-row">
+            <div class="field">
+              <label for="name">Your name</label>
+              <input id="name" name="name" type="text" autocomplete="name" required maxlength="80" />
+            </div>
+
+            <div class="field">
+              <label for="phone">Phone number<span class="hint">So we can call or WhatsApp you back.</span></label>
+              <input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" required maxlength="24" />
+            </div>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="business">Business type</label>
+              <select id="business" name="business" required>
+                <option value="">Choose one</option>
+                {businessTypes.map((t) => <option value={t}>{t}</option>)}
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="need">Service<span class="hint">The closest match. "Not sure yet" is fine.</span></label>
+              <select id="need" name="need">
+                {needs.map((n) => <option value={n.value} selected={n.value === 'not-sure'}>{n.label}</option>)}
+              </select>
+            </div>
           </div>
 
           <div class="field">
-            <label for="phone">Phone number<span class="hint">So we can call or WhatsApp you back. Digits, spaces, + and - are fine.</span></label>
-            <input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" required maxlength="24" />
-          </div>
-
-          <div class="field">
-            <label for="business">Business type</label>
-            <select id="business" name="business" required>
-              <option value="">Choose one</option>
-              {businessTypes.map((t) => <option value={t}>{t}</option>)}
-            </select>
-          </div>
-
-          <div class="field">
-            <label for="need">Service<span class="hint">The closest match. "Not sure yet" is fine.</span></label>
-            <select id="need" name="need">
-              {needs.map((n) => <option value={n.value} selected={n.value === 'not-sure'}>{n.label}</option>)}
-            </select>
-          </div>
-
-          <div class="field">
-            <label for="message">Tell us about it<span class="hint">What the business does and what you need. The more specific, the more useful our first reply.</span></label>
+            <label for="message">Tell us about it<span class="hint">Anything that helps: your current website, a deadline, or what you have already tried.</span></label>
             <textarea id="message" name="message" required minlength="10" maxlength="2000"></textarea>
           </div>
 
@@ -121,6 +125,7 @@ const schema = [
 
       <div>
         <FallHeading text="Where we are" />
+        <div class="visit">
         <a class="map" href={site.mapLink} rel="noopener" aria-label="Open Nine Technology’s location in Google Maps">
           <Picture src={mapImage} alt="Map showing Nine Technology on Lazimpat Road, Kathmandu" widths={[400, 800, 1200]} sizes="(min-width: 900px) 520px, 100vw" formats={['avif', 'webp']} loading="lazy" decoding="async" />
         </a>
@@ -154,6 +159,7 @@ const schema = [
             <dd>{site.areasServed.join(', ')} in person, and remote work anywhere in Nepal.</dd>
           </div>
         </dl>
+        </div>
       </div>
     </div>
   </section>
