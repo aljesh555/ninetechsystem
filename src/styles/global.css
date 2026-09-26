@@ -556,13 +556,22 @@ html:not(.js) .menu-toggle { display: none; }
 
 .footer { background: var(--navy-deep); color: rgba(255, 255, 255, 0.78); padding-block: var(--s7) var(--s5); font-size: 0.9375rem; }
 .footer-grid { display: grid; gap: var(--s5); }
-@media (min-width: 760px) { .footer-grid { grid-template-columns: 1.4fr 1fr 1fr; gap: var(--s6); } }
+@media (min-width: 620px) { .footer-grid { grid-template-columns: 1fr 1fr; gap: var(--s6) var(--s5); } }
+@media (min-width: 1000px) { .footer-grid { grid-template-columns: 1.4fr 1fr 1fr 1.25fr; gap: var(--s5); } }
+@media (min-width: 620px) and (max-width: 999px) { .footer-brand { grid-column: 1 / -1; } }
+
+/* The social accounts sit under the blurb, in a row rather than a column:
+   four one-word links stacked would read as another navigation block. */
+.footer-social { display: flex; flex-wrap: wrap; gap: var(--s2) var(--s3); margin-top: var(--s4); }
+.footer-all { color: var(--amber); }
+.footer-cta { margin-top: var(--s4); width: 100%; justify-content: center; }
 .footer .mark { display: block; width: 168px; margin-bottom: var(--s4); }
 .footer .mark svg { width: 100%; height: auto; aspect-ratio: 735 / 294; }
 .footer h2 { font-family: var(--sans); font-size: 0.8125rem; font-weight: 500; color: rgba(255, 255, 255, 0.55); letter-spacing: 0; margin-bottom: var(--s3); }
 .footer a { text-decoration: none; }
 .footer a:hover { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 0.25em; text-decoration-color: var(--amber); }
 .footer li + li { margin-top: var(--s2); }
+.footer .footer-social li + li { margin-top: 0; }
 .footer .np { color: rgba(255, 255, 255, 0.6); font-size: 0.875rem; }
 .footer-bottom { margin-top: var(--s6); padding-top: var(--s4); border-top: 1px solid rgba(255, 255, 255, 0.14); display: flex; flex-wrap: wrap; gap: var(--s3) var(--s4); justify-content: space-between; font-size: 0.875rem; color: rgba(255, 255, 255, 0.55); }
 

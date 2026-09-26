@@ -1,45 +1,84 @@
 ---
+/**
+ * The footer. Four columns: who we are, what we do, the rest of the site, and
+ * how to reach us.
+ *
+ * The services are listed here deliberately. They are eleven pages deep in the
+ * site and the footer is the only place every page links to all of them, which
+ * is how a visitor two clicks in finds the one they actually want.
+ */
 import { site, nav } from '../data/site.js';
 // The same generated lockup as the header, inlined: no copy in public/ to drift.
 import fullLockup from '../../assets/brand/logo-full-white.svg?raw';
+
+// Short labels: the service pages carry long descriptive titles for search,
+// which would wrap three lines in a footer column.
+const services = [
+  { label: 'Websites and stores', href: '/services/website' },
+  { label: 'Custom software', href: '/services/software' },
+  { label: 'Mobile apps', href: '/services/app' },
+  { label: 'Digital marketing', href: '/services/grow' },
+  { label: 'AI automation', href: '/services/automate' },
+  { label: 'Support and care', href: '/services/support' },
+];
+
+// Everything else worth reaching, in the order someone deciding would read it.
+const company = [
+  { label: 'How we work', href: '/how-we-work' },
+  { label: 'Our work', href: '/work' },
+  { label: 'Sectors we work in', href: '/sectors' },
+  { label: 'Guides', href: '/blog' },
+  { label: 'About', href: '/about' },
+  { label: 'Contact', href: '/contact' },
+];
+
+// Built now, so the notice is right whenever the site is rebuilt.
+const year = new Date().getFullYear();
+const copyright = year > Number(site.founded) ? `${site.founded}–${year}` : site.founded;
 ---
 
 <footer class="footer">
   <div class="wrap">
     <div class="footer-grid">
-      <div>
-        <span class="mark" role="img" aria-label="Nine Technology"><Fragment set:html={fullLockup} /></span>
+      <div class="footer-brand">
+        <span class="mark" role="img" aria-label={site.name}><Fragment set:html={fullLockup} /></span>
         <p>We build websites, software and AI automation for businesses in Nepal — then we market it, automate it and keep it running.</p>
         <p class="np" lang="ne">{site.nepaliName}</p>
+        <ul class="footer-social">
+          {site.social.map((s) => <li><a href={s.url} rel="noopener me">{s.name}</a></li>)}
+        </ul>
       </div>
 
-      <div>
-        <h2>Contact</h2>
+      <nav aria-labelledby="footer-services">
+        <h2 id="footer-services">Services</h2>
         <ul>
+          {services.map((s) => <li><a href={s.href}>{s.label}</a></li>)}
+          <li><a class="footer-all" href="/services">All services</a></li>
+        </ul>
+      </nav>
+
+      <nav aria-labelledby="footer-company">
+        <h2 id="footer-company">Company</h2>
+        <ul>
+          {company.map((c) => <li><a href={c.href}>{c.label}</a></li>)}
+        </ul>
+      </nav>
+
+      <div>
+        <h2 id="footer-contact">Contact</h2>
+        <ul aria-labelledby="footer-contact">
           <li><a href={site.phoneHref}>{site.phoneDisplay}</a></li>
           <li><a href={site.whatsapp} rel="noopener">WhatsApp</a></li>
-          <li>
-            <a href={site.emailHref}>{site.email}</a>
-          </li>
+          <li><a href={site.emailHref}>{site.email}</a></li>
           <li>{site.address.display}</li>
           <li>{site.hours}</li>
         </ul>
-      </div>
-
-      <div>
-        <h2>Pages</h2>
-        <ul>
-          {nav.map((item) => <li><a href={item.href}>{item.label}</a></li>)}
-        </ul>
-        <h2 class="footer-h2-gap">Follow</h2>
-        <ul>
-          {site.social.map((s) => <li><a href={s.url} rel="noopener me">{s.name}</a></li>)}
-        </ul>
+        <a class="btn btn-primary footer-cta" href="/contact">Request a consultation</a>
       </div>
     </div>
 
     <div class="footer-bottom">
-      <span>© {site.founded} {site.legalName}</span>
+      <span>© {copyright} {site.legalName}</span>
       <span>{site.tagline}</span>
     </div>
   </div>
