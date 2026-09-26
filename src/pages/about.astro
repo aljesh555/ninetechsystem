@@ -24,7 +24,6 @@ const crumbs = [
   { name: 'About', path },
 ];
 const consult = { label: 'Request a consultation', href: '/contact' };
-const initials = (name) => name.split(' ').map((w) => w[0]).join('');
 
 const facts = [
   { icon: 'users', value: 'Two directors', label: 'You deal with one of them directly' },
@@ -89,33 +88,9 @@ const schema = [
     </div>
   </section>
 
-  <section class="section section-tint">
-    <div class="wrap">
-      <div class="section-head">
-        <FallHeading text="The directors" />
-        <p class="lead">{site.legalName} is owned and run by its two directors. Every project is scoped with one of them, delivered by our team, and remains their responsibility through to the support that follows launch.</p>
-      </div>
-      <ul class="people">
-        {people.map((p) => (
-          <li class="person">
-            <div class="person-photo">
-              <Slot name={p.slot} alt={`${p.name}, ${p.title} at Nine Technology`} ratio="1-1" sizes="160px" optional />
-              <span class="person-monogram" aria-hidden="true">{initials(p.name)}</span>
-            </div>
-            <div class="person-copy">
-              <h3>{p.name}</h3>
-              <p class="title">{p.title}</p>
-              {p.role && <p class="person-role">{p.role}</p>}
-            </div>
-          </li>
-        ))}
-      </ul>
-    </div>
-  </section>
+  <HowWeWork tint />
 
-  <HowWeWork />
-
-  <section class="section section-tint">
+  <section class="section">
     <div class="wrap">
       <div class="section-head">
         <FallHeading text="What we commit to" />
@@ -136,7 +111,7 @@ const schema = [
     </div>
   </section>
 
-  <section class="section">
+  <section class="section section-tint">
     <div class="wrap">
       <div class="section-head">
         <FallHeading text="The company" />
@@ -144,6 +119,10 @@ const schema = [
       </div>
       <dl class="company-facts">
         <div><dt>Registered name</dt><dd>{site.legalName}</dd></div>
+        <div>
+          <dt>Directors</dt>
+          <dd>{people.map((d) => <span class="company-director">{d.name}, {d.title}</span>)}</dd>
+        </div>
         <div><dt>Address</dt><dd>{site.address.display}</dd></div>
         <div><dt>Founded</dt><dd>{site.founded}</dd></div>
         <div><dt>Areas served</dt><dd>{site.areasServed.join(', ')} and the rest of Nepal</dd></div>

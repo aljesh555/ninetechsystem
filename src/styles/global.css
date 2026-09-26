@@ -427,34 +427,9 @@ html:not(.js) .menu-toggle { display: none; }
 @media (min-width: 640px) { .company-facts > div { grid-template-columns: 200px 1fr; gap: var(--s4); } }
 .company-facts dt { color: var(--grey); font-size: 0.9375rem; }
 .company-facts dd { font-weight: 500; }
+.company-director { display: block; }
 .office-pair { display: grid; gap: var(--s4); margin-top: var(--s5); }
 @media (min-width: 760px) { .office-pair { grid-template-columns: 1fr 1fr; gap: var(--s5); } }
-
-/* --- people -------------------------------------------------------------- */
-
-.people { display: grid; gap: var(--s4); margin-top: var(--s5); }
-@media (min-width: 720px) { .people { grid-template-columns: 1fr 1fr; gap: var(--s5); } }
-.person {
-  display: grid; grid-template-columns: 116px minmax(0, 1fr); gap: var(--s4);
-  align-items: center; padding: var(--s4); background: var(--white);
-  border: 1px solid var(--rule); border-top: 2px solid var(--navy);
-  border-radius: var(--radius);
-}
-.person h3 { font-size: 1.1875rem; }
-.person .title { color: var(--grey); font-size: 0.9375rem; margin-top: 2px; }
-.person-role { margin-top: var(--s2); color: var(--grey); font-size: 0.9375rem; }
-.person .svc-view { margin-top: var(--s3); }
-.person-photo { position: relative; }
-.person-photo .slot { max-width: none; }
-
-/* Until a photograph exists, the person's initials stand in. Two identical
-   empty frames read as broken images; a monogram reads as a decision. */
-.person-monogram {
-  display: grid; place-items: center; aspect-ratio: 1; border-radius: var(--radius);
-  background: var(--navy); color: #fff;
-  font-family: var(--display); font-weight: 600; font-size: 1.75rem; letter-spacing: 0.01em;
-}
-.person-photo .slot ~ .person-monogram { display: none; }
 
 /* --- image slots --------------------------------------------------------- */
 
@@ -638,9 +613,6 @@ html:not(.js) .menu-toggle { display: none; }
 /* --- about --------------------------------------------------------------- */
 .nava { display: flex; gap: var(--s5); align-items: flex-start; flex-wrap: wrap; }
 .nava .prose { flex: 1 1 300px; }
-.commitments.one-col { grid-template-columns: 1fr; }
-.commitments.one-col .commitment:first-child { border-top: 0; padding-top: 0; }
-.contact-nepali { margin-top: var(--s4); font-size: 1.0625rem; color: var(--grey); }
 /* Equal-width hero buttons on small screens: two ragged widths read as an
    accident, and full-width targets are easier to hit on a phone. */
 @media (max-width: 519px) {
