@@ -52,7 +52,7 @@ work behind it — one team, one invoice, and we are still there after launch.
 - Coordinates: ${site.geo.lat}, ${site.geo.lng}
 - Opening hours: ${site.hours}
 - Response time: ${site.replyPromise}
-- Areas served: ${site.areasServed.join(', ')} in person, and remote work anywhere in Nepal
+- Areas served: ${site.reach}
 - Website: ${site.url}
 
 ## Directors

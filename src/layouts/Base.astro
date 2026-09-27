@@ -4,6 +4,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { site } from '../data/site.js';
 import { services, npr } from '../data/services.js';
+import { areaServed } from '../lib/schema.js';
 
 const {
   title,
@@ -45,7 +46,7 @@ const business = {
     telephone: site.phoneDisplay,
     email: site.email,
     contactType: 'sales',
-    areaServed: 'NP',
+    areaServed,
     availableLanguage: ['en', 'ne'],
   },
   priceRange: `NPR ${npr(lowest)}+`,
@@ -60,7 +61,7 @@ const business = {
   },
   geo: { '@type': 'GeoCoordinates', latitude: site.geo.lat, longitude: site.geo.lng },
   hasMap: site.mapLink,
-  areaServed: site.areasServed.map((n) => ({ '@type': 'City', name: n })),
+  areaServed,
   openingHoursSpecification: [
     {
       '@type': 'OpeningHoursSpecification',

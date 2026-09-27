@@ -40,7 +40,12 @@ export const site = {
   // The one promise on the site that needs a person to keep it.
   replyTime: 'within minutes',
   replyPromise: 'We reply within minutes, Sunday–Friday, 10am–5pm.',
+  // The three cities we reach in person. Kept separate from `reach` because
+  // the schema marks each one as a City for local search.
   areasServed: ['Kathmandu', 'Lalitpur', 'Bhaktapur'],
+  // How far the work actually goes, in one sentence, used wherever the page
+  // states it so the three places can never drift apart.
+  reach: 'Kathmandu, Lalitpur and Bhaktapur in person, and the rest of Nepal and clients abroad remotely.',
 
   social: [
     { name: 'Facebook', url: 'https://www.facebook.com/profile.php?id=61594083495632' },

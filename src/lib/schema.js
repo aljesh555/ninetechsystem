@@ -42,13 +42,21 @@ export function offer(price, path) {
   };
 }
 
+/** The cities we reach in person, the country they sit in, and the rest.
+ *  The cities come first: they are what local search matches on. */
+export const areaServed = [
+  ...site.areasServed.map((n) => ({ '@type': 'City', name: n })),
+  { '@type': 'Country', name: 'Nepal' },
+  { '@type': 'Place', name: 'Worldwide, remotely' },
+];
+
 export const service = ({ name, description, path, price, serviceType }) => ({
   '@type': 'Service',
   name,
   ...(serviceType && { serviceType }),
   description,
   provider: orgRef,
-  areaServed: site.areasServed.map((n) => ({ '@type': 'City', name: n })),
+  areaServed,
   url: abs(path),
   ...(price && { offers: offer(price, path) }),
 });

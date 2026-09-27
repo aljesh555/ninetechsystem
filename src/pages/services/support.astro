@@ -13,7 +13,7 @@ import Faq from '../../components/services/Faq.astro';
 import CtaStrip from '../../components/services/CtaStrip.astro';
 import { support, contactHref } from '../../data/services.js';
 import { site } from '../../data/site.js';
-import { breadcrumbList, faqPage, orgRef, abs } from '../../lib/schema.js';
+import { breadcrumbList, faqPage, orgRef, abs, areaServed } from '../../lib/schema.js';
 
 const path = '/services/support';
 const crumbs = [
@@ -31,7 +31,7 @@ const schema = [
     serviceType: 'Website and software maintenance',
     description: support.answer,
     provider: orgRef,
-    areaServed: site.areasServed.map((n) => ({ '@type': 'City', name: n })),
+    areaServed,
     url: abs(path),
     hasOfferCatalog: {
       '@type': 'OfferCatalog',

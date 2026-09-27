@@ -14,7 +14,7 @@ import Faq from '../../components/services/Faq.astro';
 import CtaStrip from '../../components/services/CtaStrip.astro';
 import { icon } from '../../lib/icons.js';
 import { automate, contactHref } from '../../data/services.js';
-import { breadcrumbList, faqPage, orgRef, abs } from '../../lib/schema.js';
+import { breadcrumbList, faqPage, orgRef, abs, areaServed } from '../../lib/schema.js';
 import { site } from '../../data/site.js';
 
 const path = '/services/automate';
@@ -33,7 +33,7 @@ const schema = [
     serviceType: 'AI automation',
     description: automate.answer,
     provider: orgRef,
-    areaServed: site.areasServed.map((n) => ({ '@type': 'City', name: n })),
+    areaServed,
     url: abs(path),
     hasOfferCatalog: {
       '@type': 'OfferCatalog',
