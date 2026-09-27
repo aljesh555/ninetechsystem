@@ -8,6 +8,7 @@
  * is how a visitor two clicks in finds the one they actually want.
  */
 import { site, nav } from '../data/site.js';
+import { socialIcon } from '../lib/social-icons.js';
 // The same generated lockup as the header, inlined: no copy in public/ to drift.
 import fullLockup from '../../assets/brand/logo-full-white.svg?raw';
 
@@ -45,7 +46,13 @@ const copyright = year > Number(site.founded) ? `${site.founded}–${year}` : si
         <p>We build websites, software and AI automation for businesses in Nepal — then we market it, automate it and keep it running.</p>
         <p class="np" lang="ne">{site.nepaliName}</p>
         <ul class="footer-social">
-          {site.social.map((s) => <li><a href={s.url} rel="noopener me">{s.name}</a></li>)}
+          {site.social.map((s) => (
+            <li>
+              <a href={s.url} rel="noopener me" aria-label={`${site.name} on ${s.name}`}>
+                {socialIcon(s.name) ? <Fragment set:html={socialIcon(s.name)} /> : s.name}
+              </a>
+            </li>
+          ))}
         </ul>
       </div>
 

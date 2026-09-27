@@ -572,7 +572,16 @@ html:not(.js) .menu-toggle { display: none; }
 
 /* The social accounts sit under the blurb, in a row rather than a column:
    four one-word links stacked would read as another navigation block. */
-.footer-social { display: flex; flex-wrap: wrap; gap: var(--s2) var(--s3); margin-top: var(--s4); }
+/* The accounts as marks rather than words: four names in a row read as a
+   third navigation block, which is not what they are. */
+.footer-social { display: flex; flex-wrap: wrap; gap: var(--s2); margin-top: var(--s4); }
+.footer-social a {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 40px; height: 40px; border-radius: var(--radius);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: rgba(255, 255, 255, 0.78); transition: color 0.15s ease, border-color 0.15s ease;
+}
+.footer-social a:hover { color: var(--amber); border-color: var(--amber); text-decoration: none; }
 .footer-all { color: var(--amber); }
 .footer-cta { margin-top: var(--s4); width: 100%; justify-content: center; }
 .footer .mark { display: block; width: 168px; margin-bottom: var(--s4); }
