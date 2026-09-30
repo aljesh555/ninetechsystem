@@ -150,7 +150,7 @@ const graph = { '@context': 'https://schema.org', '@graph': [business, ...schema
         // attribute is used rather than an inline style, because the site's
         // Content-Security-Policy allows no inline styles. Mouse and trackpad
         // only, and never under reduced motion.
-        const art = document.querySelector('.hero-art, .build-hero-art');
+        const art = document.querySelector('.build-hero-art');
         if (art && matchMedia('(hover: hover) and (pointer: fine)').matches
             && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
           const hero = art.closest('section');

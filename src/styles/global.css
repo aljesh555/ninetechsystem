@@ -260,18 +260,6 @@ html:not(.js) .menu-toggle { display: none; }
 
 .hero { background: var(--navy); color: var(--white); padding-block: var(--s7) var(--s8); position: relative; overflow: hidden; }
 
-/* The isometric grid the artwork is drawn on, continued behind it: the same
-   30 degree axes as every scene, so the hero reads as one drawing rather than
-   a picture pasted onto a flat panel. Masked to fade out before it reaches
-   the headline, where lines behind type would only make it harder to read. */
-.hero::before {
-  content: ''; position: absolute; inset: 0; pointer-events: none;
-  background-image:
-    repeating-linear-gradient(30deg, rgba(255, 255, 255, 0.07) 0 1px, transparent 1px 74px),
-    repeating-linear-gradient(-30deg, rgba(255, 255, 255, 0.07) 0 1px, transparent 1px 74px);
-  -webkit-mask-image: radial-gradient(120% 105% at 78% 42%, #000 8%, transparent 70%);
-  mask-image: radial-gradient(120% 105% at 78% 42%, #000 8%, transparent 70%);
-}
 .hero > * { position: relative; }
 @media (min-width: 720px) { .hero { padding-block: var(--s8); } }
 .hero .display { max-width: 14ch; }
@@ -611,14 +599,14 @@ html:not(.js) .menu-toggle { display: none; }
 /* --- motion: one idea, things settling into place ------------------------ */
 
 @keyframes settle {
-  from { opacity: 0; transform: translateY(32px); }
+  from { opacity: 0; transform: translateY(18px); }
   to { opacity: 1; transform: none; }
 }
 
-.js .hero-seq > * { animation: settle 0.7s var(--ease) both; }
-.js .hero-seq > *:nth-child(2) { animation-delay: 0.07s; }
-.js .hero-seq > *:nth-child(3) { animation-delay: 0.14s; }
-.js .hero-seq > *:nth-child(4) { animation-delay: 0.21s; }
+.js .hero-seq > * { animation: settle 0.9s var(--ease) both; }
+.js .hero-seq > *:nth-child(2) { animation-delay: 0.3s; }
+.js .hero-seq > *:nth-child(3) { animation-delay: 0.42s; }
+.js .hero-seq > *:nth-child(4) { animation-delay: 0.54s; }
 
 .js .reveal { opacity: 0; transform: translateY(28px); }
 .js .reveal.is-in {
@@ -638,7 +626,7 @@ html:not(.js) .menu-toggle { display: none; }
 .js .stagger.reveal.is-in > *:nth-child(4) { transition-delay: 0.21s; }
 
 @media (prefers-reduced-motion: reduce) {
-  .js .hero-seq > * { animation: none; }
+  .js .hero-seq > *, .js .rise *, .js .hero .facts-dark > *, .js .hero .facts-dark::before { animation: none !important; }
   .js .reveal, .js .stagger.reveal > * { opacity: 1; transform: none; transition: none; }
   * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }
@@ -1186,12 +1174,47 @@ h1 + .lead, h2 + .lead { margin-top: var(--s3); }
 
 .hero-grid { display: grid; gap: var(--s5); align-items: center; }
 @media (min-width: 900px) { .hero-grid { grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: var(--s6); } }
-.hero-art { display: flex; justify-content: center; }
-.hero-art .scene { width: min(100%, 420px); height: auto; }
-@media (max-width: 899px) { .hero-art { display: none; } }
-/* The display line animates word by word; it must not also slide in as a block. */
+/* The field: a canvas behind the whole hero (src/lib/field.js). The mark's
+   SVG sets the size and place the canvas draws the 9 into; without JS it
+   shows itself, as the same dots. */
+.hero > .field { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.hero-mark { display: flex; justify-content: center; }
+.hero-mark .mark { width: min(100%, 320px); height: auto; opacity: 0.5; }
+.js .hero-mark .mark { visibility: hidden; }
+@media (max-width: 899px) {
+  .hero-mark { display: none; }
+  .hero > .field { opacity: 0.3; }
+}
+
+/* The headline rises line by line from behind a clip, sharpening as it
+   comes; the amber stop lands last. The padding keeps descenders unclipped. */
+.rise .ln { display: block; overflow: hidden; padding-bottom: 0.14em; margin-bottom: -0.14em; }
+.rise .ln > span { display: inline-block; }
 .js .hero-seq > .display { animation: none; }
-.hero .display .w { display: inline-block; }
+.js .rise .ln > span { animation: rise 1.15s var(--ease) both; }
+.js .rise .ln + .ln > span { animation-delay: 0.11s; }
+.js .rise .stop { animation: land 0.9s var(--ease) 0.85s both; }
+@keyframes rise {
+  from { transform: translateY(108%); filter: blur(10px); opacity: 0.4; }
+  to { transform: none; filter: none; opacity: 1; }
+}
+@keyframes land {
+  from { transform: translateY(-0.9em); opacity: 0; }
+  to { transform: none; opacity: 1; }
+}
+/* The facts strip: its rule draws across, then the four settle. */
+.js .hero .facts-dark { border-top-color: transparent; position: relative; }
+.js .hero .facts-dark::before {
+  content: ''; position: absolute; left: 0; right: 0; top: -1px; height: 1px;
+  background: rgba(255, 255, 255, 0.14); transform-origin: left;
+  animation: draw 1.4s var(--ease) 0.5s both;
+}
+.js .hero .facts-dark > div { animation: settle 0.9s var(--ease) both; }
+.js .hero .facts-dark > div:nth-child(1) { animation-delay: 0.7s; }
+.js .hero .facts-dark > div:nth-child(2) { animation-delay: 0.78s; }
+.js .hero .facts-dark > div:nth-child(3) { animation-delay: 0.86s; }
+.js .hero .facts-dark > div:nth-child(4) { animation-delay: 0.94s; }
+@keyframes draw { from { transform: scaleX(0); } }
 
 .facts-dark { border-top-color: rgba(255, 255, 255, 0.14); margin-top: var(--s6); }
 .facts-dark dd { color: var(--white); }
@@ -1260,7 +1283,7 @@ h1 + .lead, h2 + .lead { margin-top: var(--s3); }
 
 /* The signal only runs in a hero, never in the small group illustrations. */
 .signal { display: none; }
-.js .hero-art .signal, .js .build-hero-art .signal { display: block; animation: signal-in 0.8s ease 1.4s both; }
+.js .build-hero-art .signal { display: block; animation: signal-in 0.8s ease 1.4s both; }
 .sig { transform-box: fill-box; animation: orbit 6s linear infinite, sig-pulse 1.5s ease-in-out infinite; }
 .sig-2 { animation-delay: -2s, -0.5s; }
 .sig-3 { animation-delay: -4s, -1s; }
