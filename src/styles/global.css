@@ -258,30 +258,7 @@ html:not(.js) .menu-toggle { display: none; }
 
 /* --- hero ---------------------------------------------------------------- */
 
-.hero { background: var(--navy); color: var(--white); padding-block: var(--s7) var(--s8); position: relative; overflow: hidden; }
-
-/* The isometric grid the artwork is drawn on, continued behind it: the same
-   30 degree axes as every scene, so the hero reads as one drawing rather than
-   a picture pasted onto a flat panel. Masked to fade out before it reaches
-   the headline, where lines behind type would only make it harder to read. */
-.hero::before {
-  content: ''; position: absolute; inset: 0; pointer-events: none;
-  background-image:
-    repeating-linear-gradient(30deg, rgba(255, 255, 255, 0.07) 0 1px, transparent 1px 74px),
-    repeating-linear-gradient(-30deg, rgba(255, 255, 255, 0.07) 0 1px, transparent 1px 74px);
-  -webkit-mask-image: radial-gradient(120% 105% at 78% 42%, #000 8%, transparent 70%);
-  mask-image: radial-gradient(120% 105% at 78% 42%, #000 8%, transparent 70%);
-}
-.hero > * { position: relative; }
-@media (min-width: 720px) { .hero { padding-block: var(--s8); } }
-.hero .display { max-width: 14ch; }
-.hero h1 {
-  font-family: var(--sans); font-weight: 400; letter-spacing: 0;
-  font-size: clamp(1.2rem, 2.4vw, 1.6rem); line-height: 1.45;
-  margin-top: var(--s4); max-width: 30ch; color: rgba(255, 255, 255, 0.86);
-}
-.hero .btn-row { margin-top: var(--s5); }
-.hero-note { margin-top: var(--s4); font-size: 0.9375rem; color: rgba(255, 255, 255, 0.7); }
+/* The home hero lives in home-hero.css, loaded by the home page only. */
 
 /* Inner pages: a quieter version of the same composition. */
 .page-head { padding-block: var(--s6) var(--s5); border-bottom: 1px solid var(--rule); }
@@ -610,16 +587,6 @@ html:not(.js) .menu-toggle { display: none; }
 
 /* --- motion: one idea, things settling into place ------------------------ */
 
-@keyframes settle {
-  from { opacity: 0; transform: translateY(32px); }
-  to { opacity: 1; transform: none; }
-}
-
-.js .hero-seq > * { animation: settle 0.7s var(--ease) both; }
-.js .hero-seq > *:nth-child(2) { animation-delay: 0.07s; }
-.js .hero-seq > *:nth-child(3) { animation-delay: 0.14s; }
-.js .hero-seq > *:nth-child(4) { animation-delay: 0.21s; }
-
 .js .reveal { opacity: 0; transform: translateY(28px); }
 .js .reveal.is-in {
   opacity: 1; transform: none;
@@ -638,7 +605,6 @@ html:not(.js) .menu-toggle { display: none; }
 .js .stagger.reveal.is-in > *:nth-child(4) { transition-delay: 0.21s; }
 
 @media (prefers-reduced-motion: reduce) {
-  .js .hero-seq > * { animation: none; }
   .js .reveal, .js .stagger.reveal > * { opacity: 1; transform: none; transition: none; }
   * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }
@@ -1184,19 +1150,6 @@ h1 + .lead, h2 + .lead { margin-top: var(--s3); }
    Home
    ========================================================================== */
 
-.hero-grid { display: grid; gap: var(--s5); align-items: center; }
-@media (min-width: 900px) { .hero-grid { grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: var(--s6); } }
-.hero-art { display: flex; justify-content: center; }
-.hero-art .scene { width: min(100%, 420px); height: auto; }
-@media (max-width: 899px) { .hero-art { display: none; } }
-/* The display line animates word by word; it must not also slide in as a block. */
-.js .hero-seq > .display { animation: none; }
-.hero .display .w { display: inline-block; }
-
-.facts-dark { border-top-color: rgba(255, 255, 255, 0.14); margin-top: var(--s6); }
-.facts-dark dd { color: var(--white); }
-.facts-dark dt { color: rgba(255, 255, 255, 0.68); }
-
 /* The three problems, each paired with its solution. */
 .problems { display: grid; gap: var(--s4); margin-top: var(--s5); }
 @media (min-width: 900px) { .problems { grid-template-columns: repeat(3, 1fr); } }
@@ -1260,7 +1213,7 @@ h1 + .lead, h2 + .lead { margin-top: var(--s3); }
 
 /* The signal only runs in a hero, never in the small group illustrations. */
 .signal { display: none; }
-.js .hero-art .signal, .js .build-hero-art .signal { display: block; animation: signal-in 0.8s ease 1.4s both; }
+.js .build-hero-art .signal { display: block; animation: signal-in 0.8s ease 1.4s both; }
 .sig { transform-box: fill-box; animation: orbit 6s linear infinite, sig-pulse 1.5s ease-in-out infinite; }
 .sig-2 { animation-delay: -2s, -0.5s; }
 .sig-3 { animation-delay: -4s, -1s; }

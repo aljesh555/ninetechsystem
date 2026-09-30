@@ -11,7 +11,9 @@ import Base from '../layouts/Base.astro';
 import HowWeWork from '../components/HowWeWork.astro';
 import FallHeading from '../components/services/FallHeading.astro';
 import Arrow from '../components/services/Arrow.astro';
-import { icon, iconOnNavy, sceneOnNavy } from '../lib/icons.js';
+import HeroSystem from '../components/HeroSystem.astro';
+import { icon, iconOnNavy } from '../lib/icons.js';
+import '../styles/home-hero.css';
 import { site, industries, disciplines } from '../data/site.js';
 import { groups } from '../data/services.js';
 
@@ -65,11 +67,27 @@ const schema = [
   schema={schema}
 >
   <section class="hero on-navy">
+    <div class="hero-field" aria-hidden="true">
+      <svg focusable="false">
+        <defs>
+          <pattern id="hf-dots" width="24" height="24" patternUnits="userSpaceOnUse"><circle class="hf-dot" cx="12" cy="12" r="1" /></pattern>
+          <pattern id="hf-grid" width="120" height="120" patternUnits="userSpaceOnUse"><path class="hf-major" d="M12.5 0V120M0 12.5H120" /></pattern>
+          <radialGradient id="hf-fade"><stop offset="0" stop-color="#fff" /><stop offset="1" stop-color="#fff" stop-opacity="0" /></radialGradient>
+          <mask id="hf-mask" maskUnits="userSpaceOnUse"><circle class="hf-lens" cx="-999" cy="-999" r="300" fill="url(#hf-fade)" /></mask>
+        </defs>
+        <rect class="hf-base" width="100%" height="100%" fill="url(#hf-dots)" />
+        <rect width="100%" height="100%" fill="url(#hf-grid)" />
+        <g class="hf-spot">
+          <rect class="hf-lit" width="100%" height="100%" fill="url(#hf-dots)" mask="url(#hf-mask)" />
+          <circle class="hf-lens hf-glow" cx="-999" cy="-999" r="300" fill="url(#hf-fade)" />
+        </g>
+      </svg>
+    </div>
     <div class="wrap hero-grid">
       <div class="hero-copy hero-seq">
-        <p class="display fall fall-now">
-          <span class="w">Your</span> <span class="w">ambition,</span><br />
-          <span class="w">our</span> <span class="w">engineering</span><span class="stop w" aria-hidden="true"></span><span class="sr-only">.</span>
+        <p class="display">
+          <span class="line"><span class="line-in">Your ambition,</span></span>
+          <span class="line"><span class="line-in">our engineering<span class="stop" aria-hidden="true"></span></span></span><span class="sr-only">.</span>
         </p>
         <h1>We build and run the digital systems businesses in Kathmandu depend on: websites, custom software, marketing and AI automation, engineered to work as one.</h1>
         <div class="btn-row">
@@ -78,7 +96,7 @@ const schema = [
         </div>
         <p class="hero-note">{site.replyPromise}</p>
       </div>
-      <div class="hero-art"><Fragment set:html={sceneOnNavy('services')} /></div>
+      <HeroSystem />
     </div>
     <div class="wrap">
       <dl class="facts facts-dark">

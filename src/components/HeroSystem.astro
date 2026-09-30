@@ -1,0 +1,278 @@
+---
+/**
+ * The home hero's drawing: the company as one running system. Four service
+ * groups (Build, Grow, Automate, Support) are wired by circuit traces to a
+ * core that carries the Nine mark. On load the core and traces draw in and
+ * the nodes resolve; after that, small amber pulses travel the traces, each
+ * arrival answered by the core routing a pulse on to another group.
+ *
+ * Every animated value is transform, opacity, filter or stroke-dashoffset,
+ * set from the stylesheet or through the Web Animations API, never through an
+ * inline style (the CSP forbids them). The finished drawing is the markup's
+ * resting state, so without JS or under reduced motion it simply stands still.
+ */
+import symbol from '../../assets/brand/logo-symbol-white.svg?raw';
+import { groups } from '../data/services.js';
+
+const markPath = symbol.match(/\sd="([^"]+)"/)[1];
+
+// Circuit traces for the top-left quadrant, drawn from the node to the core.
+// The other three quadrants are the same traces mirrored about the centre.
+const traces = ['M108 140V184L144 220H210', 'M120 140V172L156 208H210'];
+const mirror = [
+  '',
+  'translate(560 0) scale(-1 1)',
+  'translate(0 520) scale(1 -1)',
+  'translate(560 520) scale(-1 -1)',
+];
+// Card origins, in the same order as the groups: Build, Grow, Automate, Support.
+const origin = [[20, 40], [360, 40], [20, 380], [360, 380]];
+
+const detail = {
+  build: ['WEB · SOFTWARE · APP', 'DEPLOYED'],
+  grow: ['SEARCH · SOCIAL · ADS', 'RUNNING'],
+  automate: ['AI CHAT · AGENTS · FLOWS', 'ACTIVE'],
+  support: ['HOSTING · UPKEEP · CARE', 'ON CALL'],
+};
+
+// A fixed activity histogram per node: deterministic, so the markup never
+// changes between builds.
+const bars = (seed) =>
+  Array.from({ length: 14 }, (_, i) => 3 + (((seed * 7 + i * 5) ^ (i * 3 + seed)) % 9));
+
+const nodes = groups.map((g, i) => ({
+  id: g.id,
+  name: g.name,
+  index: String(i + 1).padStart(2, '0'),
+  count: String(g.services.length).padStart(2, '0'),
+  line: detail[g.id][0],
+  status: detail[g.id][1],
+  x: origin[i][0],
+  y: origin[i][1],
+  mirror: mirror[i],
+  bars: bars(i + 3),
+}));
+
+// Pins around the core, symmetric about its centre (280, 260).
+const pins = [228, 240, 252, 268, 280, 292, 308, 320, 332];
+const pinPath =
+  pins.map((p) => `M${p} 183V190M${p} 330V337`).join('') +
+  pins.map((p) => `M203 ${p - 20}H210M350 ${p - 20}H357`).join('');
+---
+<div class="hero-sys" aria-hidden="true">
+  <svg class="sys" viewBox="0 0 560 530" fill="none" focusable="false">
+    <!-- Peer links between neighbouring groups, and the core's taps onto them. -->
+    <g class="links">
+      <path class="tr bus" pathLength="1" d="M200 76H360" />
+      <path class="tr bus" pathLength="1" d="M200 444H360" />
+      <path class="tr tap" pathLength="1" d="M280 183V76" />
+      <path class="tr tap" pathLength="1" d="M280 337V444" />
+      <rect class="junction" x="277" y="73" width="6" height="6" />
+      <rect class="junction" x="277" y="441" width="6" height="6" />
+    </g>
+
+    {nodes.map((n, q) => (
+      <g class={`quad q${q}`} transform={n.mirror || undefined}>
+        {traces.map((d, t) => (
+          <>
+            <path class="tr" pathLength="1" d={d} />
+            <g class="pulse" data-q={q} data-dir={t === 0 ? 'in' : 'out'}>
+              <path class="p-glow" pathLength="100" d={d} />
+              <path class="p-trail" pathLength="100" d={d} />
+              <path class="p-head" pathLength="100" d={d} />
+            </g>
+          </>
+        ))}
+        <circle class="pad" cx="108" cy="140" r="2.5" />
+        <circle class="pad" cx="120" cy="140" r="2.5" />
+      </g>
+    ))}
+
+    <!-- Bus pulses (peer to peer), kept separate so the mirror never flips them. -->
+    {['M200 76H360', 'M200 444H360'].map((d) => (
+      <g class="pulse" data-bus>
+        <path class="p-glow" pathLength="100" d={d} />
+        <path class="p-trail" pathLength="100" d={d} />
+        <path class="p-head" pathLength="100" d={d} />
+      </g>
+    ))}
+
+    <!-- The core. -->
+    <g class="core">
+      <path class="pins" d={pinPath} />
+      <rect class="core-frame" pathLength="1" x="210" y="190" width="140" height="140" rx="12" />
+      <rect class="core-inner" x="222" y="202" width="116" height="116" rx="6" />
+      <g class="core-mark">
+        <path fill="#fff" fill-rule="evenodd" transform="translate(255.5 222) scale(0.0689)" d={markPath} />
+      </g>
+      <text class="mono core-label fine" x="280" y="306" text-anchor="middle">CORE · 09</text>
+      <rect class="core-led" x="326" y="206" width="6" height="6" />
+    </g>
+
+    {nodes.map((n, q) => (
+      <g class={`node n${q}`} data-node={q} transform={`translate(${n.x} ${n.y})`}>
+        <g class="node-in">
+          <rect class="card" width="180" height="100" rx="8" />
+          <rect class="card-edge" pathLength="1" width="180" height="100" rx="8" />
+          <text class="mono dim fine" x="14" y="23">{n.index}</text>
+          <text class="mono status fine" x="154" y="23" text-anchor="end">{n.status}</text>
+          <path class="tick" d="M159 19.5l2.2 2.2 4.3-4.6" />
+          <text class="name" x="14" y="51">{n.name}</text>
+          <text class="mono dim fine" x="14" y="67">{n.line}</text>
+          <g class="meter">
+            {n.bars.map((h, i) => (
+              i === n.bars.length - 1
+                ? <rect class="bar bar-last" x={14 + i * 6} y="80" width="3" height="10" />
+                : <rect class="bar" x={14 + i * 6} y={90 - h} width="3" height={h} />
+            ))}
+          </g>
+          <text class="mono readout fine" x="166" y="90" text-anchor="end">{n.count} SVC</text>
+        </g>
+      </g>
+    ))}
+
+    <text class="mono caption fine" x="280" y="524" text-anchor="middle">FIG. 01 — ONE ARCHITECTURE, FOUR DISCIPLINES</text>
+  </svg>
+</div>
+
+<script>
+  // The system runs: pulses travel the traces, the core answers each arrival
+  // by routing a pulse out to another group. Paused while the hero is off
+  // screen or the tab is hidden; never started under reduced motion.
+  const root = document.querySelector('.hero-sys');
+  const hero = root?.closest('section');
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (root && hero && !still && 'animate' in Element.prototype) {
+    const pulses = [...root.querySelectorAll('.pulse[data-q]')];
+    const bus = [...root.querySelectorAll('.pulse[data-bus]')];
+    const led = root.querySelector('.core-led');
+    const nodes = [...root.querySelectorAll('.node')];
+    const pads = [...root.querySelectorAll('.quad')].map((q) => [...q.querySelectorAll('.pad')]);
+    const EASE = 'cubic-bezier(0.45, 0, 0.2, 1)';
+    const busy = new WeakSet();
+    let visible = true;
+    let timer = 0;
+
+    const flash = (el, from, to) => el?.animate(
+      [{ fill: from }, { fill: from, offset: 0.25 }, { fill: to }],
+      { duration: 900, easing: 'ease-out' },
+    );
+    const blink = (el) => el?.animate(
+      [{ opacity: 1, transform: 'scale(1.6)' }, { opacity: 1, transform: 'none' }],
+      { duration: 700, easing: 'cubic-bezier(0.16, 1, 0.3, 1)' },
+    );
+    const bump = (q) => {
+      const bar = nodes[q]?.querySelector('.bar-last');
+      bar?.animate([{ transform: 'scaleY(0.2)' }, { transform: 'none' }], { duration: 600, easing: 'cubic-bezier(0.16, 1, 0.3, 1)' });
+    };
+
+    // A pulse is a short head and a longer, fainter trail riding the same
+    // path. Travel is expressed as stroke-dashoffset on a 100-unit path.
+    const send = (g, reverse, duration) => new Promise((done) => {
+      if (busy.has(g)) return done(false);
+      busy.add(g);
+      const opts = { duration, easing: EASE };
+      // [dash length, peak opacity] for head, trail and glow. Going forwards
+      // the dashes share a front edge; in reverse they share a back edge, so
+      // the trail and glow always follow the head.
+      const parts = [['.p-head', 6, 1], ['.p-trail', 36, 0.6], ['.p-glow', 10, 0.25]];
+      let last;
+      for (const [sel, len, peak] of parts) {
+        const from = reverse ? -100 : len + 1;
+        const to = reverse ? 5 : len - 105;
+        last = g.querySelector(sel).animate([
+          { strokeDashoffset: from, opacity: 0 },
+          { opacity: peak, offset: 0.1 },
+          { opacity: peak, offset: 0.88 },
+          { strokeDashoffset: to, opacity: 0 },
+        ], opts);
+      }
+      last.finished.then(() => { busy.delete(g); done(true); }, () => { busy.delete(g); done(false); });
+    });
+
+    // Traces run node to core, so "in" plays forwards and "out" in reverse.
+    const inbound = (q) => pulses.find((p) => +p.dataset.q === q && p.dataset.dir === 'in');
+    const outbound = (q) => pulses.find((p) => +p.dataset.q === q && p.dataset.dir === 'out');
+    const pick = (n, not) => { let r; do { r = Math.floor(Math.random() * n); } while (r === not); return r; };
+
+    const cycle = async () => {
+      if (!visible) return;
+      const r = Math.random();
+      if (r < 0.2) {
+        // A peer link: Build to Grow, or Automate to Support, and back.
+        const i = Math.random() < 0.5 ? 0 : 1;
+        const back = Math.random() < 0.5;
+        const target = (i ? 2 : 0) + (back ? 0 : 1);
+        blink(nodes[(i ? 2 : 0) + (back ? 1 : 0)]?.querySelector('.tick'));
+        if (await send(bus[i], back, 1300)) { bump(target); blink(nodes[target].querySelector('.tick')); }
+      } else {
+        const from = Math.floor(Math.random() * 4);
+        flash(pads[from][0], '#ff9500', '#123566');
+        if (await send(inbound(from), false, 1500)) {
+          blink(led);
+          const to = pick(4, from);
+          await new Promise((t) => setTimeout(t, 140));
+          if (await send(outbound(to), true, 1500)) {
+            flash(pads[to][1], '#ff9500', '#123566');
+            bump(to);
+            blink(nodes[to].querySelector('.tick'));
+          }
+        }
+      }
+    };
+
+    const loop = () => {
+      clearTimeout(timer);
+      if (!visible) return;
+      cycle();
+      timer = setTimeout(loop, 1500 + Math.random() * 900);
+    };
+
+    const setVisible = (v) => {
+      const was = visible;
+      visible = v && !document.hidden;
+      if (visible && !was) loop();
+      if (!visible) clearTimeout(timer);
+    };
+
+    // First pulse once the drawing has finished assembling.
+    setTimeout(() => { visible = false; setVisible(true); }, 2100);
+    if ('IntersectionObserver' in window) {
+      let seen = true;
+      new IntersectionObserver(([e]) => { seen = e.isIntersecting; setVisible(seen); }).observe(hero);
+      document.addEventListener('visibilitychange', () => setVisible(seen));
+    }
+  }
+
+  // The blueprint field: dots under a soft lens that follows the pointer.
+  // Positions are set as SVG attributes, which the CSP allows. Desktop only.
+  const field = document.querySelector('.hero-field');
+  const lens = field?.querySelectorAll('.hf-lens');
+  if (field && hero && lens?.length) {
+    let x = 0, y = 0, tx = 0, ty = 0, raf = 0;
+    const home = () => {
+      const art = root?.getBoundingClientRect();
+      const h = hero.getBoundingClientRect();
+      if (art && art.width) { tx = art.left - h.left + art.width / 2; ty = art.top - h.top + art.height * 0.46; }
+      else { tx = h.width * 0.72; ty = h.height * 0.42; }
+    };
+    const set = () => { for (const c of lens) { c.setAttribute('cx', x.toFixed(1)); c.setAttribute('cy', y.toFixed(1)); } };
+    const step = () => {
+      x += (tx - x) * 0.09; y += (ty - y) * 0.09;
+      set();
+      raf = Math.abs(tx - x) + Math.abs(ty - y) > 0.5 ? requestAnimationFrame(step) : 0;
+    };
+    const go = () => { if (!raf) raf = requestAnimationFrame(step); };
+    home(); x = tx; y = ty; set();
+    field.classList.add('is-set');
+    addEventListener('resize', () => { home(); x = tx; y = ty; set(); });
+    if (!still && matchMedia('(hover: hover) and (pointer: fine)').matches) {
+      hero.addEventListener('pointermove', (e) => {
+        const h = hero.getBoundingClientRect();
+        tx = e.clientX - h.left; ty = e.clientY - h.top; go();
+      });
+      hero.addEventListener('pointerleave', () => { home(); go(); });
+    }
+  }
+</script>
