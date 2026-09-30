@@ -1,0 +1,10 @@
+---
+/** One question of the step-by-step builder. Shown one at a time by the script. */
+const { id, sec, title, sub } = Astro.props;
+---
+
+<section class="wiz-step" data-step={id} data-sec={sec} hidden aria-labelledby={`wq-${id}`}>
+  <h2 class="wiz-title" id={`wq-${id}`}>{title}</h2>
+  {sub && <p class="wiz-sub">{sub}</p>}
+  <div class="wiz-answers"><slot /></div>
+</section>

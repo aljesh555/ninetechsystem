@@ -1,0 +1,24 @@
+---
+/**
+ * An answer card. Either sets a value (path + v), toggles one (toggle + on/off),
+ * or runs a named action (act). `advance` moves to the next question after.
+ */
+const { path, v, toggle, on, off, act, advance = false, title, body, price } = Astro.props;
+---
+
+<button
+  type="button"
+  class="opt"
+  data-path={path}
+  data-v={v}
+  data-toggle={toggle}
+  data-on={on}
+  data-off={off}
+  data-act={act}
+  data-advance={advance ? '' : undefined}
+>
+  <span class="opt-mark" aria-hidden="true"></span>
+  <span class="opt-title">{title}</span>
+  {body && <span class="opt-body">{body}</span>}
+  {price && <span class="opt-price">{price}</span>}
+</button>

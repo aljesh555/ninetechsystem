@@ -1,0 +1,22 @@
+---
+/** A tiered monthly service: pick one level; levels a plan covers are marked. */
+import { npr } from '../../lib/package-price.js';
+const { path, ask, options } = Astro.props;
+---
+
+<div class="q q-block">
+  <div class="q-text">
+    <p class="q-ask">{ask}</p>
+    <p class="q-cost" data-cost={path}></p>
+  </div>
+  <div class="levels" role="group" aria-label={ask}>
+    {options.map((o, i) => (
+      <button type="button" class="level" data-path={path} data-v={i}>
+        <span class="level-name">{o.name}</span>
+        <span class="level-body">{o.body}</span>
+        <span class="level-price">{o.price ? `Rs ${npr(o.price)}/mo` : 'No charge'}</span>
+        <span class="level-tag" data-level-tag>Included</span>
+      </button>
+    ))}
+  </div>
+</div>

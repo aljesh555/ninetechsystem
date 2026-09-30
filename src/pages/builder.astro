@@ -1,0 +1,1583 @@
+---
+/**
+ * Build my package. Four screens, one package:
+ *
+ *   start     choose: a ready-made plan, or build your own
+ *   plans     the four monthly plans; picking one goes straight to review
+ *   wizard    build your own, one question at a time, as a conversation:
+ *             website, then app, then marketing, then search and AI, then extras
+ *   review    everything at once, every quantity adjustable, prices live
+ *   proposal  the document the client reads, prints or sends on WhatsApp
+ *
+ * Linked from the home hero. `/builder?staff` adds a "prepared by" field and
+ * "Send to client" for use in a pitch meeting.
+ *
+ * Prices live in src/data/packages.js; the arithmetic in
+ * src/lib/package-price.js. The whole package, and the screen and question it
+ * is on, are kept in the URL hash, so a refresh never loses it and a copied
+ * link reopens the same quote.
+ */
+import '../styles/global.css';
+import Stepper from '../components/builder/Stepper.astro';
+import YesNo from '../components/builder/YesNo.astro';
+import Levels from '../components/builder/Levels.astro';
+import Step from '../components/builder/Step.astro';
+import Opt from '../components/builder/Opt.astro';
+import BigStepper from '../components/builder/BigStepper.astro';
+import logoWhite from '../../assets/brand/logo-full-white.svg?raw';
+import logoNavy from '../../assets/brand/logo-full-navy.svg?raw';
+import { site } from '../data/site.js';
+import {
+  plans, units, platforms, levels, websites, apps, oneTime, terms, everyPlan,
+  clientTerms, discounts,
+} from '../data/packages.js';
+import { npr, alaCarte } from '../lib/package-price.js';
+
+const rs = (n) => `Rs ${npr(n)}`;
+const mo = (n) => `${rs(n)} a month`;
+const each = (k) => `${rs(units[k].unit)} each a month`;
+const pct = (r) => `${Math.round(r * 100)}%`;
+const lowest = Math.min(...plans.map((p) => p.price));
+const discountLine = [
+  `${pct(discounts.monthly.at(-1).rate)} off monthly fees from ${rs(discounts.monthly.at(-1).min)} a month, ${pct(discounts.monthly[0].rate)} from ${rs(discounts.monthly[0].min)}`,
+  `${pct(discounts.oneTime.at(-1).rate)} off one-time work from ${rs(discounts.oneTime.at(-1).min)}, ${pct(discounts.oneTime[0].rate)} from ${rs(discounts.oneTime[0].min)}`,
+];
+const sections = [
+  ['website', 'Website'],
+  ['app', 'App'],
+  ['marketing', 'Marketing'],
+  ['search', 'Search & AI'],
+  ['extras', 'Extras'],
+  ['review', 'Review'],
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Build your package — Nine Technology</title>
+    <meta name="description" content="Price your website, app, marketing and AI automation in two minutes: pick a monthly plan or answer a few questions. Every price in writing, in NPR." />
+    <link rel="canonical" href={`${site.url}/builder`} />
+    <meta name="theme-color" content="#123566" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preload" href="/fonts/inter-400-500.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/poppins-600.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/poppins-700.woff2" as="font" type="font/woff2" crossorigin />
+  </head>
+  <body class="bld scr-start">
+    <header class="bld-top">
+      <div class="bld-top-in">
+        <a href="/" class="bld-logo" aria-label="Nine Technology — home"><Fragment set:html={logoWhite} /></a>
+        <span class="bld-title">Build your package</span>
+        <label class="bld-client bld-staff" data-staff-only hidden>
+          <span>Prepared by</span>
+          <input type="text" data-text="staff" placeholder="Your name" autocomplete="off" maxlength="40" />
+        </label>
+        <div class="bld-top-actions">
+          <button type="button" class="bld-ghost" data-reset>Start over</button>
+        </div>
+      </div>
+    </header>
+
+    <!-- start ------------------------------------------------------------- -->
+    <section class="start" data-screen="start" aria-labelledby="h-start">
+      <div class="start-in">
+        <p class="start-kicker">Build your package</p>
+        <h1 class="start-title" id="h-start">What should we build for you<span class="stop" aria-hidden="true"></span></h1>
+        <p class="start-lead">Pick a ready-made monthly plan, or answer a few questions and see exactly what your package costs. Prices update as you go, and nothing is sent until you choose to send it.</p>
+        <div class="start-paths">
+          <button type="button" class="path" data-go="plans">
+            <span class="path-k">Ready-made</span>
+            <span class="path-title">Choose a monthly plan</span>
+            <span class="path-body">Four plans with filming, ads, an AI assistant and website care in one price. From {rs(lowest)} a month.</span>
+            <span class="path-go">See the plans <span aria-hidden="true">→</span></span>
+          </button>
+          <button type="button" class="path path-main" data-act="custom">
+            <span class="path-k">Custom</span>
+            <span class="path-title">Build my own</span>
+            <span class="path-body">A few questions, one at a time: your website, then an app, then marketing. About two minutes.</span>
+            <span class="path-go">Start <span aria-hidden="true">→</span></span>
+          </button>
+        </div>
+        <p class="start-note">All prices in NPR, excluding 13% VAT. {site.replyPromise}</p>
+      </div>
+    </section>
+
+    <div class="bld-app" data-app>
+      <main class="bld-main">
+        <!-- plans ------------------------------------------------------- -->
+        <section data-screen="plans" hidden aria-labelledby="h-plans">
+          <header class="scr-head">
+            <button type="button" class="back-link" data-go="start"><span aria-hidden="true">←</span> Back</button>
+            <h1 id="h-plans">Ready-made plans<span class="stop" aria-hidden="true"></span></h1>
+            <p>One team and one bill: filming, ads, an AI assistant and website care in one monthly price. Pick one, then add anything else on the next screen.</p>
+          </header>
+          <div class="plans plans-full">
+            {plans.map((p) => (
+              <button type="button" class:list={['plan', p.recommended && 'plan-rec']} data-plan={p.id} data-plan-go>
+                {p.recommended && <span class="plan-flag">Most chosen</span>}
+                <span class="plan-name">{p.name}</span>
+                <span class="plan-promise">{p.promise}</span>
+                <span class="plan-price"><span class="plan-cur">Rs</span>{npr(p.price)}<span class="plan-per">/month</span></span>
+                <span class="plan-sep">Bought separately <s>{rs(alaCarte(p))}</s></span>
+                <span class="plan-for">{p.bestFor}</span>
+                <ul class="plan-feat">{p.features.map((f) => <li>{f}</li>)}</ul>
+                <span class="plan-pick">Choose {p.name} <span aria-hidden="true">→</span></span>
+              </button>
+            ))}
+          </div>
+          <p class="plans-alt">Prefer to choose piece by piece? <button type="button" class="link-btn" data-act="custom">Build my own instead</button></p>
+        </section>
+
+        <!-- wizard ------------------------------------------------------ -->
+        <section data-screen="wizard" hidden aria-label="Build my own">
+          <nav class="prog" aria-label="Progress">
+            <ol class="prog-steps">
+              {sections.map(([id, label]) => (
+                <li><button type="button" data-jump={id}>{label}</button></li>
+              ))}
+            </ol>
+            <div class="prog-bar"><span class="prog-fill" data-prog></span></div>
+          </nav>
+
+          <div class="wiz">
+            <p class="wiz-count"><span class="stop" aria-hidden="true"></span> <span data-sec-name></span> · <span data-count></span></p>
+
+            <!-- website -->
+            <Step id="web-type" sec="website" title="First, your website. What do you need?" sub="Registered in your name, with the domain and hosting included.">
+              <div class="opts opts-2">
+                <Opt path="web.type" v="none" advance title="Nothing new for now" body="We have one, or it can wait." />
+                {Object.entries(websites).map(([k, w]) => (
+                  <Opt path="web.type" v={k} advance title={w.label} body={w.blurb} price={`${w.from ? 'From ' : ''}${rs(w.base)}`} />
+                ))}
+              </div>
+            </Step>
+            <Step id="web-pages" sec="website" title="How many pages should it have?" sub="Home, About, Services and Contact would be four. You can change this later.">
+              <BigStepper path="web.pages" max={40} unit="pages" cost="web" />
+            </Step>
+            <Step id="web-lang" sec="website" title="Should it speak Nepali and English?" sub={`The second language adds ${rs(websites.landing.bilingual)} to a landing page. Larger sites include it.`}>
+              <div class="opts opts-2">
+                <Opt path="web.bilingual" v="true" advance title="Nepali and English" price={`+ ${rs(websites.landing.bilingual)}`} />
+                <Opt path="web.bilingual" v="false" advance title="One language is enough" />
+              </div>
+            </Step>
+            <Step id="web-care" sec="website" title="Once it’s live, who looks after it?" sub="Hosting, security, backups, and the small changes every website needs.">
+              <div class="opts opts-list">
+                {levels.care.options.map((o, i) => (
+                  <Opt path="care" v={i} advance title={i === 0 ? 'We’ll look after it ourselves' : o.name.replace(/^\+ /, 'Care with ')} body={o.body} price={o.price ? mo(o.price) : undefined} />
+                ))}
+              </div>
+            </Step>
+
+            <!-- app -->
+            <Step id="app-need" sec="app" title="Next, do you need a mobile app?" sub="Published on the App Store and Google Play, in your company’s name.">
+              <div class="opts opts-2">
+                <Opt act="app:none" advance title="No app for now" />
+                <Opt act="app:ios" advance title="iPhone (iOS)" body="App Store" />
+                <Opt act="app:android" advance title="Android" body="Google Play" />
+                <Opt act="app:both" advance title="Both" body={`The second platform adds ${pct(apps.secondPlatform)}, not double`} />
+              </div>
+            </Step>
+            <Step id="app-tier" sec="app" title="What does the app need to do?" sub="A starting price. The final price is fixed in writing after we scope it together.">
+              <div class="opts opts-list">
+                {Object.entries(apps.tiers).map(([k, t]) => (
+                  <Opt path="app.tier" v={k} advance title={t.label} body={t.body} price={`From ${rs(t.base)}`} />
+                ))}
+              </div>
+            </Step>
+            <Step id="app-care" sec="app" title="After launch, should we keep it updated?" sub="New iOS and Android versions arrive every year; apps that are not updated stop working.">
+              <div class="opts opts-2">
+                <Opt path="app.care" v="true" advance title="Yes, look after it" body="Store updates, OS compatibility, fixes" price={mo(apps.care)} />
+                <Opt path="app.care" v="false" advance title="No, we’ll manage" />
+              </div>
+            </Step>
+            <Step id="software" sec="app" title="Does the business need its own software?" sub="Orders, stock, bookings or staff in one system, instead of notebooks, Excel and WhatsApp.">
+              <div class="opts opts-2">
+                <Opt path="software" v="true" advance title="Yes, let’s talk about it" body="Scoped in writing before we start" price={`From ${rs(oneTime.software.price)}`} />
+                <Opt path="software" v="false" advance title="Not right now" />
+              </div>
+            </Step>
+
+            <!-- marketing -->
+            <Step id="mkt" sec="marketing" title="Now, marketing. Should we run your social media?" sub="Posts, reels, ads and replies, planned a month ahead and approved by you before anything goes out.">
+              <div class="opts opts-2">
+                <Opt act="mkt:yes" advance title="Yes, run it for us" body="Next: which platforms, and how much" />
+                <Opt act="mkt:no" advance title="Not now" body="Skip to search and AI" />
+              </div>
+            </Step>
+            <Step id="platforms" sec="marketing" title="Where are your customers?" sub={`Facebook and Instagram are the base. Each platform added is ${mo(3000)}.`}>
+              <div class="opts opts-3">
+                {platforms.map((p) => (
+                  <button type="button" class="opt opt-check" data-set="platforms" data-v={p.id}>
+                    <span class="opt-mark" aria-hidden="true"></span>
+                    <span class="opt-title">{p.label}</span>
+                    <span class="opt-body">{p.base ? 'Included in management' : `+ ${mo(3000)}`}</span>
+                  </button>
+                ))}
+              </div>
+              <p class="big-cost big-cost-line" data-cost="platforms"></p>
+            </Step>
+            <Step id="graphics" sec="marketing" title="How many graphic posts a month?" sub="Offers, announcements, menus, festival greetings. Designed to your brand, in Nepali and English.">
+              <BigStepper path="qty.graphics" max={units.graphics.max} unit={each('graphics')} cost="u-graphics" presets={[4, 8, 12, 20]} />
+            </Step>
+            <Step id="reels" sec="marketing" title="And short videos (reels)?" sub="Reels reach the most people on Facebook, Instagram and TikTok. We script, film and edit them.">
+              <BigStepper path="qty.reels" max={units.reels.max} unit={each('reels')} cost="u-reels" presets={[0, 2, 4, 8, 12]} />
+            </Step>
+            <Step id="filming" sec="marketing" title="Should we come and film at your place?" sub="Real footage of your shop, team and product outperforms stock video. We batch it into one visit.">
+              <div class="opts opts-2">
+                <Opt path="qty.halfDays" v="0" advance title="No, use our photos and clips" />
+                <Opt path="qty.halfDays" v="1" advance title="Half a day a month" price={mo(units.halfDays.unit)} />
+                <Opt path="qty.halfDays" v="2" advance title="A full day a month" price={mo(units.halfDays.unit * 2)} />
+                <Opt path="qty.halfDays" v="4" advance title="Two days a month" price={mo(units.halfDays.unit * 4)} />
+              </div>
+            </Step>
+            <Step id="photos" sec="marketing" title="How many edited photos a month?" sub="Product, food, rooms, team: retouched and ready for posts, ads and your website.">
+              <BigStepper path="qty.photos" max={units.photos.max} step={units.photos.step} unit={each('photos')} cost="u-photos" presets={[0, 10, 20, 30]} />
+            </Step>
+            <Step id="ads" sec="marketing" title="How many ad campaigns should run at once?" sub="Each campaign chases one goal: messages, calls, visits or sales. Your ad budget is paid to Meta directly, never through us.">
+              <BigStepper path="qty.campaigns" max={units.campaigns.max} unit={`${rs(units.campaigns.unit)} per campaign a month`} cost="u-campaigns" presets={[0, 1, 2, 4]} />
+            </Step>
+            <Step id="boosts" sec="marketing" title="Any boosted posts on top?" sub="A quick push behind a post that is already doing well.">
+              <BigStepper path="qty.boosts" max={units.boosts.max} unit={each('boosts')} cost="u-boosts" presets={[0, 2, 4, 8]} />
+            </Step>
+            <Step id="creators" sec="marketing" title="Would you like a hired creator on camera?" sub="Most businesses start with the owner or staff on camera; customers trust a face they will meet. A creator is billed at cost, agreed before booking.">
+              <div class="opts opts-2">
+                <Opt path="qty.creators" v="0" advance title="Owner or staff on camera" body="What we recommend to start" />
+                <Opt path="qty.creators" v="1" advance title="One creator a month" price={`About ${mo(units.creators.unit)}`} />
+                <Opt path="qty.creators" v="2" advance title="Two creators a month" price={`About ${mo(units.creators.unit * 2)}`} />
+              </div>
+            </Step>
+
+            <!-- search and ai -->
+            <Step id="seo" sec="search" title="When someone searches for a business like yours, what should they find?" sub="On Google, on Maps, and in the answers AI assistants give.">
+              <div class="opts opts-list">
+                {levels.seo.options.map((o, i) => (
+                  <Opt path="seo" v={i} advance title={i === 0 ? 'Leave search for now' : o.name} body={o.body} price={o.price ? mo(o.price) : undefined} />
+                ))}
+              </div>
+            </Step>
+            <Step id="ai" sec="search" title="It’s 10pm and a customer messages you. Who answers?" sub="An AI assistant trained on your prices and FAQs, in Nepali and English, handing over to your team when it should.">
+              <div class="opts opts-list">
+                {levels.ai.options.map((o, i) => (
+                  <Opt path="ai" v={i} advance title={i === 0 ? 'We answer ourselves, in the morning' : o.name.replace(/^\+ /, 'Plus ')} body={o.body} price={o.price ? mo(o.price) : undefined} />
+                ))}
+              </div>
+            </Step>
+
+            <!-- extras -->
+            <Step id="extras" sec="extras" title="Anything else to add?" sub="Pick any. Quantities can be adjusted on the next screen.">
+              <div class="opts opts-2">
+                <Opt toggle="brandKit" on="true" off="false" title="Brand kit" body="Logo refresh, colours, fonts, post templates" price={rs(oneTime.brandKit.price)} />
+                <Opt toggle="adFilm" on="standard" off="none" title="An ad film" body="30–60 seconds: script, crew, one talent" price={rs(oneTime.adFilm.standard.price)} />
+                <Opt toggle="photoshoot" on="1" off="0" title="Product or menu photoshoot" body="25 edited photos" price={rs(oneTime.photoshoot.price)} />
+                <Opt toggle="festival" on="1" off="0" title="Festival pack" body="Dashain or Tihar: 4 extra reels and a festive set" price={rs(oneTime.festival.price)} />
+                <Opt toggle="agentic" on="3" off="0" title="AI agents in the office" body="Invoices, stock alerts, staff reports, email triage" price={`From ${rs(oneTime.agentic.base)}`} />
+                <Opt toggle="server" on="true" off="false" title="Server setup" body="VPS, security, backups, monitoring" price={rs(oneTime.server.price)} />
+                <Opt toggle="healthCheck" on="true" off="false" title="Digital Health Check" body="Your site, Google and social, against two competitors" price={rs(oneTime.healthCheck.price)} />
+              </div>
+            </Step>
+
+            <footer class="wiz-foot">
+              <button type="button" class="bld-ghost bld-ghost-dark" data-back><span aria-hidden="true">←</span> Back</button>
+              <button type="button" class="link-btn wiz-skip" data-go="review">Skip to my package</button>
+              <button type="button" class="btn btn-primary" data-next>Next <span aria-hidden="true">→</span></button>
+            </footer>
+          </div>
+        </section>
+
+        <!-- review ------------------------------------------------------ -->
+        <section data-screen="review" hidden aria-labelledby="h-review">
+          <header class="scr-head">
+            <button type="button" class="back-link" data-back-review><span aria-hidden="true">←</span> <span data-back-label>Back</span></button>
+            <h1 id="h-review">Your package<span class="stop" aria-hidden="true"></span></h1>
+            <p>Everything at once. Adjust any number and the price follows.</p>
+          </header>
+
+          <section class="bld-sec" data-review-plan aria-labelledby="h-rplan">
+            <div class="rplan">
+              <div>
+                <p class="rplan-k">Monthly plan</p>
+                <h2 id="h-rplan" data-rplan-name>—</h2>
+                <p class="rplan-body" data-rplan-body></p>
+              </div>
+              <div class="rplan-switch" role="group" aria-label="Change plan">
+                {plans.map((p) => <button type="button" data-plan={p.id}>{p.name}<span>{rs(p.price)}</span></button>)}
+              </div>
+            </div>
+            <button type="button" class="link-btn rplan-off" data-plan="">Remove the plan and price the monthly work piece by piece</button>
+          </section>
+
+          <div class="nudge" data-nudge hidden>
+            <p><span class="stop" aria-hidden="true"></span> <span data-nudge-text></span></p>
+            <button type="button" class="btn btn-primary" data-nudge-go>Switch</button>
+          </div>
+          <p class="rplan-cta" data-review-noplan><button type="button" class="link-btn" data-go="plans">Compare with the ready-made plans</button></p>
+
+          <section class="bld-sec" aria-labelledby="h-rweb">
+            <header class="bld-sec-head"><span class="bld-num">01</span><div><h2 id="h-rweb">Website</h2><p>One-time. Registered in your name.</p></div></header>
+            <div class="qs">
+              <div class="q q-block">
+                <div class="q-text"><p class="q-ask">Website</p><p class="q-cost" data-cost="web"></p></div>
+                <div class="cards cards-4" role="group" aria-label="Website">
+                  <button type="button" class="card" data-path="web.type" data-v="none"><span class="card-name">None</span><span class="card-body">Not now.</span></button>
+                  {Object.entries(websites).map(([k, w]) => (
+                    <button type="button" class="card" data-path="web.type" data-v={k}>
+                      <span class="card-name">{w.label}</span>
+                      <span class="card-price">{w.from ? 'From ' : ''}{rs(w.base)}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div data-when="web"><Stepper path="web.pages" ask="Pages" hint="" max={40} cost="web-pages" /></div>
+              <div data-when="landing"><YesNo path="web.bilingual" ask="Nepali and English" hint={`+ ${rs(websites.landing.bilingual)}`} cost="web-bilingual" /></div>
+              <Levels path="care" ask="Website care" options={levels.care.options} />
+            </div>
+          </section>
+
+          <section class="bld-sec" aria-labelledby="h-rapp">
+            <header class="bld-sec-head"><span class="bld-num">02</span><div><h2 id="h-rapp">App and software</h2><p>One-time, from. Fixed in writing after scoping.</p></div></header>
+            <div class="qs">
+              <YesNo path="app.ios" ask="iPhone app (iOS)" cost="app" />
+              <YesNo path="app.android" ask="Android app" hint={`With iOS, adds ${pct(apps.secondPlatform)}`} cost="app" />
+              <div data-when="app">
+                <div class="q q-block">
+                  <div class="q-text"><p class="q-ask">What the app does</p></div>
+                  <div class="cards cards-3" role="group" aria-label="App scope">
+                    {Object.entries(apps.tiers).map(([k, t]) => (
+                      <button type="button" class="card" data-path="app.tier" data-v={k}>
+                        <span class="card-name">{t.label}</span><span class="card-body">{t.body}</span><span class="card-price">From {rs(t.base)}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <YesNo path="app.care" ask="App care after launch" hint={mo(apps.care)} cost="app-care" />
+              </div>
+              <YesNo path="software" ask="Custom software or web app" hint={`From ${rs(oneTime.software.price)}`} cost="software" />
+            </div>
+          </section>
+
+          <section class="bld-sec" aria-labelledby="h-rmkt">
+            <header class="bld-sec-head"><span class="bld-num">03</span><div><h2 id="h-rmkt">Marketing, every month</h2><p data-mkt-note>Anything above the plan is added at the unit price.</p></div></header>
+            <div class="qs">
+              <div class="q q-block">
+                <div class="q-text"><p class="q-ask">Platforms</p><p class="q-cost" data-cost="platforms"></p></div>
+                <div class="q-ctl">
+                  <div class="chips-pick" role="group" aria-label="Platforms">
+                    {platforms.map((p) => <button type="button" data-set="platforms" data-v={p.id}>{p.label}</button>)}
+                  </div>
+                </div>
+              </div>
+              <Stepper path="qty.graphics" ask="Graphic posts a month" hint={each('graphics')} max={units.graphics.max} cost="u-graphics" />
+              <Stepper path="qty.reels" ask="Short videos (reels) a month" hint={each('reels')} max={units.reels.max} cost="u-reels" />
+              <Stepper path="qty.photos" ask="Edited photos a month" hint={each('photos')} max={units.photos.max} step={units.photos.step} cost="u-photos" />
+              <Stepper path="qty.halfDays" ask="Filming on location" hint={`${rs(units.halfDays.unit)} per half-day`} max={units.halfDays.max} unit="half-days" cost="u-halfDays" />
+              <Stepper path="qty.campaigns" ask="Ad campaigns running at once" hint={`${rs(units.campaigns.unit)} each a month. Ad budget paid to Meta directly.`} max={units.campaigns.max} cost="u-campaigns" />
+              <Stepper path="qty.boosts" ask="Boosted posts a month" hint={each('boosts')} max={units.boosts.max} cost="u-boosts" />
+              <Stepper path="qty.creators" ask="Hired creators a month" hint={`About ${rs(units.creators.unit)} each, at cost`} max={units.creators.max} cost="u-creators" />
+            </div>
+          </section>
+
+          <section class="bld-sec" aria-labelledby="h-rsearch">
+            <header class="bld-sec-head"><span class="bld-num">04</span><div><h2 id="h-rsearch">Search and AI assistant</h2><p>Monthly.</p></div></header>
+            <div class="qs">
+              <Levels path="seo" ask="Google and AI search" options={levels.seo.options} />
+              <Levels path="ai" ask="AI assistant" options={levels.ai.options} />
+            </div>
+          </section>
+
+          <section class="bld-sec" aria-labelledby="h-rextra">
+            <header class="bld-sec-head"><span class="bld-num">05</span><div><h2 id="h-rextra">Extras</h2><p>One-time, on top of anything monthly.</p></div></header>
+            <div class="qs">
+              <div class="q q-block">
+                <div class="q-text"><p class="q-ask">Ad film</p><p class="q-cost" data-cost="film"></p></div>
+                <div class="cards cards-3" role="group" aria-label="Ad film">
+                  <button type="button" class="card" data-path="adFilm" data-v="none"><span class="card-name">None</span></button>
+                  <button type="button" class="card" data-path="adFilm" data-v="standard"><span class="card-name">Ad film</span><span class="card-body">30–60 sec, one talent</span><span class="card-price">{rs(oneTime.adFilm.standard.price)}</span></button>
+                  <button type="button" class="card" data-path="adFilm" data-v="premium"><span class="card-name">Premium ad film</span><span class="card-body">Multiple locations and talent</span><span class="card-price">{rs(oneTime.adFilm.premium.price)}</span></button>
+                </div>
+              </div>
+              <Stepper path="photoshoot" ask="Product or menu photoshoots" hint={`${rs(oneTime.photoshoot.price)} each, 25 photos`} max={oneTime.photoshoot.max} cost="photoshoot" />
+              <Stepper path="extraHalf" ask="Extra half-day shoots" hint={`${rs(oneTime.extraHalf.price)} each`} max={oneTime.extraHalf.max} cost="extraHalf" />
+              <Stepper path="extraFull" ask="Extra full-day shoots" hint={`${rs(oneTime.extraFull.price)} each`} max={oneTime.extraFull.max} cost="extraFull" />
+              <Stepper path="festival" ask="Festival packs" hint={`${rs(oneTime.festival.price)} each`} max={oneTime.festival.max} cost="festival" />
+              <Stepper path="agentic" ask="Office tasks run by AI agents" hint={`${rs(oneTime.agentic.base)} for up to ${oneTime.agentic.baseWorkflows}, then ${rs(oneTime.agentic.extra)} each, + ${mo(oneTime.agentic.care)} care`} max={oneTime.agentic.max} cost="agentic" />
+              <YesNo path="brandKit" ask="Brand kit" hint={rs(oneTime.brandKit.price)} cost="brand" />
+              <YesNo path="server" ask="Server setup" hint={rs(oneTime.server.price)} cost="server" />
+              <YesNo path="healthCheck" ask="Digital Health Check" hint={`${rs(oneTime.healthCheck.price)}. ${oneTime.healthCheck.note}`} cost="health" />
+            </div>
+          </section>
+
+          <section class="bld-sec" aria-labelledby="h-rterm">
+            <header class="bld-sec-head"><span class="bld-num">06</span><div><h2 id="h-rterm">Commitment</h2><p>Short to start, rewarded for staying.</p></div></header>
+            <div class="cards cards-3" role="group" aria-label="Commitment">
+              {terms.map((t) => (
+                <button type="button" class="card" data-path="term" data-v={t.months}>
+                  <span class="card-name">{t.name}</span><span class="card-body">{t.body}</span>
+                </button>
+              ))}
+            </div>
+            <ul class="bld-perks">{discountLine.map((d) => <li><span class="stop" aria-hidden="true"></span> {d}.</li>)}</ul>
+          </section>
+
+          <section class="bld-sec finish" aria-labelledby="h-finish">
+            <h2 id="h-finish">Who is this for?</h2>
+            <div class="finish-row">
+              <input type="text" class="finish-input" data-text="client" placeholder="Your business name" autocomplete="organization" maxlength="80" aria-labelledby="h-finish" />
+              <button type="button" class="btn btn-primary" data-go="proposal">See my proposal <span aria-hidden="true">→</span></button>
+            </div>
+            <p class="finish-note">Your proposal opens on the next screen. Print it, save it as a PDF, or send it to us on WhatsApp.</p>
+          </section>
+        </section>
+      </main>
+
+      <!-- cart -------------------------------------------------------------- -->
+      <aside class="cart" data-cart aria-label="Your package">
+        <button type="button" class="cart-bar" data-cart-toggle aria-expanded="false">
+          <span class="cart-bar-fig"><span class="cart-bar-k">Monthly</span><span data-bar-m>Rs 0</span></span>
+          <span class="cart-bar-fig"><span class="cart-bar-k">One-time</span><span data-bar-o>Rs 0</span></span>
+          <span class="cart-bar-open">View package</span>
+        </button>
+        <div class="cart-in">
+          <header class="cart-head">
+            <p class="cart-kicker">Your package so far</p>
+            <p class="cart-client" data-client-echo>—</p>
+          </header>
+          <div class="cart-group">
+            <p class="cart-label">Every month</p>
+            <ul class="lines" data-lines="monthly"></ul>
+            <p class="cart-empty" data-empty="monthly">Monthly work appears here.</p>
+            <div class="disc" data-disc="m">
+              <div class="meter"><span class="meter-fill" data-meter="m"></span></div>
+              <p class="disc-text" data-disc-text="m"></p>
+            </div>
+            <dl class="sums" data-sums="m"></dl>
+          </div>
+          <div class="cart-group">
+            <p class="cart-label">One time</p>
+            <ul class="lines" data-lines="once"></ul>
+            <p class="cart-empty" data-empty="once">Websites, apps and shoots appear here.</p>
+            <div class="disc" data-disc="o">
+              <div class="meter"><span class="meter-fill" data-meter="o"></span></div>
+              <p class="disc-text" data-disc-text="o"></p>
+            </div>
+            <dl class="sums" data-sums="o"></dl>
+          </div>
+          <div class="cart-total">
+            <div class="cart-fig"><span class="cart-fig-k">Monthly</span><span class="cart-fig-v" data-fig="m">Rs 0</span><span class="cart-fig-s" data-fig-s="m"></span></div>
+            <div class="cart-fig"><span class="cart-fig-k">One-time</span><span class="cart-fig-v" data-fig="o">Rs 0</span><span class="cart-fig-s" data-fig-s="o"></span></div>
+            <div class="cart-due"><span class="cart-fig-k">Due to start</span><span class="cart-due-v" data-fig="due">Rs 0</span><span class="cart-fig-s" data-fig-s="due"></span></div>
+            <button type="button" class="btn btn-primary cart-cta" data-cart-cta>See my package</button>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <p class="toast" data-toast role="status" aria-live="polite"></p>
+
+    <!-- proposal ------------------------------------------------------------ -->
+    <article class="prop" data-screen="proposal" hidden aria-label="Proposal">
+      <div class="prop-actions">
+        <button type="button" class="bld-ghost bld-ghost-dark" data-go="review"><span aria-hidden="true">←</span> Edit package</button>
+        <div class="prop-actions-r">
+          <button type="button" class="bld-ghost bld-ghost-dark" data-copy>Copy link</button>
+          <button type="button" class="bld-ghost bld-ghost-dark" data-print>Print or save PDF</button>
+          <a class="bld-ghost bld-ghost-dark" data-send data-staff-only hidden href="#" target="_blank" rel="noopener">Send to client</a>
+          <a class="btn btn-primary" data-accept href="#" target="_blank" rel="noopener">Send to Nine Technology</a>
+        </div>
+      </div>
+
+      <div class="prop-doc">
+        <header class="prop-head">
+          <div class="prop-logo"><Fragment set:html={logoWhite} /></div>
+          <div class="prop-meta"><span>Proposal <span data-p="ref"></span></span><span data-p="date"></span></div>
+          <p class="prop-for">Prepared for</p>
+          <h1 class="prop-client" data-p="client"></h1>
+          <p class="prop-by" data-p="by"></p>
+        </header>
+
+        <div class="prop-figs">
+          <div><span class="prop-fig-k">Every month</span><span class="prop-fig-v" data-p="m"></span><span class="prop-fig-s" data-p="m-s"></span></div>
+          <div><span class="prop-fig-k">One time</span><span class="prop-fig-v" data-p="o"></span><span class="prop-fig-s" data-p="o-s"></span></div>
+          <div class="prop-fig-due"><span class="prop-fig-k">Due to start</span><span class="prop-fig-v" data-p="due"></span><span class="prop-fig-s" data-p="due-s"></span></div>
+        </div>
+
+        <section class="prop-plan" data-p-plan>
+          <div class="prop-plan-head">
+            <p class="prop-kicker">Your plan</p>
+            <h2><span data-p="plan-name"></span><span class="stop" aria-hidden="true"></span></h2>
+            <p class="prop-plan-promise" data-p="plan-promise"></p>
+          </div>
+          <ul class="prop-feat" data-p="plan-feat"></ul>
+          <div class="prop-save">
+            <p><span class="prop-save-k">Bought separately</span> <s data-p="sep"></s></p>
+            <p><span class="prop-save-k">Your plan</span> <strong data-p="plan-price"></strong></p>
+            <p class="prop-save-y" data-p="save"></p>
+          </div>
+        </section>
+
+        <section class="prop-sec" data-p-m><h3>Every month</h3><table class="prop-table"><tbody data-p="m-lines"></tbody></table></section>
+        <section class="prop-sec" data-p-o>
+          <h3>One time</h3>
+          <table class="prop-table"><tbody data-p="o-lines"></tbody></table>
+          <p class="prop-note" data-p="from-note">Items marked “from” are fixed in writing after scoping, before any work starts.</p>
+        </section>
+
+        <section class="prop-sec prop-cols">
+          <div>
+            <h3>In every plan</h3>
+            <ul class="prop-list">{everyPlan.map((t) => <li>{t}</li>)}</ul>
+            <p class="prop-note" data-p="ad"></p>
+          </div>
+          <div>
+            <h3>Terms</h3>
+            <ul class="prop-list">{clientTerms.map((t) => <li>{t}</li>)}</ul>
+          </div>
+        </section>
+
+        <footer class="prop-foot">
+          <div class="prop-foot-logo"><Fragment set:html={logoNavy} /></div>
+          <p>{site.legalName}<br />{site.address.display}</p>
+          <p>{site.phoneDisplay}<br />{site.email}<br />ninetechsystem.com</p>
+        </footer>
+      </div>
+    </article>
+
+    <script>
+      import { initialState, price, included, betterPlan, npr } from '../lib/package-price.js';
+      import { units, websites, discounts } from '../data/packages.js';
+
+      const WA = '9779843325804';
+      const STAFF = new URLSearchParams(location.search).has('staff');
+      const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const $ = (s, r = document) => r.querySelector(s);
+      const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+      const rs = (n) => `Rs ${npr(n)}`;
+
+      // ---- the conversation -------------------------------------------------
+      const SECTIONS = { website: 'Website', app: 'App', marketing: 'Marketing', search: 'Search & AI', extras: 'Extras', review: 'Review' };
+      const hasApp = (s) => s.app.ios || s.app.android;
+      const inMkt = (s) => s.mkt === true;
+      const WHEN = {
+        'web-pages': (s) => s.web.type !== 'none',
+        'web-lang': (s) => s.web.type === 'landing',
+        'app-tier': hasApp,
+        'app-care': hasApp,
+        platforms: inMkt, graphics: inMkt, reels: inMkt, filming: inMkt, photos: inMkt, ads: inMkt, boosts: inMkt,
+        creators: (s) => inMkt(s) && s.qty.halfDays > 0,
+      };
+      const STEPS = $$('.wiz-step').map((el) => el.dataset.step);
+      const visibleSteps = () => STEPS.filter((id) => (WHEN[id] ? WHEN[id](state) : true));
+      const secOf = (id) => $(`.wiz-step[data-step="${id}"]`).dataset.sec;
+
+      // ---- state, kept in the URL hash --------------------------------------
+      const enc = (o) => {
+        const bytes = new TextEncoder().encode(JSON.stringify(o));
+        return btoa(String.fromCharCode(...bytes)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+      };
+      const dec = (s) => {
+        const bin = atob(s.replace(/-/g, '+').replace(/_/g, '/'));
+        return JSON.parse(new TextDecoder().decode(Uint8Array.from(bin, (c) => c.charCodeAt(0))));
+      };
+      const blank = () => ({ ...initialState(null), mkt: null, ui: { screen: 'start', step: STEPS[0], from: 'start' } });
+      let state = blank();
+      try {
+        const m = location.hash.match(/q=([\w-]+)/);
+        if (m) {
+          const saved = dec(m[1]);
+          const base = blank();
+          state = {
+            ...base, ...saved,
+            qty: { ...base.qty, ...saved.qty }, web: { ...base.web, ...saved.web },
+            app: { ...base.app, ...saved.app }, ui: { ...base.ui, ...saved.ui },
+          };
+        }
+      } catch { state = blank(); }
+      const save = () => history.replaceState(null, '', `${location.search}#q=${enc(state)}`);
+
+      const get = (path) => path.split('.').reduce((o, k) => o[k], state);
+      const set = (path, v) => {
+        const ks = path.split('.');
+        const last = ks.pop();
+        ks.reduce((o, k) => o[k], state)[last] = v;
+      };
+      const parse = (v) => (v === 'true' ? true : v === 'false' ? false : /^\d+$/.test(v) ? Number(v) : v);
+
+      function bounds(path, el) {
+        let min = Number(el.dataset.min);
+        let max = Number(el.dataset.max);
+        const inc = included(state);
+        if (path.startsWith('qty.')) min = inc[path.slice(4)];
+        if (path === 'web.pages') {
+          const w = websites[state.web.type];
+          if (w) { min = w.minPages ?? 1; max = w.maxPages; }
+        }
+        return { min, max, step: Number(el.dataset.step) || 1 };
+      }
+
+      function choosePlan(id) {
+        if (!id) { state.plan = null; return; }
+        const next = initialState(id);
+        for (const k of Object.keys(state)) if (!['plan', 'qty', 'platforms', 'seo', 'ai', 'care'].includes(k)) next[k] = state[k];
+        // Keep anything already asked for above the new plan's allowance.
+        for (const k of Object.keys(units)) next.qty[k] = Math.max(next.qty[k], state.plan ? next.qty[k] : state.qty[k]);
+        if (!state.plan) {
+          next.platforms = [...new Set([...next.platforms, ...state.platforms])];
+          for (const k of ['seo', 'ai', 'care']) next[k] = Math.max(next[k], state[k]);
+        }
+        next.mkt = true;
+        state = next;
+      }
+
+      const ACTS = {
+        custom() {
+          state.plan = null;
+          state.ui.step = STEPS[0];
+          show('wizard');
+        },
+        'app:none'() { state.app.ios = false; state.app.android = false; },
+        'app:ios'() { state.app.ios = true; state.app.android = false; },
+        'app:android'() { state.app.ios = false; state.app.android = true; },
+        'app:both'() { state.app.ios = true; state.app.android = true; },
+        'mkt:yes'() {
+          state.mkt = true;
+          if (!state.platforms.length) state.platforms = ['facebook', 'instagram'];
+          if (!state.qty.graphics) state.qty.graphics = 8;
+        },
+        'mkt:no'() {
+          state.mkt = false;
+          if (!state.plan) { for (const k of Object.keys(units)) state.qty[k] = 0; state.platforms = []; }
+        },
+      };
+      const actOn = (a) => ({
+        'app:none': !hasApp(state), 'app:ios': state.app.ios && !state.app.android,
+        'app:android': state.app.android && !state.app.ios, 'app:both': state.app.ios && state.app.android,
+        'mkt:yes': state.mkt === true, 'mkt:no': state.mkt === false,
+      })[a];
+
+      // ---- screens and steps --------------------------------------------------
+      function show(screen) {
+        if (screen === 'review' && !['proposal', 'review'].includes(state.ui.screen)) state.ui.from = state.ui.screen;
+        state.ui.screen = screen;
+        $('[data-cart]').classList.remove('is-open');
+        commit();
+        scrollTo({ top: 0, behavior: 'instant' });
+      }
+
+      let dir = 1;
+      function goStep(id, d = 1) {
+        dir = d;
+        state.ui.step = id;
+        commit();
+        if ($('.wiz').getBoundingClientRect().top < 0) scrollTo({ top: 0, behavior: reduce ? 'instant' : 'smooth' });
+      }
+      function next() {
+        const list = visibleSteps();
+        const i = list.indexOf(state.ui.step);
+        if (i < 0 || i === list.length - 1) return show('review');
+        goStep(list[i + 1], 1);
+      }
+      function back() {
+        const list = visibleSteps();
+        const i = list.indexOf(state.ui.step);
+        if (i <= 0) return show('start');
+        goStep(list[i - 1], -1);
+      }
+
+      // ---- events -------------------------------------------------------------
+      let advancing = null;
+      document.addEventListener('click', (e) => {
+        const t = e.target.closest('button, a');
+        if (!t) return;
+        const d = t.dataset;
+
+        if (d.act) {
+          ACTS[d.act]?.();
+          if (d.act !== 'custom') commit();
+        } else if (d.toggle) {
+          const off = parse(d.off);
+          set(d.toggle, get(d.toggle) === off ? parse(d.on) : off);
+          commit();
+        } else if (d.plan !== undefined) {
+          choosePlan(d.plan);
+          if (t.hasAttribute('data-plan-go')) return show('review');
+          commit();
+        } else if (d.path) {
+          const path = d.path;
+          let v = parse(d.v);
+          if (['seo', 'ai', 'care'].includes(path)) v = Math.max(v, included(state)[path]);
+          set(path, v);
+          if (path === 'web.type' && websites[v]) {
+            const w = websites[v];
+            state.web.pages = Math.min(Math.max(state.web.pages, w.minPages ?? 1), w.maxPages);
+          }
+          commit();
+        } else if (d.set) {
+          const v = d.v;
+          if (included(state).platforms.includes(v)) return;
+          const list = state[d.set];
+          state[d.set] = list.includes(v) ? list.filter((x) => x !== v) : [...list, v];
+          commit();
+        } else if (t.hasAttribute('data-inc') || t.hasAttribute('data-dec')) {
+          const stepper = t.closest('[data-stepper]');
+          const path = stepper.dataset.stepper;
+          const { min, max, step } = bounds(path, stepper);
+          set(path, Math.min(max, Math.max(min, get(path) + (t.hasAttribute('data-inc') ? step : -step))));
+          commit();
+        } else if (d.go) {
+          return show(d.go);
+        } else if (d.jump) {
+          if (d.jump === 'review') return show('review');
+          const first = visibleSteps().find((id) => secOf(id) === d.jump);
+          if (first) goStep(first, STEPS.indexOf(first) >= STEPS.indexOf(state.ui.step) ? 1 : -1);
+          return;
+        } else if (t.hasAttribute('data-next')) {
+          return next();
+        } else if (t.hasAttribute('data-back')) {
+          return back();
+        } else if (t.hasAttribute('data-back-review')) {
+          const from = state.ui.from;
+          return show(from === 'wizard' || from === 'plans' ? from : 'start');
+        } else if (t.hasAttribute('data-cart-cta')) {
+          return show(state.ui.screen === 'review' ? 'proposal' : 'review');
+        } else if (t.hasAttribute('data-nudge-go')) {
+          choosePlan(d.target);
+          commit();
+        } else if (t.hasAttribute('data-reset')) {
+          const staff = state.staff;
+          state = { ...blank(), staff };
+          $$('[data-text]').forEach((i) => (i.value = state[i.dataset.text] ?? ''));
+          return show('start');
+        } else if (t.hasAttribute('data-print')) {
+          return window.print();
+        } else if (t.hasAttribute('data-copy')) {
+          navigator.clipboard?.writeText(location.href).then(() => toast('Link copied. It opens this proposal.'));
+          return;
+        } else if (t.hasAttribute('data-cart-toggle')) {
+          const open = $('[data-cart]').classList.toggle('is-open');
+          t.setAttribute('aria-expanded', String(open));
+          return;
+        }
+
+        // An answer in the conversation moves on by itself, after a beat.
+        if (t.hasAttribute('data-advance') && state.ui.screen === 'wizard') {
+          clearTimeout(advancing);
+          advancing = setTimeout(next, reduce ? 0 : 340);
+        }
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (state.ui.screen !== 'wizard' || e.target.closest('input, textarea') || e.metaKey || e.ctrlKey || e.altKey) return;
+        const step = $(`.wiz-step[data-step="${state.ui.step}"]`);
+        if (e.key === 'Enter' && !e.target.closest('button')) { e.preventDefault(); next(); }
+        else if (/^[1-9]$/.test(e.key)) $$('.opt', step)[Number(e.key) - 1]?.click();
+      });
+
+      for (const input of $$('[data-text]')) {
+        input.value = state[input.dataset.text] ?? '';
+        input.addEventListener('input', () => { state[input.dataset.text] = input.value; commit(); });
+        input.addEventListener('keydown', (e) => { if (e.key === 'Enter' && input.dataset.text === 'client') show('proposal'); });
+      }
+      for (const el of $$('[data-staff-only]')) el.hidden = !STAFF;
+
+      // ---- motion helpers ----------------------------------------------------
+      const shown = new WeakMap();
+      function tween(el, to) {
+        const from = shown.get(el) ?? to;
+        shown.set(el, to);
+        if (reduce || from === to) { el.textContent = rs(to); return; }
+        const t0 = performance.now();
+        const step = (now) => {
+          if (shown.get(el) !== to) return;
+          const p = Math.min(1, (now - t0) / 520);
+          el.textContent = rs(from + (to - from) * (1 - Math.pow(1 - p, 4)));
+          if (p < 1) requestAnimationFrame(step);
+        };
+        requestAnimationFrame(step);
+      }
+      // Bars use the Web Animations API: the CSP allows no inline styles.
+      const scaleAt = new WeakMap();
+      function scaleX(el, to) {
+        const from = scaleAt.get(el) ?? 0;
+        if (from === to) return;
+        scaleAt.set(el, to);
+        el.animate([{ transform: `scaleX(${from})` }, { transform: `scaleX(${to})` }], {
+          duration: reduce ? 0 : 600, easing: 'cubic-bezier(0.16, 1, 0.3, 1)', fill: 'forwards',
+        });
+      }
+      let toastTimer;
+      function toast(msg) {
+        const el = $('[data-toast]');
+        el.textContent = msg;
+        el.classList.remove('is-on');
+        void el.offsetWidth;
+        el.classList.add('is-on');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => el.classList.remove('is-on'), 2600);
+      }
+
+      // ---- render ------------------------------------------------------------
+      let prevKeys = null;
+      const prevRate = { m: null, o: null };
+      let prevStep = null;
+
+      function lineEl(l, isNew) {
+        const li = document.createElement('li');
+        li.className = 'line' + (isNew ? ' is-new' : '') + (l.credit ? ' is-credit' : '') + (l.plan ? ' is-plan' : '');
+        const a = document.createElement('div');
+        const name = document.createElement('span');
+        name.className = 'line-name';
+        name.textContent = l.label;
+        a.append(name);
+        if (l.detail) {
+          const dd = document.createElement('span');
+          dd.className = 'line-detail';
+          dd.textContent = l.detail;
+          a.append(dd);
+        }
+        const amt = document.createElement('span');
+        amt.className = 'line-amt';
+        if (l.was) {
+          const s = document.createElement('s');
+          s.textContent = rs(l.was);
+          amt.append(s, document.createElement('br'), 'Waived');
+        } else {
+          amt.textContent = (l.amount < 0 ? '− ' : '') + (l.from ? 'from ' : '') + rs(Math.abs(l.amount));
+        }
+        li.append(a, amt);
+        return li;
+      }
+
+      function sums(dl, rows) {
+        dl.replaceChildren();
+        for (const [k, v, cls] of rows) {
+          const dt = document.createElement('dt');
+          const dd = document.createElement('dd');
+          dt.textContent = k;
+          dd.textContent = v;
+          if (cls) { dt.className = cls; dd.className = cls; }
+          dl.append(dt, dd);
+        }
+      }
+
+      function discount(which, r, table, per) {
+        const box = $(`[data-disc="${which}"]`);
+        const text = $(`[data-disc-text="${which}"]`);
+        const fill = $(`[data-meter="${which}"]`);
+        const rate = r.tier?.rate ?? 0;
+        box.hidden = !r.sub;
+        if (!r.sub) { prevRate[which] = 0; return; }
+        if (r.next) {
+          const b = document.createElement('strong');
+          b.textContent = rs(r.next.min - r.sub);
+          text.replaceChildren('Add ', b, ` more${per} to unlock ${Math.round(r.next.rate * 100)}% off`);
+          scaleX(fill, Math.min(1, r.sub / r.next.min));
+        } else {
+          text.textContent = `${Math.round(table[0].rate * 100)}% off unlocked, the highest tier`;
+          scaleX(fill, 1);
+        }
+        box.classList.toggle('is-max', !r.next);
+        if (prevRate[which] !== null && rate > prevRate[which]) {
+          box.classList.remove('is-pop');
+          void box.offsetWidth;
+          box.classList.add('is-pop');
+          toast(`${Math.round(rate * 100)}% off ${which === 'm' ? 'the monthly fee' : 'one-time work'}, unlocked`);
+        }
+        prevRate[which] = rate;
+      }
+
+      function renderScreens() {
+        const scr = state.ui.screen;
+        for (const el of $$('[data-screen]')) el.hidden = el.dataset.screen !== scr;
+        $('[data-app]').hidden = !['plans', 'wizard', 'review'].includes(scr);
+        document.body.className = `bld scr-${scr}`;
+        $('.bld-top').hidden = scr === 'proposal';
+        $('[data-reset]').hidden = scr === 'start';
+      }
+
+      function renderWizard() {
+        const list = visibleSteps();
+        if (!list.includes(state.ui.step)) state.ui.step = list.find((id) => STEPS.indexOf(id) > STEPS.indexOf(state.ui.step)) ?? list[0];
+        const id = state.ui.step;
+        for (const el of $$('.wiz-step')) el.hidden = el.dataset.step !== id;
+        const cur = $(`.wiz-step[data-step="${id}"]`);
+        if (prevStep !== id && state.ui.screen === 'wizard') {
+          cur.classList.remove('is-in', 'is-back');
+          void cur.offsetWidth;
+          cur.classList.add('is-in');
+          if (dir < 0) cur.classList.add('is-back');
+          prevStep = id;
+        }
+        const i = list.indexOf(id);
+        const sec = cur.dataset.sec;
+        $('[data-sec-name]').textContent = SECTIONS[sec];
+        $('[data-count]').textContent = `Question ${i + 1} of ${list.length}`;
+        $('[data-next]').firstChild.textContent = i === list.length - 1 ? 'See my package ' : 'Next ';
+        const order = Object.keys(SECTIONS);
+        const at = order.indexOf(sec);
+        for (const b of $$('[data-jump]')) {
+          const k = order.indexOf(b.dataset.jump);
+          b.classList.toggle('is-done', k < at);
+          b.classList.toggle('is-cur', k === at);
+          if (k === at) b.setAttribute('aria-current', 'step'); else b.removeAttribute('aria-current');
+          b.disabled = b.dataset.jump !== 'review' && !list.some((s) => secOf(s) === b.dataset.jump);
+        }
+        if (state.ui.screen === 'wizard') scaleX($('[data-prog]'), (i + 1) / (list.length + 1));
+      }
+
+      function render() {
+        renderScreens();
+        renderWizard();
+        const r = price(state);
+        const inc = included(state);
+        const plan = r.plan;
+
+        for (const b of $$('[data-plan]')) b.setAttribute('aria-pressed', String((b.dataset.plan || null) === state.plan));
+        for (const b of $$('[data-path]')) {
+          b.setAttribute('aria-pressed', String(get(b.dataset.path) === parse(b.dataset.v)));
+          if (['seo', 'ai', 'care'].includes(b.dataset.path)) {
+            const lv = Number(b.dataset.v);
+            b.disabled = !!plan && lv < inc[b.dataset.path];
+            b.classList.toggle('is-inc', !!plan && lv <= inc[b.dataset.path] && lv > 0);
+          }
+        }
+        for (const b of $$('[data-toggle]')) b.setAttribute('aria-pressed', String(get(b.dataset.toggle) !== parse(b.dataset.off)));
+        for (const b of $$('[data-act]')) {
+          const on = actOn(b.dataset.act);
+          if (on !== undefined) b.setAttribute('aria-pressed', String(on));
+        }
+        for (const b of $$('[data-set]')) {
+          b.setAttribute('aria-pressed', String(state.platforms.includes(b.dataset.v)));
+          b.classList.toggle('is-inc', inc.platforms.includes(b.dataset.v));
+        }
+        for (const s of $$('[data-stepper]')) {
+          const path = s.dataset.stepper;
+          const { min, max } = bounds(path, s);
+          const v = get(path);
+          $('[data-out]', s).textContent = String(v);
+          $('[data-dec]', s).disabled = v <= min;
+          $('[data-inc]', s).disabled = v >= max;
+        }
+
+        // cost beside each question
+        const byKey = Object.fromEntries([...r.monthly, ...r.once].map((l) => [l.key, l]));
+        for (const c of $$('[data-cost]')) {
+          const k = c.dataset.cost;
+          let text = '';
+          let quiet = false;
+          if (k.startsWith('u-')) {
+            const u = k.slice(2);
+            const l = byKey[k];
+            if (l) text = `+ ${rs(l.amount)} a month`;
+            if (plan && inc[u] > 0) { text = `${inc[u]} included in ${plan.name}` + (l ? ` · + ${rs(l.amount)} a month` : ''); quiet = !l; }
+          } else if (k === 'platforms') {
+            const n = r.monthly.filter((l) => l.key.startsWith('pf-') || l.key === 'social').reduce((a, l) => a + l.amount, 0);
+            text = n ? `+ ${rs(n)} a month for management` : plan ? `Included in ${plan.name}` : '';
+            quiet = !n && !!plan;
+          } else if (['seo', 'ai', 'care'].includes(k)) {
+            const l = byKey[`l-${k}`];
+            if (l) text = `+ ${rs(l.amount)} a month`;
+            else if (plan && inc[k] > 0) { text = `Included in ${plan.name}`; quiet = true; }
+          } else if (k === 'web') {
+            const l = byKey.web;
+            text = l ? `${rs(l.amount)}${byKey['web-credit'] ? ` · ${rs(-byKey['web-credit'].amount)} included with 12 months` : ''}` : '';
+          } else if (k === 'web-pages') {
+            const w = websites[state.web.type];
+            if (w) text = `${w.pages} included · ${rs(w.extraPage)} each after`;
+            quiet = true;
+          } else if (k === 'web-bilingual') {
+            text = state.web.bilingual ? `+ ${rs(websites.landing.bilingual)}` : '';
+          } else if (k === 'app') {
+            text = byKey.app ? `from ${rs(byKey.app.amount)}` : '';
+          } else if (k === 'app-care') {
+            text = byKey['app-care'] ? `+ ${rs(byKey['app-care'].amount)} a month` : '';
+          } else if (k === 'agentic') {
+            text = byKey.agentic ? `from ${rs(byKey.agentic.amount)} + ${rs(byKey['agentic-care'].amount)} a month` : '';
+          } else {
+            text = byKey[k] ? rs(byKey[k].amount) : '';
+          }
+          c.textContent = text;
+          c.classList.toggle('is-inc', quiet);
+        }
+
+        for (const w of $$('[data-when]')) {
+          const k = w.dataset.when;
+          w.hidden = !(k === 'web' ? state.web.type !== 'none' : k === 'landing' ? state.web.type === 'landing' : k === 'app' ? hasApp(state) : true);
+        }
+
+        // review: the plan block, or a nudge towards one
+        $('[data-review-plan]').hidden = !plan;
+        $('[data-review-noplan]').hidden = !!plan;
+        if (plan) {
+          $('[data-rplan-name]').textContent = `${plan.name}: ${plan.promise}`;
+          $('[data-rplan-body]').textContent = `${rs(plan.price)} a month. ${plan.features.slice(0, 3).join('. ')}.`;
+        }
+        $('[data-mkt-note]').textContent = plan ? `${plan.name} includes the numbers shown; anything above is added at the unit price.` : 'Priced per piece. A plan may cover the same for less.';
+        const better = betterPlan(state);
+        $('[data-nudge]').hidden = !better;
+        if (better) {
+          $('[data-nudge-text]').textContent = `${better.plan.name} covers everything you picked for ${rs(better.cost)} a month: ${rs(better.saves)} less than buying it piece by piece.`;
+          const go = $('[data-nudge-go]');
+          go.dataset.target = better.plan.id;
+          go.textContent = `Switch to ${better.plan.name}`;
+        }
+        const from = state.ui.from;
+        $('[data-back-label]').textContent = from === 'wizard' ? 'Back to the questions' : from === 'plans' ? 'Back to the plans' : 'Back';
+
+        // cart
+        const keys = new Set([...r.monthly, ...r.once].map((l) => l.key));
+        for (const [which, lines] of [['monthly', r.monthly], ['once', r.once]]) {
+          $(`[data-lines="${which}"]`).replaceChildren(...lines.map((l) => lineEl(l, prevKeys !== null && !prevKeys.has(l.key))));
+          $(`[data-empty="${which}"]`).hidden = lines.length > 0;
+        }
+        prevKeys = keys;
+
+        discount('m', r.m, discounts.monthly, ' a month');
+        discount('o', r.o, discounts.oneTime, '');
+
+        const mRows = [];
+        if (r.m.disc || r.m.prepay) mRows.push(['Subtotal', rs(r.m.sub)]);
+        if (r.m.disc) mRows.push([`Volume discount ${Math.round(r.m.tier.rate * 100)}%`, `− ${rs(r.m.disc)}`, 'is-save']);
+        if (r.m.prepay) mRows.push(['6 months paid up front, 5%', `− ${rs(r.m.prepay)}`, 'is-save']);
+        sums($('[data-sums="m"]'), mRows);
+        sums($('[data-sums="o"]'), r.o.disc ? [['Subtotal', rs(r.o.sub)], [`Volume discount ${Math.round(r.o.tier.rate * 100)}%`, `− ${rs(r.o.disc)}`, 'is-save']] : []);
+
+        tween($('[data-fig="m"]'), r.m.total);
+        tween($('[data-fig="o"]'), r.o.total);
+        tween($('[data-fig="due"]'), r.due.exVat + r.due.vat);
+        tween($('[data-bar-m]'), r.m.total);
+        tween($('[data-bar-o]'), r.o.total);
+        $('[data-fig-s="m"]').textContent = r.m.total ? `+ VAT ${rs(r.m.vat)}${plan ? ` · ad budget ${plan.adBudget} paid to Meta` : ''}` : '';
+        $('[data-fig-s="o"]').textContent = r.o.total ? `+ VAT ${rs(r.o.vat)}${r.o.hasFrom ? ' · includes “from” prices' : ''}` : '';
+        const hasProjects = r.once.some((l) => !l.setup && l.amount > 0);
+        $('[data-fig-s="due"]').textContent = r.due.exVat
+          ? [r.due.months === 6 ? '6 months up front' : r.due.months ? 'first month' : '', r.once.some((l) => l.setup && l.amount) ? 'setup' : '', hasProjects ? '50% of one-time work' : '']
+              .filter(Boolean).join(' + ') + ', incl. VAT'
+          : '';
+        $('[data-client-echo]').textContent = state.client || (plan ? `${plan.name} plan` : 'Built by you');
+        $('[data-cart-cta]').textContent = state.ui.screen === 'review' ? 'See my proposal' : 'See my package';
+
+        renderProposal(r);
+      }
+
+      // ---- the proposal ------------------------------------------------------
+      const ref = () => {
+        const d = new Date();
+        const n = [...JSON.stringify({ ...state, ui: 0 })].reduce((a, c) => (a * 31 + c.charCodeAt(0)) >>> 0, 7) % 9000 + 1000;
+        return `NT-${String(d.getFullYear()).slice(2)}${String(d.getMonth() + 1).padStart(2, '0')}${String(d.getDate()).padStart(2, '0')}-${n}`;
+      };
+      const p = (k) => $(`[data-p="${k}"]`);
+
+      function rows(tbody, lines, totals) {
+        tbody.replaceChildren();
+        for (const l of lines) {
+          const tr = document.createElement('tr');
+          if (l.credit) tr.className = 'is-save';
+          const a = document.createElement('td');
+          const n = document.createElement('span');
+          n.className = 'pt-name';
+          n.textContent = l.label;
+          a.append(n);
+          if (l.detail) { const dd = document.createElement('span'); dd.className = 'pt-detail'; dd.textContent = l.detail; a.append(dd); }
+          const b = document.createElement('td');
+          b.textContent = l.was ? 'Waived' : (l.amount < 0 ? '− ' : '') + (l.from ? 'from ' : '') + rs(Math.abs(l.amount));
+          tr.append(a, b);
+          tbody.append(tr);
+        }
+        for (const [k, v, cls] of totals) {
+          const tr = document.createElement('tr');
+          tr.className = cls;
+          const a = document.createElement('td');
+          const b = document.createElement('td');
+          a.textContent = k;
+          b.textContent = v;
+          tr.append(a, b);
+          tbody.append(tr);
+        }
+      }
+
+      function summary(r) {
+        const out = [`Proposal ${ref()}${state.client ? ` for ${state.client}` : ''}`];
+        if (r.plan) out.push(`Plan: ${r.plan.name}`);
+        for (const l of [...r.monthly.filter((x) => !x.plan), ...r.once]) out.push(`- ${l.label}${l.qty ? ` (${l.detail})` : ''}`);
+        if (r.m.total) out.push(`Monthly: ${rs(r.m.total)} + VAT`);
+        if (r.o.total) out.push(`One-time: ${rs(r.o.total)} + VAT`);
+        out.push(`Due to start: ${rs(r.due.exVat + r.due.vat)} incl. VAT`);
+        return out.join('\n');
+      }
+
+      function renderProposal(r) {
+        p('ref').textContent = ref();
+        p('date').textContent = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+        p('client').textContent = state.client || 'Your business';
+        p('by').textContent = state.staff ? `By ${state.staff}, Nine Technology` : 'Nine Technology, Lazimpat, Kathmandu';
+        p('m').textContent = rs(r.m.total);
+        p('m-s').textContent = r.m.total ? `+ 13% VAT · ${state.term === 12 ? '12-month term' : state.term === 6 ? '6 months paid up front' : '3-month minimum'}` : 'No monthly work';
+        p('o').textContent = rs(r.o.total);
+        p('o-s').textContent = r.o.total ? '+ 13% VAT · 50% to start, 50% on delivery' : 'No one-time work';
+        p('due').textContent = rs(r.due.exVat + r.due.vat);
+        p('due-s').textContent = 'Including VAT';
+
+        $('[data-p-plan]').hidden = !r.plan;
+        if (r.plan) {
+          p('plan-name').textContent = r.plan.name;
+          p('plan-promise').textContent = `${r.plan.promise}. ${r.plan.bestFor}. ${r.plan.reply}.`;
+          p('plan-feat').replaceChildren(...r.plan.features.map((f) => { const li = document.createElement('li'); li.textContent = f; return li; }));
+          p('sep').textContent = `${rs(r.separate)} a month`;
+          p('plan-price').textContent = `${rs(r.plan.price)} a month`;
+          p('save').textContent = `You save ${rs(r.separate - r.plan.price)} every month, ${rs((r.separate - r.plan.price) * 12)} a year.`;
+        }
+
+        $('[data-p-m]').hidden = !r.monthly.length;
+        const mt = [];
+        if (r.m.disc) mt.push([`Volume discount, ${Math.round(r.m.tier.rate * 100)}%`, `− ${rs(r.m.disc)}`, 'is-save']);
+        if (r.m.prepay) mt.push(['Six months paid up front, 5%', `− ${rs(r.m.prepay)}`, 'is-save']);
+        mt.push(['Monthly total', rs(r.m.total), 'is-total'], ['VAT 13%', rs(r.m.vat), 'is-vat']);
+        rows(p('m-lines'), r.monthly, mt);
+
+        $('[data-p-o]').hidden = !r.once.length;
+        const ot = [];
+        if (r.o.disc) ot.push([`Volume discount, ${Math.round(r.o.tier.rate * 100)}%`, `− ${rs(r.o.disc)}`, 'is-save']);
+        ot.push(['One-time total', rs(r.o.total), 'is-total'], ['VAT 13%', rs(r.o.vat), 'is-vat']);
+        rows(p('o-lines'), r.once, ot);
+        p('from-note').hidden = !r.o.hasFrom;
+        p('ad').textContent = r.plan
+          ? `Suggested ad budget for ${r.plan.name}: ${r.plan.adBudget} a month, paid by you directly to the platform.`
+          : 'Ad budgets are paid by you directly to Meta, Google or TikTok, never through us.';
+
+        const text = summary(r);
+        const link = `${location.origin}${location.pathname}${location.hash}`;
+        const hello = STAFF ? 'Hi Nine Technology, we accept this proposal.' : 'Hi Nine Technology, I built this package on your website.';
+        $('[data-accept]').href = `https://wa.me/${WA}?text=${encodeURIComponent(`${hello}\n\n${text}\n\n${link}`)}`;
+        $('[data-accept]').textContent = STAFF ? 'Accept on WhatsApp' : 'Send to Nine Technology';
+        $('[data-send]').href = `https://wa.me/?text=${encodeURIComponent(`${text}\n\nThe full proposal: ${link}`)}`;
+      }
+
+      function commit() { save(); render(); }
+
+      render();
+      save();
+    </script>
+  </body>
+</html>
+
+<style is:global>
+  /* ---- shell --------------------------------------------------------------- */
+  .bld { background: var(--off-white); min-height: 100vh; }
+  .bld [hidden] { display: none !important; }
+  .link-btn { background: none; border: 0; padding: 0; color: var(--navy); font-weight: 500; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--amber); text-decoration-thickness: 2px; cursor: pointer; }
+  .link-btn:hover { text-decoration-color: var(--navy); }
+
+  .bld-top { position: relative; z-index: 20; background: var(--navy); color: var(--white); border-bottom: 1px solid var(--rule-navy); }
+  .scr-start .bld-top { border-bottom-color: transparent; }
+  @media (min-width: 1080px) { .scr-wizard .bld-top, .scr-review .bld-top, .scr-plans .bld-top { position: sticky; top: 0; } }
+  .bld-top-in { max-width: 1440px; margin: 0 auto; padding: 12px var(--gutter); display: flex; align-items: center; gap: var(--s4); flex-wrap: wrap; }
+  .bld-logo svg { height: 38px; width: auto; }
+  .bld-title { font-family: var(--display); font-weight: 600; font-size: 0.95rem; padding-left: var(--s4); border-left: 1px solid var(--rule-navy); color: rgba(255, 255, 255, 0.8); }
+  .bld-client { display: flex; align-items: center; gap: 10px; flex: 0 1 260px; }
+  .bld-client span { font-size: 0.8rem; color: rgba(255, 255, 255, 0.6); white-space: nowrap; }
+  .bld-client input { width: 100%; min-height: 40px; padding: 0 12px; border-radius: var(--radius); background: rgba(255, 255, 255, 0.06); border: 1px solid var(--rule-navy); color: var(--white); }
+  .bld-client input::placeholder { color: rgba(255, 255, 255, 0.4); }
+  .bld-client input:focus { outline: 2px solid var(--amber); outline-offset: 1px; border-color: transparent; }
+  .bld-top-actions { margin-left: auto; display: flex; gap: var(--s2); }
+  .bld-ghost {
+    min-height: 42px; padding: 0 1rem; border-radius: var(--radius); cursor: pointer; gap: 6px;
+    background: transparent; border: 1px solid var(--rule-navy); color: var(--white); font-size: 0.95rem;
+    display: inline-flex; align-items: center; text-decoration: none; transition: border-color 0.15s, background-color 0.15s;
+  }
+  .bld-ghost:hover { border-color: var(--white); background: rgba(255, 255, 255, 0.06); }
+  .bld-ghost-dark { color: var(--navy); border-color: var(--rule); background: var(--white); }
+  .bld-ghost-dark:hover { border-color: var(--navy); background: var(--white); }
+  @media (max-width: 719px) {
+    .bld-title { display: none; }
+    .bld-client { flex: 1 1 100%; order: 3; }
+  }
+
+  /* ---- start ------------------------------------------------------------- */
+  .start { background: var(--navy); color: var(--white); min-height: calc(100vh - 63px); display: grid; align-items: center; position: relative; overflow: hidden; }
+  .start::before {
+    content: ''; position: absolute; inset: 0; pointer-events: none; opacity: 0.5;
+    background-image: radial-gradient(rgba(255, 255, 255, 0.16) 1px, transparent 1.4px);
+    background-size: 28px 28px;
+  }
+  .start-in { position: relative; max-width: 1120px; margin: 0 auto; padding: var(--s7) var(--gutter) var(--s8); width: 100%; }
+  .start-kicker { font-size: 0.9rem; color: rgba(255, 255, 255, 0.7); display: flex; align-items: center; gap: 10px; }
+  .start-kicker::before { content: ''; width: 24px; height: 1px; background: var(--amber); }
+  .start-title { font-family: var(--display); font-weight: 700; font-size: clamp(2.4rem, 6.4vw, 4.4rem); letter-spacing: -0.035em; line-height: 1.02; margin-top: var(--s3); max-width: 13ch; }
+  .start-lead { margin-top: var(--s4); font-size: clamp(1.05rem, 1.6vw, 1.2rem); color: rgba(255, 255, 255, 0.8); max-width: 36em; }
+  .start-paths { margin-top: var(--s6); display: grid; gap: var(--s3); }
+  @media (min-width: 760px) { .start-paths { grid-template-columns: 1fr 1fr; gap: var(--s4); } }
+  .path {
+    text-align: left; cursor: pointer; display: flex; flex-direction: column; gap: 8px; min-height: 230px;
+    padding: var(--s5); border-radius: var(--radius); color: var(--white);
+    background: rgba(255, 255, 255, 0.04); border: 1px solid var(--rule-navy);
+    transition: transform 0.4s var(--ease), border-color 0.2s, background-color 0.2s;
+  }
+  .path:hover { transform: translateY(-4px); border-color: rgba(255, 255, 255, 0.5); background: rgba(255, 255, 255, 0.07); }
+  .path-main { background: var(--white); color: var(--navy); border-color: var(--white); }
+  .path-main:hover { background: var(--white); border-color: var(--amber); }
+  .path-k { font-size: 0.8rem; color: rgba(255, 255, 255, 0.6); }
+  .path-main .path-k { color: var(--grey); }
+  .path-title { font-family: var(--display); font-weight: 600; font-size: 1.7rem; letter-spacing: -0.02em; }
+  .path-body { font-size: 0.98rem; line-height: 1.5; color: rgba(255, 255, 255, 0.75); max-width: 30em; }
+  .path-main .path-body { color: var(--grey); }
+  .path-go { margin-top: auto; padding-top: var(--s3); font-weight: 500; display: inline-flex; gap: 8px; align-items: center; }
+  .path-go span { transition: transform 0.3s var(--ease); }
+  .path:hover .path-go span { transform: translateX(4px); }
+  .path-main .path-go { align-self: flex-start; background: var(--amber); padding: 10px 18px; border-radius: var(--radius); }
+  .start-note { margin-top: var(--s5); font-size: 0.88rem; color: rgba(255, 255, 255, 0.55); max-width: none; }
+  .start-in > * { animation: rise 0.8s var(--ease) both; }
+  .start-in > :nth-child(2) { animation-delay: 0.06s; }
+  .start-in > :nth-child(3) { animation-delay: 0.12s; }
+  .start-in > :nth-child(4) { animation-delay: 0.2s; }
+  .start-in > :nth-child(5) { animation-delay: 0.28s; }
+
+  /* ---- app grid ---------------------------------------------------------- */
+  .bld-app { max-width: 1440px; margin: 0 auto; padding: var(--s5) var(--gutter) var(--s8); display: grid; gap: var(--s5); align-items: start; }
+  @media (min-width: 1080px) { .bld-app { grid-template-columns: minmax(0, 1fr) 380px; } }
+  .scr-plans .bld-app { grid-template-columns: minmax(0, 1fr); }
+  .scr-plans .cart { display: none; }
+
+  .scr-head { margin-bottom: var(--s4); }
+  .scr-head h1 { font-family: var(--display); font-weight: 700; font-size: clamp(2rem, 4.4vw, 3rem); letter-spacing: -0.03em; margin-top: var(--s2); }
+  .scr-head p { color: var(--grey); margin-top: 8px; max-width: 40em; }
+  .back-link { background: none; border: 0; padding: 0; color: var(--grey); cursor: pointer; font-size: 0.92rem; display: inline-flex; gap: 6px; }
+  .back-link:hover { color: var(--navy); }
+
+  /* ---- plans ------------------------------------------------------------- */
+  .plans { display: grid; gap: var(--s3); }
+  @media (min-width: 620px) { .plans { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (min-width: 1180px) { .plans { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+  .plan {
+    position: relative; text-align: left; cursor: pointer; display: flex; flex-direction: column; gap: 4px;
+    padding: var(--s4); background: var(--white); color: var(--navy);
+    border: 1px solid var(--rule); border-radius: var(--radius);
+    transition: border-color 0.2s, transform 0.4s var(--ease);
+  }
+  .plan:hover { border-color: var(--navy); transform: translateY(-4px); }
+  .plan-rec { border-color: var(--navy); outline: 1px solid var(--navy); }
+  .plan-flag { position: absolute; top: 0; right: var(--s3); transform: translateY(-50%); background: var(--amber); color: var(--navy); font-size: 0.72rem; font-weight: 500; padding: 3px 9px; border-radius: var(--radius); }
+  .plan-name { font-family: var(--display); font-weight: 700; font-size: 1.4rem; letter-spacing: -0.02em; }
+  .plan-promise { font-size: 0.9rem; color: var(--grey); }
+  .plan-price { font-family: var(--display); font-weight: 700; font-size: 2rem; letter-spacing: -0.03em; margin-top: var(--s2); line-height: 1.1; white-space: nowrap; }
+  .plan-cur { font-size: 1rem; margin-right: 4px; font-weight: 600; }
+  .plan-per { font-family: var(--sans); font-size: 0.85rem; font-weight: 400; color: var(--grey); margin-left: 3px; letter-spacing: 0; }
+  .plan-sep { font-size: 0.8rem; color: var(--grey); }
+  .plan-sep s { white-space: nowrap; }
+  .plan-for { font-size: 0.9rem; font-weight: 500; margin-top: var(--s2); padding-top: var(--s2); border-top: 1px solid var(--rule); }
+  .plan-feat { font-size: 0.86rem; line-height: 1.45; display: grid; gap: 7px; margin-top: var(--s2); color: var(--grey); }
+  .plan-feat li { padding-left: 16px; position: relative; }
+  .plan-feat li::before { content: ''; position: absolute; left: 0; top: 0.5em; width: 6px; height: 6px; background: var(--amber); }
+  .plan-pick { margin-top: auto; padding-top: var(--s4); font-weight: 500; }
+  .plan-rec .plan-pick { align-self: stretch; text-align: center; background: var(--amber); padding: 10px; border-radius: var(--radius); margin-top: var(--s4); }
+  .plans-alt { margin: var(--s5) auto 0; text-align: center; color: var(--grey); max-width: none; }
+
+  /* ---- wizard -------------------------------------------------------------- */
+  .prog { margin-bottom: var(--s3); }
+  .prog-steps { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; }
+  .prog-steps button {
+    background: none; border: 0; padding: 6px 10px 8px; cursor: pointer; white-space: nowrap;
+    font-size: 0.88rem; color: var(--grey); display: inline-flex; align-items: center; gap: 7px;
+  }
+  .prog-steps li:first-child button { padding-left: 0; }
+  .prog-steps button::before { content: ''; width: 7px; height: 7px; border: 1px solid currentColor; }
+  .prog-steps button.is-done { color: var(--navy); }
+  .prog-steps button.is-done::before { background: var(--amber); border-color: var(--amber); }
+  .prog-steps button.is-cur { color: var(--navy); font-weight: 500; }
+  .prog-steps button.is-cur::before { background: var(--navy); border-color: var(--navy); }
+  .prog-steps button:disabled { opacity: 0.4; cursor: default; }
+  .prog-bar { height: 3px; background: var(--rule); border-radius: 2px; overflow: hidden; }
+  .prog-fill { display: block; height: 100%; background: var(--navy); transform-origin: left; transform: scaleX(0); }
+
+  .wiz { background: var(--white); border: 1px solid var(--rule); border-radius: var(--radius); padding: var(--s5) var(--s4) var(--s4); min-height: min(640px, calc(100vh - 220px)); display: flex; flex-direction: column; }
+  @media (min-width: 720px) { .wiz { padding: var(--s6) var(--s6) var(--s5); } }
+  .wiz-count { font-size: 0.85rem; color: var(--grey); display: flex; align-items: center; gap: 8px; max-width: none; }
+  .wiz-count .stop { width: 8px; height: 8px; }
+  .wiz-step { margin-top: var(--s3); }
+  .wiz-step.is-in { animation: q-in 0.5s var(--ease) both; }
+  .wiz-step.is-in.is-back { animation-name: q-back; }
+  @keyframes q-in { from { opacity: 0; transform: translateX(28px); } to { opacity: 1; transform: none; } }
+  @keyframes q-back { from { opacity: 0; transform: translateX(-28px); } to { opacity: 1; transform: none; } }
+  .wiz-title { font-family: var(--display); font-weight: 600; font-size: clamp(1.6rem, 3.2vw, 2.35rem); letter-spacing: -0.025em; line-height: 1.12; max-width: 22ch; }
+  .wiz-sub { color: var(--grey); margin-top: 10px; font-size: 1.02rem; max-width: 40em; }
+  .wiz-answers { margin-top: var(--s5); }
+  .wiz-foot { margin-top: auto; padding-top: var(--s5); display: flex; align-items: center; gap: var(--s3); }
+  .wiz-foot .btn { margin-left: auto; min-height: 48px; padding-inline: 1.6rem; gap: 8px; }
+  .wiz-skip { font-size: 0.92rem; color: var(--grey); font-weight: 400; text-decoration-color: var(--rule); }
+  @media (max-width: 560px) { .wiz-skip { display: none; } }
+
+  .opts { display: grid; gap: 10px; }
+  @media (min-width: 640px) { .opts-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); } .opts-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  .opt {
+    position: relative; text-align: left; cursor: pointer; display: grid; grid-template-columns: auto 1fr auto; column-gap: 14px; align-items: start;
+    padding: 18px 20px; background: var(--white); color: var(--navy);
+    border: 1px solid var(--rule); border-radius: var(--radius);
+    transition: border-color 0.2s, background-color 0.25s var(--ease), color 0.2s, transform 0.35s var(--ease);
+  }
+  .opt:hover { border-color: var(--navy); transform: translateY(-2px); }
+  .opt:active { transform: scale(0.99); }
+  .opt-mark { grid-row: 1 / span 2; width: 18px; height: 18px; margin-top: 3px; border: 1.5px solid var(--rule); border-radius: 50%; position: relative; transition: border-color 0.2s, background-color 0.2s; }
+  .opt-check .opt-mark, .opt[data-toggle] .opt-mark { border-radius: 3px; }
+  .opt-title { font-weight: 500; font-size: 1.05rem; line-height: 1.35; grid-column: 2; }
+  .opt-body { grid-column: 2; font-size: 0.88rem; color: var(--grey); line-height: 1.45; margin-top: 3px; }
+  .opt-price { grid-column: 3; grid-row: 1; font-size: 0.9rem; font-weight: 500; white-space: nowrap; font-variant-numeric: tabular-nums; padding-top: 2px; }
+  .opt[aria-pressed='true'] { background: var(--navy); border-color: var(--navy); color: var(--white); }
+  .opt[aria-pressed='true'] .opt-body { color: rgba(255, 255, 255, 0.72); }
+  .opt[aria-pressed='true'] .opt-mark { border-color: var(--amber); background: var(--amber); }
+  .opt[aria-pressed='true'] .opt-mark::after {
+    content: ''; position: absolute; left: 5px; top: 1.5px; width: 5px; height: 9px;
+    border: solid var(--navy); border-width: 0 2px 2px 0; transform: rotate(45deg);
+    animation: tick 0.3s var(--ease) both;
+  }
+  @keyframes tick { from { opacity: 0; transform: rotate(45deg) scale(0.4); } to { opacity: 1; transform: rotate(45deg) scale(1); } }
+  .opts-list .opt { padding-block: 16px; }
+  @media (max-width: 480px) {
+    .opt { grid-template-columns: auto 1fr; }
+    .opt-price { grid-column: 2; grid-row: auto; margin-top: 6px; }
+  }
+
+  .big-row { display: flex; align-items: center; gap: var(--s4); flex-wrap: wrap; }
+  .stepper-big button { width: 64px; height: 72px; }
+  .stepper-big svg { width: 18px; height: 18px; }
+  .stepper-big output { font-size: 2.6rem; font-weight: 700; line-height: 72px; min-width: 3.2ch; padding-inline: 16px; letter-spacing: -0.03em; }
+  .big-side { display: flex; flex-direction: column; gap: 2px; }
+  .big-unit { font-size: 0.92rem; color: var(--grey); }
+  .big-cost { font-weight: 500; font-size: 1.05rem; font-variant-numeric: tabular-nums; min-height: 1.5em; }
+  .big-cost-line { margin-top: var(--s3); }
+  .presets { display: flex; flex-wrap: wrap; gap: 8px; margin-top: var(--s4); }
+  .presets button {
+    min-width: 56px; min-height: 42px; padding: 0 16px; border-radius: 21px; border: 1px solid var(--rule);
+    background: var(--white); cursor: pointer; font-weight: 500; color: var(--navy); font-variant-numeric: tabular-nums; transition: all 0.2s;
+  }
+  .presets button:hover { border-color: var(--navy); }
+  .presets button[aria-pressed='true'] { background: var(--navy); border-color: var(--navy); color: var(--white); }
+
+  /* ---- review ------------------------------------------------------------ */
+  .bld-sec { background: var(--white); border: 1px solid var(--rule); border-radius: var(--radius); padding: var(--s5) var(--s4); }
+  @media (min-width: 720px) { .bld-sec { padding: var(--s5); } }
+  .bld-sec + .bld-sec, .nudge + .bld-sec, .rplan-cta + .bld-sec { margin-top: var(--s3); }
+  .bld-sec-head { display: flex; gap: var(--s3); align-items: flex-start; margin-bottom: var(--s3); }
+  .bld-sec-head h2 { font-size: clamp(1.25rem, 2.2vw, 1.5rem); }
+  .bld-sec-head p { color: var(--grey); margin-top: 4px; font-size: 0.95rem; }
+  .bld-num { flex: none; font-family: var(--display); font-weight: 600; font-size: 0.8rem; width: 32px; height: 32px; display: grid; place-items: center; background: var(--navy); color: var(--white); border-radius: var(--radius); }
+
+  .rplan { display: grid; gap: var(--s4); align-items: center; }
+  @media (min-width: 900px) { .rplan { grid-template-columns: 1fr auto; } }
+  .rplan-k { font-size: 0.82rem; color: var(--grey); }
+  .rplan h2 { font-size: 1.6rem; letter-spacing: -0.02em; margin-top: 2px; }
+  .rplan-body { color: var(--grey); font-size: 0.92rem; margin-top: 6px; }
+  .rplan-switch { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
+  @media (min-width: 560px) { .rplan-switch { grid-template-columns: repeat(4, auto); } }
+  .rplan-switch button { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; padding: 10px 14px; border: 1px solid var(--rule); background: var(--white); border-radius: var(--radius); cursor: pointer; font-weight: 500; color: var(--navy); }
+  .rplan-switch button:hover { border-color: var(--navy); }
+  .rplan-switch button span { font-size: 0.78rem; font-weight: 400; color: var(--grey); }
+  .rplan-switch button[aria-pressed='true'] { background: var(--navy); border-color: var(--navy); color: var(--white); }
+  .rplan-switch button[aria-pressed='true'] span { color: rgba(255, 255, 255, 0.7); }
+  .rplan-off { margin-top: var(--s3); font-size: 0.88rem; font-weight: 400; color: var(--grey); }
+  .rplan-cta { margin-block: 0 var(--s3); font-size: 0.95rem; }
+  [data-review-plan] + .nudge { margin-top: var(--s3); }
+
+  .nudge { margin-bottom: var(--s3); display: flex; gap: var(--s3); align-items: center; justify-content: space-between; flex-wrap: wrap; padding: 14px var(--s4); background: var(--navy); color: var(--white); border-radius: var(--radius); animation: rise 0.5s var(--ease) both; }
+  .nudge p { max-width: none; font-size: 0.98rem; }
+  .nudge .btn { min-height: 42px; }
+
+  .qs > * + * { border-top: 1px solid var(--rule); }
+  .qs > [data-when] { border-top: 0; }
+  .qs > [data-when] > .q { border-top: 1px solid var(--rule); }
+  .q { display: grid; gap: var(--s2) var(--s4); padding-block: 14px; align-items: center; }
+  @media (min-width: 720px) { .q:not(.q-block) { grid-template-columns: minmax(0, 1fr) auto; } }
+  .q-ask { font-weight: 500; line-height: 1.4; }
+  .q-hint { font-size: 0.85rem; color: var(--grey); margin-top: 2px; line-height: 1.45; }
+  .q-ctl { display: flex; flex-wrap: wrap; align-items: center; gap: 8px var(--s3); justify-content: flex-end; }
+  @media (max-width: 719px) { .q-ctl { justify-content: flex-start; } }
+  .q-block .q-text { display: flex; justify-content: space-between; gap: var(--s3); align-items: baseline; flex-wrap: wrap; }
+  .q-block .q-ctl { justify-content: flex-start; }
+  .q-cost { font-size: 0.86rem; font-weight: 500; min-width: 7.5em; text-align: right; font-variant-numeric: tabular-nums; }
+  .q-cost:empty { display: none; }
+  .q-cost.is-inc { color: var(--grey); font-weight: 400; }
+  .q-block .q-cost { min-width: 0; }
+  .q-unit { font-size: 0.85rem; color: var(--grey); }
+
+  .stepper { display: inline-flex; align-items: center; border: 1px solid var(--rule); border-radius: var(--radius); background: var(--white); }
+  .stepper button { width: 44px; height: 44px; display: grid; place-items: center; cursor: pointer; background: none; border: 0; color: var(--navy); transition: background-color 0.15s; }
+  .stepper button:hover:not(:disabled) { background: var(--off-white); }
+  .stepper button:active:not(:disabled) svg { transform: scale(0.8); }
+  .stepper button:disabled { color: var(--rule); cursor: default; }
+  .stepper svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: square; transition: transform 0.1s; }
+  .stepper output { min-width: 3ch; text-align: center; font-family: var(--display); font-weight: 600; font-size: 1.2rem; font-variant-numeric: tabular-nums; border-inline: 1px solid var(--rule); line-height: 44px; padding-inline: 10px; }
+
+  .seg { display: inline-flex; border: 1px solid var(--rule); border-radius: var(--radius); padding: 3px; gap: 3px; background: var(--off-white); }
+  .seg button { min-width: 64px; min-height: 38px; border: 0; border-radius: 3px; background: transparent; cursor: pointer; color: var(--grey); font-weight: 500; transition: background-color 0.2s, color 0.2s; }
+  .seg button[aria-pressed='true'] { background: var(--white); color: var(--navy); outline: 1px solid var(--rule); }
+  .seg button[data-v='true'][aria-pressed='true'] { background: var(--navy); color: var(--white); outline: 0; }
+
+  .chips-pick { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chips-pick button { min-height: 38px; padding: 0 12px; border-radius: var(--radius); border: 1px solid var(--rule); background: var(--white); color: var(--grey); cursor: pointer; font-size: 0.9rem; transition: all 0.2s; }
+  .chips-pick button[aria-pressed='true'] { background: var(--navy); border-color: var(--navy); color: var(--white); }
+  .chips-pick button.is-inc { cursor: default; }
+  .chips-pick button.is-inc::after { content: ' · in plan'; opacity: 0.6; font-size: 0.8em; }
+
+  .levels { display: grid; gap: 8px; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); margin-top: var(--s2); }
+  .level, .card { position: relative; text-align: left; cursor: pointer; display: flex; flex-direction: column; gap: 4px; padding: 12px 14px; background: var(--white); border: 1px solid var(--rule); border-radius: var(--radius); color: var(--navy); transition: border-color 0.2s, background-color 0.2s, color 0.2s; }
+  .level:hover:not(:disabled), .card:hover { border-color: var(--navy); }
+  .level-name, .card-name { font-weight: 500; font-size: 0.95rem; line-height: 1.3; }
+  .level-body, .card-body { font-size: 0.8rem; color: var(--grey); line-height: 1.4; }
+  .level-price, .card-price { font-size: 0.82rem; font-weight: 500; margin-top: auto; padding-top: 6px; font-variant-numeric: tabular-nums; }
+  .level-tag { display: none; order: -1; align-self: flex-start; font-size: 0.68rem; font-weight: 500; padding: 1px 6px; margin-bottom: 2px; background: var(--amber); color: var(--navy); border-radius: 2px; }
+  .level.is-inc .level-tag { display: block; }
+  .level:disabled { cursor: default; opacity: 0.45; }
+  .level[aria-pressed='true'], .card[aria-pressed='true'] { background: var(--navy); border-color: var(--navy); color: var(--white); }
+  .level[aria-pressed='true'] .level-body, .card[aria-pressed='true'] .card-body { color: rgba(255, 255, 255, 0.72); }
+  .level.is-inc:not([aria-pressed='true']) { background: var(--off-white); }
+  .cards { display: grid; gap: 8px; margin-top: var(--s2); }
+  .cards-3 { grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); }
+  .cards-4 { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+  .bld-perks { margin-top: var(--s3); display: grid; gap: 6px; font-size: 0.9rem; color: var(--grey); }
+
+  .finish { background: var(--navy); color: var(--white); border-color: var(--navy); }
+  .finish h2 { font-size: 1.5rem; }
+  .finish-row { display: flex; gap: var(--s2); flex-wrap: wrap; margin-top: var(--s3); }
+  .finish-input { flex: 1 1 260px; min-height: 52px; padding: 0 16px; font-size: 1.05rem; border-radius: var(--radius); border: 1px solid var(--rule-navy); background: rgba(255, 255, 255, 0.06); color: var(--white); }
+  .finish-input::placeholder { color: rgba(255, 255, 255, 0.45); }
+  .finish-input:focus { outline: 2px solid var(--amber); outline-offset: 1px; }
+  .finish .btn { min-height: 52px; gap: 8px; }
+  .finish-note { margin-top: var(--s2); font-size: 0.86rem; color: rgba(255, 255, 255, 0.65); }
+
+  /* ---- cart --------------------------------------------------------------- */
+  .cart { position: sticky; top: 84px; }
+  .cart-in { background: var(--white); border: 1px solid var(--rule); border-radius: var(--radius); max-height: calc(100vh - 104px); overflow-y: auto; overscroll-behavior: contain; }
+  .cart-bar { display: none; }
+  .cart-head { padding: var(--s4) var(--s4) var(--s3); border-bottom: 1px solid var(--rule); }
+  .cart-kicker { font-size: 0.8rem; color: var(--grey); }
+  .cart-client { font-family: var(--display); font-weight: 600; font-size: 1.2rem; letter-spacing: -0.015em; overflow-wrap: anywhere; }
+  .cart-group { padding: var(--s3) var(--s4); border-bottom: 1px solid var(--rule); }
+  .cart-label { font-size: 0.78rem; font-weight: 500; color: var(--grey); margin-bottom: 4px; }
+  .cart-empty { font-size: 0.86rem; color: var(--grey); padding: 4px 0 6px; }
+  .lines { display: grid; }
+  .line { display: flex; justify-content: space-between; gap: var(--s3); padding: 8px 0; font-size: 0.88rem; line-height: 1.35; }
+  .line + .line { border-top: 1px dashed var(--rule); }
+  .line-name { display: block; font-weight: 500; }
+  .line-detail { display: block; color: var(--grey); font-size: 0.78rem; margin-top: 1px; }
+  .line-amt { white-space: nowrap; font-variant-numeric: tabular-nums; text-align: right; font-weight: 500; }
+  .line-amt s { color: var(--grey); font-weight: 400; }
+  .line.is-plan .line-name { font-family: var(--display); font-weight: 600; }
+  .line.is-credit .line-amt { color: #1d7a4a; }
+  .line.is-new { animation: line-in 0.6s var(--ease) both; }
+  @keyframes line-in {
+    from { opacity: 0; transform: translateX(14px); background: rgba(255, 149, 0, 0.16); }
+    60% { background: rgba(255, 149, 0, 0.1); }
+    to { opacity: 1; transform: none; background: transparent; }
+  }
+  .disc { margin-top: 8px; padding: 10px 12px; background: var(--off-white); border-radius: var(--radius); }
+  .meter { height: 4px; background: var(--rule); border-radius: 2px; overflow: hidden; }
+  .meter-fill { display: block; height: 100%; background: var(--amber); transform-origin: left; transform: scaleX(0); }
+  .disc-text { font-size: 0.8rem; margin-top: 7px; }
+  .disc.is-max { background: var(--navy); }
+  .disc.is-max .disc-text { color: var(--white); }
+  .disc.is-max .meter { background: var(--rule-navy); }
+  .disc.is-pop { animation: pop 0.7s var(--ease); }
+  @keyframes pop { 30% { transform: scale(1.03); } }
+  .sums { display: grid; grid-template-columns: 1fr auto; gap: 4px var(--s3); font-size: 0.86rem; margin-top: 8px; font-variant-numeric: tabular-nums; }
+  .sums:empty { display: none; }
+  .sums dd { text-align: right; }
+  .sums .is-save { color: #1d7a4a; font-weight: 500; }
+  .cart-total { position: sticky; bottom: 0; background: var(--navy); color: var(--white); padding: var(--s4); display: grid; grid-template-columns: 1fr 1fr; gap: var(--s3); }
+  .cart-fig, .cart-due { display: flex; flex-direction: column; }
+  .cart-fig-k { font-size: 0.78rem; color: rgba(255, 255, 255, 0.65); }
+  .cart-fig-v { font-family: var(--display); font-weight: 700; font-size: 1.4rem; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .cart-fig-s { font-size: 0.72rem; color: rgba(255, 255, 255, 0.6); line-height: 1.35; }
+  .cart-due { grid-column: 1 / -1; padding-top: var(--s3); border-top: 1px solid var(--rule-navy); }
+  .cart-due-v { font-family: var(--display); font-weight: 700; font-size: 2rem; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+  .cart-due-v::after { content: ''; display: inline-block; width: 0.18em; height: 0.18em; background: var(--amber); margin-left: 3px; }
+  .cart-cta { grid-column: 1 / -1; width: 100%; }
+
+  @media (max-width: 1079px) {
+    .bld-app { padding-bottom: 120px; }
+    .cart { position: fixed; left: 0; right: 0; bottom: 0; top: auto; z-index: 30; }
+    .cart-bar { display: flex; width: 100%; align-items: center; gap: var(--s4); padding: 12px var(--gutter); background: var(--navy); color: var(--white); border: 0; border-top: 1px solid var(--rule-navy); cursor: pointer; text-align: left; }
+    .cart-bar-fig { display: flex; flex-direction: column; white-space: nowrap; font-family: var(--display); font-weight: 700; font-size: 1.15rem; font-variant-numeric: tabular-nums; }
+    .cart-bar-k { font-family: var(--sans); font-weight: 400; font-size: 0.72rem; color: rgba(255, 255, 255, 0.65); }
+    .cart-bar-open { white-space: nowrap; margin-left: auto; background: var(--amber); color: var(--navy); padding: 8px 14px; border-radius: var(--radius); font-weight: 500; font-size: 0.9rem; }
+    .cart-in { display: none; border-radius: 0; border: 0; max-height: 78vh; }
+    .cart-total { position: static; }
+    .cart.is-open .cart-in { display: block; animation: rise 0.35s var(--ease); }
+    .cart.is-open .cart-bar-open { font-size: 0; }
+    .cart.is-open .cart-bar-open::after { content: 'Hide package'; font-size: 0.9rem; }
+  }
+  @keyframes rise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+
+  .toast { position: fixed; left: 50%; top: 84px; z-index: 50; transform: translate(-50%, -12px); opacity: 0; pointer-events: none; background: var(--amber); color: var(--navy); font-weight: 500; font-size: 0.95rem; padding: 10px 18px; border-radius: var(--radius); transition: opacity 0.3s, transform 0.4s var(--ease); max-width: calc(100vw - 32px); }
+  .toast.is-on { opacity: 1; transform: translate(-50%, 0); }
+
+  /* ---- proposal ----------------------------------------------------------- */
+  .scr-proposal { background: #e9edf3; }
+  .prop { padding: var(--s4) var(--gutter) var(--s8); }
+  .prop-actions { max-width: 960px; margin: 0 auto var(--s4); display: flex; justify-content: space-between; gap: var(--s2); flex-wrap: wrap; }
+  .prop-actions-r { display: flex; gap: var(--s2); flex-wrap: wrap; }
+  .prop-actions .btn { min-height: 42px; }
+  .prop-doc { max-width: 960px; margin: 0 auto; background: var(--white); border-radius: var(--radius); overflow: hidden; animation: rise 0.6s var(--ease) both; }
+  .prop-head { background: var(--navy); color: var(--white); padding: var(--s5) var(--s5) var(--s6); position: relative; overflow: hidden; }
+  @media (min-width: 720px) { .prop-head { padding: var(--s6) var(--s7) var(--s7); } }
+  .prop-head::after { content: ''; position: absolute; right: -90px; bottom: -110px; width: 220px; height: 220px; border: 1px solid var(--rule-navy); transform: rotate(45deg); }
+  .prop-logo svg { height: 40px; width: auto; }
+  .prop-meta { z-index: 1; position: absolute; top: var(--s5); right: var(--s5); text-align: right; font-size: 0.82rem; color: rgba(255, 255, 255, 0.7); display: flex; flex-direction: column; }
+  @media (min-width: 720px) { .prop-meta { top: var(--s6); right: var(--s7); } }
+  .prop-for { margin-top: var(--s6); font-size: 0.9rem; color: rgba(255, 255, 255, 0.7); }
+  .prop-client { font-family: var(--display); font-weight: 700; font-size: clamp(2.2rem, 6vw, 3.6rem); letter-spacing: -0.035em; line-height: 1.05; margin-top: 4px; overflow-wrap: anywhere; }
+  .prop-client::after { content: ''; display: inline-block; width: 0.16em; height: 0.16em; background: var(--amber); margin-left: 0.04em; }
+  .prop-by { margin-top: var(--s3); color: rgba(255, 255, 255, 0.75); font-size: 0.95rem; }
+  .prop-figs { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); border-bottom: 1px solid var(--rule); }
+  .prop-figs > div { padding: var(--s4) var(--s5); display: flex; flex-direction: column; gap: 2px; }
+  .prop-figs > div + div { border-left: 1px solid var(--rule); }
+  @media (min-width: 720px) { .prop-figs > div:first-child { padding-left: var(--s7); } }
+  .prop-fig-k { font-size: 0.82rem; color: var(--grey); }
+  .prop-fig-v { font-family: var(--display); font-weight: 700; font-size: 1.9rem; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+  .prop-fig-s { font-size: 0.78rem; color: var(--grey); }
+  .prop-fig-due { background: var(--off-white); }
+  .prop-plan, .prop-sec { padding: var(--s5); }
+  @media (min-width: 720px) { .prop-plan, .prop-sec { padding: var(--s6) var(--s7); } }
+  .prop-plan { display: grid; gap: var(--s4); border-bottom: 1px solid var(--rule); }
+  @media (min-width: 820px) { .prop-plan { grid-template-columns: 1fr 1.3fr; } .prop-save { grid-column: 1 / -1; } }
+  .prop-kicker { font-size: 0.82rem; color: var(--grey); }
+  .prop-plan h2 { font-size: 2.4rem; font-weight: 700; letter-spacing: -0.03em; }
+  .prop-plan-promise { color: var(--grey); margin-top: 6px; }
+  .prop-feat { display: grid; gap: 8px; font-size: 0.95rem; }
+  .prop-feat li { padding-left: 20px; position: relative; }
+  .prop-feat li::before { content: ''; position: absolute; left: 0; top: 0.55em; width: 7px; height: 7px; background: var(--amber); }
+  .prop-save { display: flex; flex-wrap: wrap; gap: var(--s2) var(--s5); align-items: baseline; padding: var(--s3) var(--s4); background: var(--off-white); border-radius: var(--radius); }
+  .prop-save-k { font-size: 0.82rem; color: var(--grey); margin-right: 6px; }
+  .prop-save-y { margin-left: auto; font-weight: 500; color: #1d7a4a; max-width: none; }
+  .prop-sec + .prop-sec { border-top: 1px solid var(--rule); }
+  .prop-sec h3 { font-size: 1.2rem; margin-bottom: var(--s3); }
+  .prop-table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+  .prop-table td { padding: 10px 0; border-top: 1px solid var(--rule); vertical-align: top; }
+  .prop-table td:last-child { text-align: right; white-space: nowrap; padding-left: var(--s4); font-weight: 500; }
+  .pt-name { display: block; font-weight: 500; }
+  .pt-detail { display: block; font-size: 0.85rem; color: var(--grey); }
+  .prop-table .is-save td { color: #1d7a4a; }
+  .prop-table .is-total td { font-family: var(--display); font-weight: 700; font-size: 1.2rem; border-top: 2px solid var(--navy); }
+  .prop-table .is-vat td { font-size: 0.85rem; color: var(--grey); border-top: 0; padding-top: 0; font-weight: 400; }
+  .prop-note { font-size: 0.85rem; color: var(--grey); margin-top: var(--s3); }
+  .prop-cols { display: grid; gap: var(--s5); }
+  @media (min-width: 820px) { .prop-cols { grid-template-columns: 1fr 1.2fr; } }
+  .prop-list { display: grid; gap: 8px; font-size: 0.9rem; }
+  .prop-list li { padding-left: 18px; position: relative; }
+  .prop-list li::before { content: ''; position: absolute; left: 0; top: 0.6em; width: 6px; height: 6px; background: var(--navy); }
+  .prop-foot { display: flex; flex-wrap: wrap; gap: var(--s3) var(--s6); align-items: center; padding: var(--s4) var(--s5); border-top: 1px solid var(--rule); font-size: 0.82rem; color: var(--grey); }
+  @media (min-width: 720px) { .prop-foot { padding: var(--s4) var(--s7); } }
+  .prop-foot-logo svg { height: 30px; width: auto; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .bld *, .bld *::before, .bld *::after { animation: none !important; transition: none !important; }
+  }
+  @media print {
+    @page { margin: 12mm; }
+    .bld, .scr-proposal { background: var(--white); }
+    .bld-top, .bld-app, .start, .prop-actions, .toast { display: none !important; }
+    .prop { padding: 0; }
+    .prop-doc { max-width: none; border-radius: 0; animation: none; }
+    .prop-head, .prop-fig-due, .prop-save { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .prop-sec, .prop-plan { break-inside: avoid; }
+  }
+</style>

@@ -9,7 +9,7 @@ import { getPosts } from '../lib/blog.js';
  */
 export async function GET() {
   const posts = await getPosts();
-  const paths = [...new Set([...nav.map((p) => p.href), '/how-we-work', '/sectors', ...posts.map((p) => `/blog/${p.id}`), ...servicePages.map((p) => p.path)])];
+  const paths = [...new Set([...nav.map((p) => p.href), '/how-we-work', '/sectors', '/builder', ...posts.map((p) => `/blog/${p.id}`), ...servicePages.map((p) => p.path)])];
   const urls = paths
     .map((path) => `  <url>\n    <loc>${site.url}${path === '/' ? '' : path}</loc>\n  </url>`)
     .join('\n');

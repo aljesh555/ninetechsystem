@@ -1,0 +1,250 @@
+/**
+ * The package builder's price list: the four monthly growth plans, every unit
+ * that can be added to them, and the one-time work sold alongside. Read by
+ * /builder only. Every figure is NPR, excluding 13% VAT.
+ *
+ * This file ships to the browser. It holds prices a client may see and nothing
+ * else: no delivery costs, margins or salaries.
+ *
+ * Unit prices are what a client pays for a piece bought on its own. They are
+ * deliberately priced so that a plan always costs less than its own contents
+ * bought separately; the builder uses that gap as the sales story.
+ */
+
+export const VAT = 0.13;
+
+/** Volume discounts, applied separately to the monthly and one-time totals.
+ *  The highest threshold reached wins; they do not stack with each other. */
+export const discounts = {
+  monthly: [
+    { min: 100000, rate: 0.1 },
+    { min: 50000, rate: 0.05 },
+  ],
+  oneTime: [
+    { min: 200000, rate: 0.1 },
+    { min: 100000, rate: 0.05 },
+  ],
+};
+
+/** Paying six months up front takes a further 5% off the monthly fee. */
+export const prepayRate = 0.05;
+
+/** Monthly, per unit. `max` bounds the stepper. */
+export const units = {
+  reels: { label: 'Short videos (reels)', unit: 2500, max: 40 },
+  graphics: { label: 'Graphic designs', unit: 1000, max: 60 },
+  photos: { label: 'Edited photos', unit: 300, max: 100, step: 5 },
+  campaigns: { label: 'Active ad campaigns', unit: 8000, max: 10 },
+  boosts: { label: 'Boosted posts', unit: 1500, max: 20 },
+  halfDays: { label: 'Filming half-days', unit: 8000, max: 12 },
+  creators: { label: 'Hired creators', unit: 7500, max: 6, note: 'estimate; billed at cost, agreed before booking' },
+};
+
+/** Posting and community management. Facebook and Instagram are the base. */
+export const social = { base: 10000, extraPlatform: 3000 };
+
+export const platforms = [
+  { id: 'facebook', label: 'Facebook', base: true },
+  { id: 'instagram', label: 'Instagram', base: true },
+  { id: 'tiktok', label: 'TikTok' },
+  { id: 'youtube', label: 'YouTube Shorts' },
+  { id: 'linkedin', label: 'LinkedIn' },
+];
+
+/** Tiered monthly services. Level 0 is "none". */
+export const levels = {
+  seo: {
+    label: 'Google & AI search',
+    options: [
+      { name: 'None', body: 'No search work this month.', price: 0 },
+      { name: 'Profile set up', body: 'Google Business Profile set up and kept accurate.', price: 3000 },
+      { name: 'Profile care', body: 'Monthly profile posts, review replies and photo updates.', price: 6000 },
+      { name: 'Search growth', body: 'Plus one article a month, on-page fixes, and schema so AI answers cite you.', price: 15000 },
+      { name: 'Search authority', body: 'Plus two articles, backlinks, and a monthly AI-search visibility check.', price: 25000 },
+    ],
+  },
+  ai: {
+    label: 'AI assistant',
+    options: [
+      { name: 'None', body: 'Your team answers every message.', price: 0 },
+      { name: 'Messenger & Instagram', body: 'Answers FAQs in Nepali and English on both inboxes.', price: 5000 },
+      { name: '+ WhatsApp', body: 'Adds WhatsApp, up to 1,000 conversations a month.', price: 8000 },
+      { name: '+ Website & leads', body: 'Adds website chat; every lead logged, a daily summary to the owner.', price: 12000 },
+      { name: '+ Office automation', body: 'Plus one new office automation built every quarter.', price: 20000 },
+    ],
+  },
+  care: {
+    label: 'Website care',
+    options: [
+      { name: 'None', body: 'You look after the website yourself.', price: 0 },
+      { name: 'Hosting & security', body: 'Hosting, updates, backups and security monitoring.', price: 5000 },
+      { name: '+ 2 edits a month', body: 'Text, image or price changes, done for you.', price: 7000 },
+      { name: '+ 4 edits a month', body: 'Room for a new offer or page section every week.', price: 9000 },
+      { name: '+ 8 edits, priority', body: 'Priority fixes, same working day.', price: 12000 },
+    ],
+  },
+};
+
+/** One-off charge to build and train the assistant when bought without a plan. */
+export const aiSetup = 15000;
+
+export const plans = [
+  {
+    id: 'pahichan',
+    name: 'Pahichan',
+    promise: 'Be seen',
+    price: 14999,
+    setup: 7500,
+    bestFor: 'A shop or clinic with no marketing yet',
+    adBudget: 'Rs 3,000–6,000',
+    includes: {
+      reels: 2, graphics: 8, photos: 0, campaigns: 0, boosts: 2, halfDays: 0, creators: 0,
+      platforms: ['facebook', 'instagram'], seo: 1, ai: 1, care: 1,
+    },
+    features: [
+      'No filming: we work from your photos and clips',
+      '2 motion posts and 8 graphic posts',
+      'Facebook and Instagram',
+      '2 boosted posts',
+      'Google Business Profile set up',
+      'AI assistant on Messenger and Instagram',
+      'Hosting and security, if hosted with us',
+      'One-page monthly report on WhatsApp',
+    ],
+    reply: 'Replies within 2 working days',
+  },
+  {
+    id: 'suruwat',
+    name: 'Suruwat',
+    promise: 'Get customers',
+    price: 29999,
+    setup: 15000,
+    bestFor: 'A local business ready to advertise',
+    adBudget: 'Rs 6,000–12,000',
+    freeWebsite: { label: 'Landing page', value: 25000 },
+    includes: {
+      reels: 4, graphics: 8, photos: 10, campaigns: 1, boosts: 0, halfDays: 1, creators: 0,
+      platforms: ['facebook', 'instagram', 'tiktok'], seo: 2, ai: 2, care: 2,
+    },
+    features: [
+      'Half a day of filming on location, every month',
+      '4 reels, 10 edited photos, 8 graphic posts',
+      'Facebook, Instagram and TikTok',
+      '1 Meta ad campaign, managed',
+      'Monthly Google profile posts and review replies',
+      'AI assistant adds WhatsApp, up to 1,000 chats',
+      'Website care with 2 edits a month',
+    ],
+    reply: 'Replies within 1 working day',
+  },
+  {
+    id: 'pragati',
+    name: 'Pragati',
+    promise: 'Grow faster',
+    price: 49999,
+    setup: 15000,
+    recommended: true,
+    bestFor: 'A business with steady sales that wants more',
+    adBudget: 'Rs 12,000–25,000',
+    freeWebsite: { label: 'Business website', value: 60000 },
+    includes: {
+      reels: 8, graphics: 10, photos: 20, campaigns: 2, boosts: 0, halfDays: 2, creators: 0,
+      platforms: ['facebook', 'instagram', 'tiktok'], seo: 3, ai: 3, care: 3,
+    },
+    features: [
+      'A full day of filming every month',
+      '8 reels, 20 edited photos, 10 graphic posts',
+      'A hired creator on camera every other month',
+      '2 Meta campaigns, new creative tested weekly',
+      'A monthly article, on-page fixes, schema for AI answers',
+      'AI assistant on your website too, every lead logged',
+      'Website care with 4 edits a month',
+      'Monthly report and a 30-minute call',
+    ],
+    reply: 'Replies the same day',
+  },
+  {
+    id: 'shikhar',
+    name: 'Shikhar',
+    promise: 'Lead your market',
+    price: 99999,
+    setup: 15000,
+    bestFor: 'Multi-branch, brand or e-commerce',
+    adBudget: 'Rs 25,000 and up',
+    freeWebsite: { label: 'Business website', value: 60000 },
+    includes: {
+      reels: 12, graphics: 14, photos: 30, campaigns: 4, boosts: 0, halfDays: 4, creators: 1,
+      platforms: ['facebook', 'instagram', 'tiktok', 'youtube', 'linkedin'], seo: 4, ai: 4, care: 4,
+    },
+    features: [
+      'Two days of filming a month, and an ad film every 6 months',
+      '12 reels, 30 edited photos, 14 graphic posts',
+      'A hired creator on camera every month',
+      'Meta, Google and TikTok ads with retargeting, up to 4 campaigns',
+      'Two articles, backlinks, and an AI-search visibility check',
+      'A new office automation every quarter',
+      'Website care with 8 edits and priority fixes',
+      'A named manager, and a call every 2 weeks',
+    ],
+    reply: 'Same-day replies from a named manager',
+  },
+];
+
+/** Websites: a base price that covers `pages`, then a price per extra page. */
+export const websites = {
+  landing: { label: 'Landing page', blurb: 'One focused page with WhatsApp and a form, fast on 4G.', base: 25000, pages: 1, extraPage: 6000, maxPages: 4, bilingual: 5000 },
+  business: { label: 'Business website', blurb: '5–8 pages, you edit it yourself, Nepali and English, SEO set up.', base: 60000, pages: 8, minPages: 5, extraPage: 5000, maxPages: 30, bilingual: 0 },
+  store: { label: 'Online store', blurb: 'Catalogue, cart and checkout with eSewa, Khalti and Fonepay.', base: 120000, pages: 10, minPages: 5, extraPage: 5000, maxPages: 40, bilingual: 0, from: true },
+};
+
+/** Mobile apps. The first platform carries the base; the second adds a share. */
+export const apps = {
+  tiers: {
+    simple: { label: 'Simple', body: 'Information, catalogue, booking or enquiry forms.', base: 250000 },
+    standard: { label: 'Standard', body: 'Accounts, payments, notifications and an admin panel.', base: 350000 },
+    advanced: { label: 'Advanced', body: 'Marketplace, live tracking, real-time features or integrations.', base: 500000 },
+  },
+  secondPlatform: 0.35,
+  care: 10000,
+};
+
+export const oneTime = {
+  software: { label: 'Custom web app or business software', price: 250000, from: true },
+  server: { label: 'Server setup: VPS, security, backups, monitoring', price: 15000 },
+  agentic: { label: 'Agentic AI office setup', base: 75000, baseWorkflows: 3, extra: 20000, care: 8000, max: 8 },
+  adFilm: {
+    standard: { label: 'Ad film, 30–60 sec: script, crew, one talent', price: 50000 },
+    premium: { label: 'Premium ad film: multiple locations and talent', price: 100000 },
+  },
+  photoshoot: { label: 'Product or menu photoshoot, 25 edited photos', price: 12000, max: 10 },
+  extraHalf: { label: 'Extra shoot, half day', price: 8000, max: 10 },
+  extraFull: { label: 'Extra shoot, full day', price: 15000, max: 10 },
+  brandKit: { label: 'Brand kit: logo refresh, colours, fonts, post templates', price: 25000 },
+  festival: { label: 'Festival pack: 4 extra reels and a festive set', price: 15000, max: 4 },
+  healthCheck: { label: 'Digital Health Check', price: 10000, note: 'Credited in full if you sign within 30 days.' },
+};
+
+export const terms = [
+  { months: 3, name: '3 months', body: 'The minimum. Then month to month with 30 days’ notice.' },
+  { months: 6, name: '6 months, paid up front', body: '5% off the monthly fee.' },
+  { months: 12, name: '12 months', body: 'Setup fee waived, and a free website on Suruwat and above.' },
+];
+
+/** What every plan includes, and the terms, as the client reads them. */
+export const everyPlan = [
+  'Every account, page, ad account and the domain stay in your name.',
+  'Nothing is posted without your approval.',
+  'Captions in Nepali and English.',
+  'Festival posts for Dashain, Tihar and Nepali New Year.',
+];
+
+export const clientTerms = [
+  'Monthly fee paid in advance by the 1st of each month. Work pauses after 7 days unpaid.',
+  'One-time work: 50% to start, 50% on delivery.',
+  'Every deliverable in your plan, every month. Anything we miss is credited on the next bill.',
+  'Your ad budget is paid by you directly to Meta, Google or TikTok. We never mark it up.',
+  'Two rounds of revisions per piece. Unused deliverables carry over for one month only.',
+  'We promise the work and honest reporting, not a number of sales or followers.',
+  'Prices exclude 13% VAT. A VAT bill is issued every month.',
+  'This quote is valid for 15 days.',
+];

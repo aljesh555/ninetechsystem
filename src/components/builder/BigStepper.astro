@@ -1,0 +1,29 @@
+---
+/** A number answer, set large, with quick picks underneath. */
+const { path, max = 99, step = 1, unit, presets = [], cost } = Astro.props;
+---
+
+<div class="big">
+  <div class="big-row">
+    <div class="stepper stepper-big" data-stepper={path} data-min="0" data-max={max} data-step={step}>
+      <button type="button" data-dec aria-label="Fewer">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10" /></svg>
+      </button>
+      <output data-out aria-live="polite">0</output>
+      <button type="button" data-inc aria-label="More">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M8 3v10" /></svg>
+      </button>
+    </div>
+    <div class="big-side">
+      {unit && <span class="big-unit">{unit}</span>}
+      <span class="big-cost" data-cost={cost}></span>
+    </div>
+  </div>
+  {presets.length > 0 && (
+    <div class="presets" role="group" aria-label="Quick picks">
+      {presets.map((p) => (
+        <button type="button" data-path={path} data-v={String(p.v ?? p)}>{p.label ?? p}</button>
+      ))}
+    </div>
+  )}
+</div>
