@@ -6,3 +6,4 @@ tmp-fonts/
 .DS_Store
 *.log
 __pycache__/
+.claude/worktrees/

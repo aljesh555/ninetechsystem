@@ -18,6 +18,7 @@ import { site, industries, disciplines } from '../data/site.js';
 import { groups } from '../data/services.js';
 
 const consult = { label: 'Request a consultation', href: '/contact' };
+const build = { label: 'Build my package', href: '/builder' };
 
 const heroFacts = [
   { icon: 'website', value: 'Design to operations', label: 'Build, market, automate, support' },
@@ -91,7 +92,7 @@ const schema = [
         </p>
         <h1>We build and run the digital systems businesses in Kathmandu depend on: websites, custom software, marketing and AI automation, engineered to work as one.</h1>
         <div class="btn-row">
-          <a class="btn btn-primary" href={consult.href}>{consult.label}</a>
+          <a class="btn btn-primary" href={build.href}>{build.label}</a>
           <a class="btn btn-secondary" href={site.whatsapp} rel="noopener">Message us on WhatsApp</a>
         </div>
         <p class="hero-note">{site.replyPromise}</p>
