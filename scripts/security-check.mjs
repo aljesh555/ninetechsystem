@@ -24,15 +24,15 @@ const BANNED = [
   [/\banthropic\b/i, 'internal tool stack'],
   [/\bastro\b/i, 'internal framework name'],
   [/\bcloudflare\b/i, 'hosting provider'],
-  [/\bresend\b/i, 'email provider'],
+  [/\bbrevo\b/i, 'email provider'],
   [/\bwrangler\b/i, 'deploy tooling'],
   [/award[- ]winning|world[- ]class|cutting[- ]edge|game[- ]changer/i, 'banned marketing word'],
   [/\b(leading|premier|#1|best in|top rated)\b/i, 'banned marketing word'],
   [/solutions provider|trusted partner|we are passionate/i, 'banned marketing phrase'],
   [/we guarantee[^.]{0,40}rank|guaranteed (top|first|number one|#1)[^.]{0,20}rank/i, 'ranking guarantee'],
   [/24\/7/i, 'round-the-clock promise we cannot keep'],
-  [/RESEND_API_KEY\s*[:=]\s*\S/i, 'API key value'],
-  [/sk-[A-Za-z0-9]{16,}|re_[A-Za-z0-9]{16,}/, 'API key value'],
+  [/(BREVO_API_KEY|RESEND_API_KEY)\s*[:=]\s*\S/i, 'API key value'],
+  [/sk-[A-Za-z0-9]{16,}|re_[A-Za-z0-9]{16,}|xkeysib-[A-Za-z0-9]{16,}/, 'API key value'],
 ];
 
 // Phrases that are fine in context and would otherwise trip the grep above.

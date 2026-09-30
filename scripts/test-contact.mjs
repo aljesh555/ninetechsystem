@@ -4,17 +4,22 @@
  */
 import { onRequestPost, onRequestGet } from '../functions/api/contact.js';
 
-let sent = null;
+let sent = null;   // the email Brevo was asked to send
+let texted = null; // the SMS alert, when one is configured
 const realFetch = globalThis.fetch;
 globalThis.fetch = async (url, init) => {
-  if (String(url).includes('api.resend.com')) {
+  if (String(url).includes('api.brevo.com/v3/smtp/email')) {
     sent = JSON.parse(init.body);
-    return new Response('{"id":"test"}', { status: 200 });
+    return new Response('{"messageId":"<test>"}', { status: 201 });
+  }
+  if (String(url).includes('api.brevo.com/v3/transactionalSMS')) {
+    texted = JSON.parse(init.body);
+    return new Response('{"reference":"test"}', { status: 201 });
   }
   return realFetch(url, init);
 };
 
-const env = { RESEND_API_KEY: 'test-key' };
+const env = { BREVO_API_KEY: 'test-key' };
 const valid = {
   name: 'Sita Gurung',
   phone: '+977 9812345678',
@@ -46,6 +51,7 @@ const check = (name, cond, extra = '') => {
 
 const run = async (name, body, opts, expectStatus, expectSent) => {
   sent = null;
+  texted = null;
   const res = await onRequestPost({ request: post(body, opts), env });
   const data = await res.json().catch(() => ({}));
   check(name, res.status === expectStatus && Boolean(sent) === expectSent,
@@ -55,10 +61,12 @@ const run = async (name, body, opts, expectStatus, expectSent) => {
 console.log('\ncontact form handler\n');
 
 await run('valid submission is delivered', {}, {}, 200, true);
-check('  email goes to info@ninetechsystem.com', sent?.to?.[0] === 'info@ninetechsystem.com');
+check('  email goes to info@ninetechsystem.com', sent?.to?.[0]?.email === 'info@ninetechsystem.com');
+check('  it is sent from website@ninetechsystem.com', sent?.sender?.email === 'website@ninetechsystem.com');
 check('  subject names the sender', sent?.subject?.includes('Sita Gurung'));
-check('  body carries the phone number', sent?.text?.includes('+977 9812345678'));
-check('  body names the service asked about', sent?.text?.includes('Service:       E-commerce / online store'));
+check('  body carries the phone number', sent?.textContent?.includes('+977 9812345678'));
+check('  body names the service asked about', sent?.textContent?.includes('Service:       E-commerce / online store'));
+check('  no SMS is sent unless one is configured', texted === null);
 
 await run('service off the list is rejected', { need: 'crypto-mining' }, {}, 422, false);
 await run('no service given counts as "not sure yet"', { need: undefined }, {}, 200, true);
@@ -80,16 +88,42 @@ await run('lookalike pages.dev name is blocked', {}, { origin: 'https://evilnine
 await run('phone with dots is rejected', { phone: '984.332.5804' }, {}, 422, false);
 await run('no timestamp still works (JavaScript off)', { ts: '' }, {}, 200, true);
 
+// MAIL_FROM overrides the sending address, for before the domain is authenticated.
+sent = null;
+await onRequestPost({ request: post({}), env: { ...env, MAIL_FROM: 'sender@example.com' } });
+check('MAIL_FROM overrides the sending address', sent?.sender?.email === 'sender@example.com');
+
+// The SMS alert, when a number is set for it.
+sent = null; texted = null;
+const smsRes = await onRequestPost({ request: post({}), env: { ...env, SMS_ALERT_TO: '+977 9843325804' } });
+check('SMS_ALERT_TO also fires an SMS alert', smsRes.status === 200 && texted !== null);
+check('  it goes to the number in digits only', texted?.recipient === '9779843325804');
+check('  it names who enquired and what for', texted?.content?.includes('Sita Gurung') && texted?.content?.includes('E-commerce'));
+check('  sender fits Brevo\'s 11-character cap', (texted?.sender?.length ?? 99) <= 11);
+
+// A failing SMS must not change what the visitor is told; the email is away.
+sent = null; texted = null;
+const okFetch = globalThis.fetch;
+globalThis.fetch = async (url, init) =>
+  String(url).includes('transactionalSMS')
+    ? (() => { throw new TypeError('sms down'); })()
+    : okFetch(url, init);
+let smsDown;
+try { smsDown = await onRequestPost({ request: post({}), env: { ...env, SMS_ALERT_TO: '9779843325804' } }); }
+catch (e) { smsDown = { status: `threw ${e.message}` }; }
+globalThis.fetch = okFetch;
+check('a failed SMS still reports the message as sent', smsDown.status === 200 && sent !== null, `(got ${smsDown.status})`);
+
 // Over-long input is truncated, not rejected outright.
 sent = null;
 await onRequestPost({ request: post({ message: 'x'.repeat(5000) }), env });
-check('over-long message is truncated to 2000 chars', sent?.text?.includes('x'.repeat(2000)) && !sent?.text?.includes('x'.repeat(2001)));
+check('over-long message is truncated to 2000 chars', sent?.textContent?.includes('x'.repeat(2000)) && !sent?.textContent?.includes('x'.repeat(2001)));
 
 // Missing API key must fail loudly rather than pretend to have sent.
 sent = null;
 const noKey = await onRequestPost({ request: post({}), env: {} });
 const noKeyBody = await noKey.json();
-check('missing RESEND_API_KEY returns 503, sends nothing', noKey.status === 503 && sent === null);
+check('missing BREVO_API_KEY returns 503, sends nothing', noKey.status === 503 && sent === null);
 check('  and tells the visitor to call instead', noKeyBody.message?.includes('+977 9843325804'));
 
 // Errors explain themselves, so the page can show the real reason.

@@ -169,17 +169,25 @@ Largest variant is 77 KB, under the 150 KB ceiling.
 
 ## The contact form
 
-**Resend, via a Cloudflare Pages Function.** MailChannels withdrew free sending
-for Cloudflare Workers on 31 August 2024, and Cloudflare's own documentation now
-points at Resend. Free tier is 100 emails/day and 3,000/month, far beyond what a
-five-page site's enquiry form will produce.
-Sources: [Cloudflare's Resend tutorial](https://developers.cloudflare.com/workers/tutorials/send-emails-with-resend/),
-[MailChannels' withdrawal](https://en.wikipedia.org/wiki/MailChannels).
+**Brevo, via a Cloudflare Pages Function.** MailChannels withdrew free sending
+for Cloudflare Workers on 31 August 2024, so the mail leaves through a provider's
+API. Brevo was chosen over Resend because one account and one key cover both
+transactional email and SMS, and the enquiry alerts and the order and reminder
+messages the client work will need are the same account. Free plan is 300
+emails/day, far beyond what a five-page site's enquiry form will produce.
+Source: [MailChannels' withdrawal](https://en.wikipedia.org/wiki/MailChannels).
 
-Requires `RESEND_API_KEY` as a Pages secret and a verified sending domain. Both
-steps are in `DEPLOY.md`. **Until the key is set, the form returns a clear error
-telling the visitor to call or WhatsApp instead** — it never pretends to have
-sent something it did not send.
+Requires `BREVO_API_KEY` as a Pages secret and a sending address Brevo has
+verified. `MAIL_FROM` overrides the sending address, which is how the form sends
+before ninetechsystem.com is authenticated in Brevo; both steps are in
+`DEPLOY.md`. **Until the key is set, the form returns a clear error telling the
+visitor to call or WhatsApp instead** — it never pretends to have sent something
+it did not send.
+
+**An SMS alert is optional and off by default.** Setting `SMS_ALERT_TO` makes the
+handler text a one-line alert after the email is away. A failure there is
+swallowed: the email is the record of the enquiry, so the visitor is told what
+actually happened to their message, not what happened to the alert.
 
 **Defences, in order:** same-site `Origin` check → honeypot field → timing check
 (under 3 seconds or over 24 hours is rejected) → server-side validation of every

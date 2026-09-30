@@ -42,7 +42,7 @@ const headersFor = (path) => {
 const exists = async (p) => { try { return (await stat(p)).isFile(); } catch { return false; } };
 
 // The contact Function, so the form can be tested end to end locally.
-// SERVE_RESEND_KEY unset means the handler returns its "not configured" error,
+// SERVE_BREVO_KEY unset means the handler returns its "not configured" error,
 // which is the right thing to see until the key is set in Cloudflare.
 const { onRequestPost, onRequestGet } = await import('../functions/api/contact.js');
 
@@ -59,12 +59,12 @@ createServer(async (req, res) => {
       headers: req.headers,
       body: chunks.length ? Buffer.concat(chunks) : undefined,
     });
-    const env = { RESEND_API_KEY: process.env.SERVE_RESEND_KEY };
+    const env = { BREVO_API_KEY: process.env.SERVE_BREVO_KEY };
     // Pretend the mail provider accepted it, so the browser path can be tested.
     const realFetch = globalThis.fetch;
     globalThis.fetch = async (u, i) =>
-      String(u).includes('api.resend.com')
-        ? new Response('{"id":"local"}', { status: 200 })
+      String(u).includes('api.brevo.com')
+        ? new Response('{"messageId":"<local>"}', { status: 201 })
         : realFetch(u, i);
     const out = req.method === 'POST'
       ? await onRequestPost({ request, env })

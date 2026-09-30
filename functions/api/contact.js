@@ -8,8 +8,10 @@
  *   4. Server-side validation of every field, with length caps
  *   5. Per-IP rate limit, 5 an hour, when a KV namespace is bound
  *
- * Nothing is stored. The message is delivered by email to the site's published
- * address and then forgotten. See DEPLOY.md for the environment variables.
+ * Nothing is stored. The message is delivered by email, through Brevo, to the
+ * site's published address and then forgotten. When SMS_ALERT_TO is set it also
+ * fires a short SMS alert, which is a convenience on top of the email and never
+ * decides what the visitor is told. See DEPLOY.md for the environment variables.
  *
  * Every JSON error carries `message`, a sentence the page shows the visitor
  * as-is, so what they read always matches what actually went wrong.
@@ -18,7 +20,11 @@ import { site, businessTypes } from '../../src/data/site.js';
 import { needs } from '../../src/data/services.js';
 
 const RECIPIENT = site.email;
-const SENDER = `${site.name} website <website@ninetechsystem.com>`;
+const SENDER_NAME = `${site.name} website`;
+// Brevo only sends from a validated sender or an authenticated domain. Until
+// ninetechsystem.com is authenticated there, MAIL_FROM overrides this address.
+const SENDER_EMAIL = 'website@ninetechsystem.com';
+const SMS_SENDER = 'NineTech'; // Brevo caps alphanumeric SMS senders at 11 characters.
 
 const PAGES_PROJECT = 'ninetechsystem.pages.dev';
 const ALLOWED_HOSTS = ['ninetechsystem.com', 'www.ninetechsystem.com', PAGES_PROJECT, 'localhost', '127.0.0.1'];
@@ -129,7 +135,7 @@ export async function onRequestPost({ request, env }) {
     await env.RATE_LIMIT.put(key, String(count + 1), { expirationTtl: 3600 });
   }
 
-  if (!env.RESEND_API_KEY) {
+  if (!env.BREVO_API_KEY) {
     return fail(503, 'Email is not set up yet',
       `Our contact form is not switched on yet, so this message was not sent. ${CALL_US}`);
   }
@@ -149,20 +155,24 @@ export async function onRequestPost({ request, env }) {
     `Country: ${request.headers.get('CF-IPCountry') || 'unknown'}`,
   ].join('\n');
 
-  let res;
-  try {
-    res = await fetch('https://api.resend.com/emails', {
+  const brevo = (path, body) =>
+    fetch(`https://api.brevo.com/v3/${path}`, {
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${env.RESEND_API_KEY}`,
+        'api-key': env.BREVO_API_KEY,
         'Content-Type': 'application/json',
+        Accept: 'application/json',
       },
-      body: JSON.stringify({
-        from: SENDER,
-        to: [RECIPIENT],
-        subject: `Website enquiry — ${name} (${business}) — ${need?.label}`,
-        text,
-      }),
+      body: JSON.stringify(body),
+    });
+
+  let res;
+  try {
+    res = await brevo('smtp/email', {
+      sender: { name: SENDER_NAME, email: env.MAIL_FROM || SENDER_EMAIL },
+      to: [{ email: RECIPIENT, name: site.name }],
+      subject: `Website enquiry — ${name} (${business}) — ${need?.label}`,
+      textContent: text,
     });
   } catch {
     res = null;
@@ -170,6 +180,19 @@ export async function onRequestPost({ request, env }) {
 
   if (!res?.ok) {
     return fail(502, 'Could not send', `We could not send that just now. ${CALL_US}`);
+  }
+
+  // The email is the record of the enquiry. The SMS is only a nudge to go and
+  // read it, so a failure here is swallowed: the message did arrive.
+  if (env.SMS_ALERT_TO) {
+    try {
+      await brevo('transactionalSMS/sms', {
+        type: 'transactional',
+        sender: (env.SMS_SENDER || SMS_SENDER).slice(0, 11),
+        recipient: env.SMS_ALERT_TO.replace(/\D/g, ''),
+        content: `Website enquiry: ${name}, ${phone}, ${need?.label}`.slice(0, 155),
+      });
+    } catch { /* nothing to tell the visitor; their message is already away */ }
   }
 
   return wantsJson

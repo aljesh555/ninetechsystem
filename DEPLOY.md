@@ -4,9 +4,10 @@
 
 **Live:** https://ninetechsystem.pages.dev
 
-Cloudflare Pages project `ninetechsystem`, account **Aljesh Raut**
-(`<your-account-id>`), production branch `main`. The static site
-and the contact Function are both deployed and verified.
+Cloudflare Pages project `ninetechsystem`, account **Aljesh Raut**, production
+branch `main`. The account ID is on the Cloudflare dashboard's overview page, and
+`npx wrangler whoami` prints it. The static site and the contact Function are
+both deployed and verified.
 
 To ship a change:
 
@@ -38,41 +39,72 @@ is wasted.
 
 ### 1. Make the contact form actually send — **required**
 
-Right now a visitor who submits the form gets an honest error telling them to
-call or WhatsApp instead. It will keep doing that, correctly, until this is done.
+The form sends. What is not finished is the sending domain, which is why this
+step is still here — see step 2.
 
-The site sends through **Resend**. MailChannels stopped free sending for
-Cloudflare on 31 August 2024, and Cloudflare's own documentation now points at
-Resend. The free tier is 100 emails a day, 3,000 a month.
+The site sends through **Brevo**, on the company's own Brevo account. Brevo does
+transactional email and SMS from one key, so the same account covers the enquiry
+alerts later. The free plan allows
+300 emails a day.
 
-1. Create an account at **resend.com**.
-2. **Domains → Add Domain →** `ninetechsystem.com`. Resend gives you DNS records
-   (SPF, DKIM, and usually a return-path CNAME). Add them wherever
-   ninetechsystem.com's DNS lives. Wait for Resend to show **Verified** — usually
-   minutes, sometimes a few hours.
-3. **API Keys → Create API Key**, permission *Sending access*. Copy it once; it
-   is not shown again.
-4. Store it as a Pages secret:
+**The key is already set as a Pages secret**, so the form sends. What is left is
+step 2 below — the sending domain.
+
+1. `BREVO_API_KEY` — **done.** Set with:
 
    ```bash
-   npx wrangler pages secret put RESEND_API_KEY --project-name ninetechsystem
+   npx wrangler pages secret put BREVO_API_KEY --project-name ninetechsystem
    ```
 
-   Paste the key when prompted. It is encrypted at rest and never appears in the
-   repo or the build.
-5. Redeploy (`npx wrangler pages deploy --project-name ninetechsystem --branch main`),
-   then send yourself a real message from https://ninetechsystem.com/contact and
+   It is encrypted at rest and never appears in the repo or the build. To replace
+   it, create a new key in Brevo under **Settings → SMTP & API → API keys**, run
+   that command again, and delete the old key in Brevo.
+
+2. **Authenticate ninetechsystem.com in Brevo** — the one thing still outstanding.
+   Brevo will only send from an address it has verified. Today the only verified
+   sender on the account is the Gmail address the Brevo account was registered
+   with, so the form is temporarily sending as that address, set through the
+   `MAIL_FROM` variable.
+
+   In Brevo: **Senders, Domains & Dedicated IPs → Domains → Add a domain →**
+   `ninetechsystem.com`. Brevo gives you a `brevo-code` TXT record, a DKIM
+   record and a DMARC record. Add them wherever ninetechsystem.com's DNS lives
+   and wait for Brevo to show the domain authenticated — usually minutes.
+
+   Then drop the override, so mail goes out as `website@ninetechsystem.com`:
+
+   ```bash
+   npx wrangler pages secret delete MAIL_FROM --project-name ninetechsystem
+   ```
+
+   Until this is done, Brevo rewrites the from address to one of its own, on
+   `brevosend.com`, which looks untrustworthy and is more likely to be filtered.
+
+3. Send yourself a real message from https://ninetechsystem.com/contact and
    confirm it lands in **info@ninetechsystem.com**.
 
-The sending address is `website@ninetechsystem.com` and the recipient is
-`info@ninetechsystem.com`. Both are in `functions/api/contact.js` if they ever
-need to change.
+The recipient is `info@ninetechsystem.com` and the intended sending address is
+`website@ninetechsystem.com`. Both are in `functions/api/contact.js`.
+
+#### Optional: an SMS alert on every enquiry
+
+The handler will also text a short alert — who enquired, their number, what for —
+if a destination is set. It needs SMS credits on the Brevo account, which the
+free plan does not include, and a sender name registered for Nepal.
+
+```bash
+npx wrangler pages secret put SMS_ALERT_TO --project-name ninetechsystem   # e.g. 9779843325804
+```
+
+The email is the record of the enquiry; the SMS is only a nudge to go and read
+it. If the SMS fails, the visitor is still told their message was sent, because
+it was.
 
 > **Alternative, once the domain is on Cloudflare:** Cloudflare Email Routing can
 > deliver Worker-sent mail to a verified address with no third party at all. It
 > needs a `send_email` binding and about five lines changed in
-> `functions/api/contact.js`. Worth switching to later; Resend is the right
-> choice for launch because it works before the domain moves.
+> `functions/api/contact.js`. Worth switching to later; Brevo is the right choice
+> now because it works before the domain moves, and it carries the SMS side too.
 
 ---
 

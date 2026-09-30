@@ -60,9 +60,10 @@ of how much difference they make.
 
 ### Now, or the site is not finished
 
-1. **A Resend API key** so the contact form sends. Until this is set, the form
-   tells visitors to call or WhatsApp instead. Full steps: `DEPLOY.md` §1.
-   *~20 minutes, including DNS.*
+1. **Authenticate ninetechsystem.com for sending email.** The contact form
+   sends through Brevo and the key is already set, so enquiries arrive — but
+   they go out from a gmail.com address until the domain is authenticated, which
+   makes spam filing likely. Full steps: `DEPLOY.md` §1.2. *~10 minutes, DNS.*
 
 2. **Turn the AI crawlers back on in Cloudflare.** Cloudflare blocks them by
    default on new domains as of 15 September 2026. Every answer-first paragraph
