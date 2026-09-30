@@ -11,7 +11,7 @@ import Base from '../layouts/Base.astro';
 import HowWeWork from '../components/HowWeWork.astro';
 import FallHeading from '../components/services/FallHeading.astro';
 import Arrow from '../components/services/Arrow.astro';
-import { icon, iconOnNavy, sceneOnNavy } from '../lib/icons.js';
+import { icon, iconOnNavy, heroScene } from '../lib/icons.js';
 import { site, industries, disciplines } from '../data/site.js';
 import { groups } from '../data/services.js';
 
@@ -67,9 +67,9 @@ const schema = [
   <section class="hero on-navy">
     <div class="wrap hero-grid">
       <div class="hero-copy hero-seq">
-        <p class="display fall fall-now">
-          <span class="w">Your</span> <span class="w">ambition,</span><br />
-          <span class="w">our</span> <span class="w">engineering</span><span class="stop w" aria-hidden="true"></span><span class="sr-only">.</span>
+        <p class="display lines">
+          <span class="ln"><span class="li">Your ambition,</span></span>
+          <span class="ln"><span class="li">our engineering</span><span class="stop" aria-hidden="true"></span><span class="sr-only">.</span></span>
         </p>
         <h1>We build and run the digital systems businesses in Kathmandu depend on: websites, custom software, marketing and AI automation, engineered to work as one.</h1>
         <div class="btn-row">
@@ -78,10 +78,10 @@ const schema = [
         </div>
         <p class="hero-note">{site.replyPromise}</p>
       </div>
-      <div class="hero-art"><Fragment set:html={sceneOnNavy('services')} /></div>
+      <div class="hero-art hero-stage"><Fragment set:html={heroScene()} /></div>
     </div>
     <div class="wrap">
-      <dl class="facts facts-dark">
+      <dl class="facts facts-dark facts-in">
         {heroFacts.map((f) => (
           <div>
             <Fragment set:html={iconOnNavy(f.icon, 44)} />
@@ -188,3 +188,74 @@ const schema = [
     </div>
   </section>
 </Base>
+
+<script>
+  // The hero scene: its loops pause when the hero is off screen or the tab is
+  // hidden, and the whole drawing tilts toward the pointer in perspective,
+  // smoothed so it trails the cursor with a little weight. The tilt runs
+  // through the Web Animations API, which the Content-Security-Policy allows
+  // where an inline style would be refused. Mouse and trackpad only, never
+  // under reduced motion.
+  const stage = document.querySelector('.hero-stage');
+  const svg = stage?.querySelector('svg');
+  const hero = stage?.closest('section');
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (stage && svg && hero && !still) {
+    // Loops stop while the hero is off screen or the tab is hidden: the CSS
+    // ones through .is-paused, the chart's SMIL through the SVG's own clock.
+    let onScreen = true;
+    const sync = () => {
+      const paused = !onScreen || document.hidden;
+      hero.classList.toggle('is-paused', paused);
+      if (paused) svg.pauseAnimations(); else svg.unpauseAnimations();
+    };
+    new IntersectionObserver(([e]) => { onScreen = e.isIntersecting; sync(); }).observe(hero);
+    document.addEventListener('visibilitychange', sync);
+
+    // The chart starts re-measuring once the scene has assembled.
+    svg.querySelectorAll('animateTransform').forEach((a, i) => (a as SVGAnimationElement).beginElementAt(3 + i * 0.4));
+
+    // The tilt waits for the assembly to finish, and is dropped entirely
+    // whenever it comes back to rest, so the drawing is only ever a 3D layer
+    // while it is actually leaning.
+    if (matchMedia('(hover: hover) and (pointer: fine)').matches && svg.animate) {
+      const pose = (x: number, y: number) => ({ transform: `rotateX(${(y * -8).toFixed(3)}deg) rotateY(${(x * 11).toFixed(3)}deg)` });
+      let tilt: Animation | null = null;
+      let ready = false, tx = 0, ty = 0, x = 0, y = 0, raf = 0;
+      setTimeout(() => { ready = true; }, 2300);
+      // Per-piece depth, set as SVG transform attributes in the same frame
+      // as the tilt: foreground pieces travel furthest. (Base.astro does this
+      // for the other heroes with a CSS transition, which Chrome would
+      // rasterise soft inside a tilted layer.)
+      const depths = [...svg.querySelectorAll('.part > .depth')];
+      const factor = [0.3, 0.8, 1, 1.6, 2];
+      const place = () => depths.forEach((g, i) => g.setAttribute('transform', `translate(${(x * factor[i]).toFixed(2)} ${(y * factor[i] * 0.6).toFixed(2)})`));
+      const step = () => {
+        x += (tx - x) * 0.06;
+        y += (ty - y) * 0.06;
+        const settled = Math.abs(tx - x) + Math.abs(ty - y) < 0.0005;
+        if (settled && !tx && !ty) {
+          tilt?.cancel(); tilt = null; raf = 0; x = y = 0;
+          depths.forEach((g) => g.removeAttribute('transform'));
+          return;
+        }
+        place();
+        const k = pose(x, y);
+        if (!tilt) { tilt = svg.animate([k, k], { duration: 1000, fill: 'forwards' }); tilt.pause(); }
+        else (tilt.effect as KeyframeEffect).setKeyframes([k, k]);
+        raf = settled ? 0 : requestAnimationFrame(step);
+      };
+      const aim = (nx: number, ny: number) => {
+        if (!ready) return;
+        tx = Math.max(-1, Math.min(1, nx));
+        ty = Math.max(-1, Math.min(1, ny));
+        if (!raf) raf = requestAnimationFrame(step);
+      };
+      hero.addEventListener('pointermove', (e) => {
+        const r = stage.getBoundingClientRect();
+        aim((e.clientX - r.left - r.width / 2) / r.width, (e.clientY - r.top - r.height / 2) / r.height);
+      });
+      hero.addEventListener('pointerleave', () => aim(0, 0));
+    }
+  }
+</script>

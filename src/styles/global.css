@@ -1281,6 +1281,114 @@ h1 + .lead, h2 + .lead { margin-top: var(--s3); }
 }
 @media print { .signal { display: none !important; } }
 
+/* --- home hero: the reveal --------------------------------------------------
+   One timeline, about 2.5s. The tagline's lines rise out of their own clip
+   and sharpen; the amber stop lands last. On the right, the platform's grid
+   draws, the pieces rise up through the platform, the traces light, and a
+   band of light crosses the scene once. Then only slow detail moves: data
+   along the traces, the chart re-measuring, a line being typed, a status
+   light. Loops pause off screen (.is-paused, set by the page script) and
+   none of it runs under reduced motion. */
+
+.hero { --expo: cubic-bezier(0.16, 1, 0.3, 1); }
+.lines .ln { display: block; overflow: hidden; padding: 0.1em 0 0.16em; margin: -0.1em 0 -0.16em; }
+.lines .li { display: inline-block; }
+.js .lines .li { animation: line-up 1.1s var(--expo) backwards; }
+.js .lines .ln + .ln .li { animation-delay: 0.12s; }
+.js .lines .stop { animation: stop-land 0.8s var(--expo) 0.7s backwards; }
+@keyframes line-up { from { transform: translateY(118%); filter: blur(8px); } 70% { filter: blur(0); } to { transform: none; filter: none; } }
+@keyframes stop-land { from { opacity: 0; transform: translateY(-0.7em); } to { opacity: 1; transform: none; } }
+.js .hero .hero-seq > :not(.display) { animation: soft-in 1s var(--expo) 0.2s backwards; }
+.js .hero .hero-seq > :nth-child(3) { animation-delay: 0.32s; }
+.js .hero .hero-seq > :nth-child(4) { animation-delay: 0.44s; }
+@keyframes soft-in { from { opacity: 0; transform: translateY(14px); filter: blur(4px); } to { opacity: 1; transform: none; filter: none; } }
+
+/* The facts strip: its rule draws across, then the four settle in turn. */
+.facts-in { position: relative; }
+.js .facts-in { border-top-color: transparent; }
+.js .facts-in::before {
+  content: ''; position: absolute; left: 0; right: 0; top: -1px; height: 1px;
+  background: rgba(255, 255, 255, 0.14); transform-origin: 0 0;
+  animation: rule-in 1.4s var(--expo) 0.5s backwards;
+}
+.js .facts-in > div { animation: soft-in 1s var(--expo) 0.8s backwards; }
+.js .facts-in > div:nth-child(2) { animation-delay: 0.9s; }
+.js .facts-in > div:nth-child(3) { animation-delay: 1s; }
+.js .facts-in > div:nth-child(4) { animation-delay: 1.1s; }
+@keyframes rule-in { from { transform: scaleX(0); } }
+
+/* The scene at rest. */
+.hero-stage { perspective: 1100px; }
+.hero-stage .hero-scene { width: 118%; max-width: 520px; margin-right: -12%; }
+@media (max-width: 899px) {
+  .hero-art.hero-stage { display: flex; margin-top: calc(var(--s3) * -1); }
+  .hero-stage .hero-scene { width: min(88%, 380px); margin: 0; }
+}
+.hero-scene { overflow: visible; }
+.hero-scene .depth { transition: none; }
+.hero-scene .rim { fill: none; stroke: #fff; stroke-opacity: 0.55; stroke-width: 0.2; stroke-linejoin: round; }
+.hero-scene .edge { fill: none; stroke: #6a92cc; stroke-width: 0.22; }
+.hero-scene .edge-b { stroke-opacity: 0.35; }
+.hero-scene .hg path { fill: none; stroke: #6a92cc; stroke-opacity: 0.22; stroke-width: 0.14; }
+.hero-scene .tone { opacity: 0.6; }
+.hero-scene .traces > path { fill: none; stroke: #3a65a3; stroke-width: 0.45; stroke-linejoin: round; }
+.hero-scene .pk { fill: none; stroke: #ffc46b; stroke-width: 0.5; stroke-linecap: round; opacity: 0; }
+.hero-scene .sheen { display: none; }
+.hero-scene .band { filter: blur(2.5px); opacity: 0; }
+
+/* The reveal. */
+.js .hero-scene .part { animation: none; opacity: 1; }
+.js .hero-scene .slab { animation: slab-in 1s var(--expo) backwards; }
+.js .hero-scene .edge, .js .hero-scene .hg path, .js .hero-scene .traces > path { stroke-dasharray: 1 1; animation: draw 1.2s var(--expo) 0.15s backwards; }
+.js .hero-scene .hg path:nth-child(2) { animation-delay: 0.2s; } .js .hero-scene .hg path:nth-child(3) { animation-delay: 0.25s; }
+.js .hero-scene .hg path:nth-child(4) { animation-delay: 0.3s; } .js .hero-scene .hg path:nth-child(5) { animation-delay: 0.35s; }
+.js .hero-scene .hg path:nth-child(6) { animation-delay: 0.4s; } .js .hero-scene .hg path:nth-child(7) { animation-delay: 0.45s; }
+.js .hero-scene .hg path:nth-child(8) { animation-delay: 0.5s; } .js .hero-scene .hg path:nth-child(9) { animation-delay: 0.55s; }
+.js .hero-scene .traces > path { animation-delay: 1.45s; }
+.js .hero-scene .pads, .js .hero-scene .tone { animation: fade 0.8s ease 1.1s backwards; }
+.js .hero-scene .pads { animation-delay: 1.5s; }
+.js .hero-scene .rise { animation: rise 1.3s var(--expo) 0.45s backwards; }
+.js .hero-scene .r-tower { --rise: 20px; }
+.js .hero-scene .r-panel { --rise: 15px; animation-delay: 0.62s; }
+.js .hero-scene .r-bar-1 { --rise: 8px; animation-delay: 0.8s; }
+.js .hero-scene .r-bar-2 { --rise: 13px; animation-delay: 0.88s; }
+.js .hero-scene .r-bar-3 { --rise: 19px; animation-delay: 0.96s; }
+.js .hero-scene .r-chip { --rise: 5px; animation-delay: 0.78s; }
+.js .hero-scene .r-core { --rise: 4px; animation-delay: 1.15s; }
+@keyframes slab-in { from { opacity: 0; transform: translateY(10px); } }
+@keyframes draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+@keyframes fade { from { opacity: 0; } }
+@keyframes rise { from { transform: translateY(var(--rise)); } }
+
+/* The light passes once. */
+.js .hero-scene .sheen { display: block; }
+.js .hero-scene .band { animation: sweep 1.8s cubic-bezier(0.45, 0, 0.2, 1) 2s backwards; }
+@keyframes sweep { from { transform: translateX(0); opacity: 0; } 20%, 75% { opacity: 0.2; } to { transform: translateX(118px); opacity: 0; } }
+
+/* Living detail. */
+.js .hero-scene .pk { stroke-dasharray: 0.08 2; animation: flow 3.4s cubic-bezier(0.45, 0, 0.55, 1) 2.4s infinite, fade 0.1s 2.4s backwards; opacity: 1; }
+.js .hero-scene .pk-2 { animation-duration: 4.2s, 0.1s; animation-delay: 3.1s, 2.4s; }
+.js .hero-scene .pk-3 { animation-duration: 5s, 0.1s; animation-delay: 2.7s, 2.4s; }
+.js .hero-scene .pk-4 { animation-duration: 3.8s, 0.1s; animation-delay: 3.6s, 2.4s; }
+@keyframes flow { from { stroke-dashoffset: 0.08; } to { stroke-dashoffset: -1; } }
+.js .hero-scene .typed path { animation: type 7s linear 2.6s infinite both; }
+.js .hero-scene .typed path:nth-child(2) { animation-delay: 2.72s; } .js .hero-scene .typed path:nth-child(3) { animation-delay: 2.84s; }
+.js .hero-scene .typed path:nth-child(4) { animation-delay: 3.02s; } .js .hero-scene .typed path:nth-child(5) { animation-delay: 3.14s; }
+.js .hero-scene .typed path:nth-child(6) { animation-delay: 3.32s; } .js .hero-scene .typed path:nth-child(7) { animation-delay: 3.44s; }
+@keyframes type { 0% { fill-opacity: 0; } 0.5%, 78% { fill-opacity: 1; } 79%, 100% { fill-opacity: 0; } }
+.js .hero-scene .cur { animation: blink 1.1s steps(1) 2.6s infinite; }
+@keyframes blink { 50% { fill-opacity: 0; } }
+.js .hero-scene .led { animation: led 2.8s ease-in-out 2s infinite; }
+@keyframes led { 50% { fill-opacity: 0.25; } }
+
+.hero.is-paused .hero-scene * { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) {
+  .js .lines .li, .js .lines .stop, .js .hero .hero-seq > *, .js .facts-in > div, .js .facts-in::before,
+  .js .hero-scene * { animation: none !important; }
+  .js .hero-scene .pk, .js .hero-scene .sheen { display: none; }
+  .js .hero-scene .edge, .js .hero-scene .hg path, .js .hero-scene .traces > path { stroke-dasharray: none; }
+}
+
 /* Home: the compact sector strip. Every sector stays visible; the detail
    lives on /sectors. */
 .sector-strip { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--s2); margin-top: var(--s5); }

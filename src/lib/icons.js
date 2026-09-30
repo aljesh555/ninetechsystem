@@ -664,5 +664,154 @@ export function iconOnNavy(name, size = 80) {
   return icon(name, size).replace(/#[0-9a-f]{6}/gi, (c) => ON_NAVY[c.toLowerCase()] ?? c);
 }
 
+/* --- the home hero ---------------------------------------------------------
+   The services scene (tower, bar chart, screen, chip) redrawn for the one
+   place it is shown large, on navy, and choreographed as a reveal: the
+   platform's grid draws in, each piece rises up through the platform (every
+   rise group is clipped to the space above its own footprint, so a box moving
+   up reads as a box being extruded), the traces between the pieces light, and
+   a band of light passes over the finished scene once. The pieces keep the
+   part > depth structure, so the pointer depth in Base.astro still applies.
+   Every class that animates is gated on .js in global.css: without scripts,
+   and under reduced motion, this renders as the finished drawing. */
+
+const HP = {
+  obj: { top: '#a4c0ea', left: '#5c87c4', right: '#3a64a2' },
+  amber: { top: '#ffc46b', left: '#ff9500', right: '#d97800' },
+  plat: { top: '#1c477b', left: '#16406f', right: '#0c2a52' },
+  screen: '#0f2d57',
+  inset: '#6e95ce',
+  groove: '#2f5794',
+};
+const pts = (list) => `M${list.map(([a, b]) => `${a.toFixed(2)} ${b.toFixed(2)}`).join('L')}`;
+const pp = (x, y, z) => p(x, y, z);
+const dOf = (svg) => svg.match(/d="([^"]+)"/)[1];
+
+/** A box with a hairline of light along its two front top edges. */
+function hbox(x, y, z, w, d, h, c = HP.obj) {
+  const t = z + h;
+  return (
+    box(x, y, z, w, d, h, c) +
+    `<path class="rim" d="${pts([pp(x, y + d, t), pp(x + w, y + d, t), pp(x + w, y, t)])}"/>`
+  );
+}
+
+/** The box's outline on screen: the region a light band may cross. */
+const hull = (x, y, z, w, d, h) =>
+  pts([pp(x, y, z + h), pp(x + w, y, z + h), pp(x + w, y, z), pp(x + w, y + d, z), pp(x, y + d, z), pp(x, y + d, z + h)]) + 'Z';
+
+/** Clip a group to the space above a footprint, so it can rise out of it. */
+let clipN = 0;
+function rise(cls, [x, y, z, w, d], body) {
+  const id = `hs-c${++clipN}`;
+  const a = pp(x, y + d, z), b = pp(x + w, y + d, z), c = pp(x + w, y, z);
+  const d0 = pts([[a[0] - 0.4, -30], [a[0] - 0.4, a[1]], [b[0], b[1] + 0.3], [c[0] + 0.4, c[1]], [c[0] + 0.4, -30]]) + 'Z';
+  return `<clipPath id="${id}"><path d="${d0}"/></clipPath><g clip-path="url(#${id})"><g class="rise ${cls}">${body}</g></g>`;
+}
+
+/** A route across the platform surface, through grid points. */
+const route = (list) => pts(list.map(([x, y]) => pp(x, y, 0.6)));
+
+export function heroScene() {
+  clipN = 0;
+  const tower = B(1, 1, 0.6, 1.9, 1.9, 4.4);
+  const panel = B(0.9, 5.4, 0.6, 3.8, 0.5, 3.2);
+  const chip = B(5.8, 5.8, 0.6, 2.9, 2.9, 0.6);
+  const bars = [B(5.4, 1.2, 0.6, 1, 1, 1.6), B(6.7, 1.2, 0.6, 1, 1, 2.8), B(8, 1.2, 0.6, 1, 1, 4.2)];
+
+  // The platform, its grid, and the traces routed between the pieces.
+  const grid = (axis) =>
+    Array.from({ length: 9 }, (_, i) => {
+      const k = 0.2 + (i + 1) * 0.96;
+      const line = axis === 'x' ? [pp(k, 0.2, 0.6), pp(k, 9.8, 0.6)] : [pp(0.2, k, 0.6), pp(9.8, k, 0.6)];
+      return `<path d="${pts(line)}" pathLength="1"/>`;
+    }).join('');
+  const routes = [
+    [[2.9, 1.7], [5.4, 1.7]],
+    [[6.2, 2.2], [6.2, 3.8], [7.6, 3.8], [7.6, 5.8]],
+    [[2, 2.9], [2, 4.3], [5.1, 4.3], [5.1, 7], [5.8, 7]],
+    [[2.2, 5.9], [2.2, 8.1], [5.8, 8.1]],
+  ].map(route);
+  const pad = ([x, y]) => poly([pp(x - 0.2, y - 0.2, 0.6), pp(x + 0.2, y - 0.2, 0.6), pp(x + 0.2, y + 0.2, 0.6), pp(x - 0.2, y + 0.2, 0.6)], '#3d68a6');
+  const platform =
+    `<g class="slab">${box(0.2, 0.2, 0, 9.6, 9.6, 0.6, HP.plat)}</g>` +
+    `<path class="edge" pathLength="1" d="${pts([pp(0.2, 9.8, 0.6), pp(9.8, 9.8, 0.6), pp(9.8, 0.2, 0.6)])}"/>` +
+    `<path class="edge edge-b" pathLength="1" d="${pts([pp(0.2, 9.8, 0.6), pp(0.2, 0.2, 0.6), pp(9.8, 0.2, 0.6)])}"/>` +
+    `<g class="hg">${grid('x')}</g><g class="hg">${grid('y')}</g>` +
+    `<g class="tone">${[tower, panel, chip, ...bars].map(([x, y, , w, d]) => poly([pp(x + 0.2, y + 0.1, 0.6), pp(x + w + 0.55, y + 0.1, 0.6), pp(x + w + 0.55, y + d + 0.35, 0.6), pp(x + 0.2, y + d + 0.35, 0.6)], '#0b2448')).join('')}</g>` +
+    `<g class="traces">${routes.map((d) => `<path d="${d}" pathLength="1"/>`).join('')}` +
+    `<g class="pads">${[[2.9, 1.7], [6.2, 2.2], [2, 2.9], [2.2, 5.9]].map(pad).join('')}</g></g>` +
+    `<g class="flow">${routes.map((d, i) => `<path class="pk pk-${i + 1}" d="${d}" pathLength="1"/>`).join('')}</g>`;
+
+  // The tower: a server, three amber bays, fine vents, and a status light.
+  const towerBody =
+    hbox(...tower) +
+    [3.4, 2.4, 1.4].map((v) => on('left', tower, 0.3, v, 0.7, v + 0.4, HP.amber.left)).join('') +
+    [3.4, 2.4, 1.4].map((v) => on('left', tower, 0.95, v + 0.12, 1.6, v + 0.28, '#a9c2e6')).join('') +
+    [3.6, 3.3, 3, 2.7, 2.4, 2.1, 1.8, 1.5, 1.2, 0.9].map((v) => on('right', tower, 0.3, v, 1.6, v + 0.09, HP.groove)).join('') +
+    `<path class="led" d="${dOf(on('right', tower, 0.3, 3.95, 0.62, 4.15, ''))}" fill="#ffd28a"/>`;
+
+  // The screen: a dark inset, a header, an image, text lines, and a line
+  // being typed with its cursor.
+  const chars = [0.14, 0.08, 0.16, 0, 0.12, 0.18, 0, 0.1, 0.14];
+  let u = 2.05;
+  const typed = chars
+    .map((w) => {
+      if (!w) { u += 0.08; return ''; }
+      const s = on('left', panel, u, 1.05, u + w, 1.23, '#e6edf6');
+      u += w + 0.035;
+      return s;
+    })
+    .join('');
+  const panelBody =
+    hbox(...panel) +
+    on('left', panel, 0.18, 0.22, 3.62, 3.02, HP.screen) +
+    on('left', panel, 0.35, 2.55, 3.45, 2.82, HP.amber.left) +
+    on('left', panel, 0.35, 0.42, 1.8, 2.3, '#e6edf6') +
+    on('left', panel, 0.35, 0.42, 1.8, 1.0, '#b9c7da') +
+    on('left', panel, 2.05, 1.95, 3.45, 2.13, '#b9c7da') +
+    on('left', panel, 2.05, 1.55, 3.0, 1.73, '#b9c7da') +
+    `<g class="typed">${typed}</g>` +
+    `<path class="cur" d="${dOf(on('left', panel, 3.4, 0.98, 3.45, 1.3, ''))}" fill="${HP.amber.top}"/>` +
+    on('left', panel, 2.05, 0.45, 2.9, 0.75, HP.amber.left);
+
+  // The chip: pins, an etched inset, and the amber core on top.
+  const chipBody =
+    hbox(...chip) +
+    [6.3, 7.1, 7.9].map((a) => box(a, 8.7, 0.7, 0.45, 0.5, 0.25, HP.obj)).join('') +
+    [6.3, 7.1, 7.9].map((a) => box(8.7, a, 0.7, 0.5, 0.45, 0.25, HP.obj)).join('') +
+    on('top', chip, 0.4, 0.4, 2.5, 2.5, HP.inset) +
+    [0.7, 2.2].map((v) => on('top', chip, 0.55, v, 2.35, v + 0.06, '#8fb0de')).join('');
+  const core = B(6.6, 6.6, 1.2, 1.3, 1.3, 0.7);
+
+  // The chart re-measures: each bar sinks a little into the platform and
+  // comes back, on its own slow cycle. SMIL rather than CSS, so the drawing
+  // stays sharp under the page's 3D tilt; begin="indefinite" means it only
+  // ever runs when the page script starts it (never without JS, never under
+  // reduced motion).
+  const ease = '0.65 0 0.35 1';
+  const measure = [
+    ['0;2.6;0.8;0', '0;0.3;0.62;1', 9],
+    ['0;1.4;4.6;1.6;0', '0;0.25;0.55;0.8;1', 10],
+    ['0;5.2;1.8;0', '0;0.35;0.7;1', 11],
+  ].map(([v, k, dur]) => {
+    const n = k.split(';').length - 1;
+    return `<animateTransform attributeName="transform" type="translate" values="${v.split(';').map((y) => `0 ${y}`).join(';')}" keyTimes="${k}" calcMode="spline" keySplines="${Array(n).fill(ease).join(';')}" dur="${dur}s" begin="indefinite" repeatCount="indefinite"/>`;
+  });
+
+  const hulls = [B(0.2, 0.2, 0, 9.6, 9.6, 0.6), tower, panel, chip, core, ...bars].map((b) => `<path d="${hull(...b)}"/>`).join('');
+
+  const body =
+    part(platform) +
+    part(rise('r-tower', tower, towerBody)) +
+    part(bars.map((b, i) => rise(`r-bar r-bar-${i + 1}`, b, `<g class="meas">${measure[i]}${hbox(...b, i === 2 ? HP.amber : HP.obj)}</g>`)).join('')) +
+    part(rise('r-panel', panel, panelBody)) +
+    part(rise('r-chip', [5.8, 5.8, 0.6, 3.4, 3.4], chipBody) + rise('r-core', core, hbox(...core, HP.amber))) +
+    `<clipPath id="hs-hull">${hulls}</clipPath>` +
+    `<g class="sheen" clip-path="url(#hs-hull)"><path class="band" d="M-8 -6L2 -6L-18 90L-28 90Z" fill="#fff"/></g>`;
+
+  return `<svg class="scene hero-scene" viewBox="2 8 76 70" width="540" height="497" aria-hidden="true" focusable="false">${body}</svg>`;
+}
+
 export const iconNames = Object.keys(draw);
 export const sceneNames = Object.keys(scenes);
