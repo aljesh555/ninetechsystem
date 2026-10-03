@@ -29,6 +29,12 @@ export const discounts = {
 /** Paying six months up front takes a further 5% off the monthly fee. */
 export const prepayRate = 0.05;
 
+/** A website costs less when it comes with a monthly plan: the plan carries a
+ *  one-time discount on it, and that is the reason shown to the client. This is
+ *  the one number to change the bundle offer. The separate 12-month free-website
+ *  credit (plan.freeWebsite) is unchanged and takes precedence on a 12-month term. */
+export const planWebsiteDiscount = 0.2;
+
 /** Monthly, per unit. `max` bounds the stepper. */
 export const units = {
   reels: { label: 'Short videos (reels)', unit: 2500, max: 40 },

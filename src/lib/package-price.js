@@ -4,7 +4,7 @@
  * read the same numbers.
  */
 import {
-  VAT, discounts, prepayRate, units, social, platforms, levels, aiSetup, plans,
+  VAT, discounts, prepayRate, planWebsiteDiscount, units, social, platforms, levels, aiSetup, plans,
   websites, apps, oneTime,
 } from '../data/packages.js';
 
@@ -139,13 +139,20 @@ export function price(state) {
   const web = websites[state.web.type];
   if (web) {
     const pages = state.web.pages;
+    const full = websitePrice(state.web);
+    // A website comes cheaper when it is part of a plan. Held off the 12-month
+    // path, where the free-website credit below applies instead (unchanged).
+    const bundled = !!plan && !(plan.freeWebsite && state.term === 12);
+    const pct = Math.round(planWebsiteDiscount * 100);
+    const base = `${pages} page${pages > 1 ? 's' : ''}${state.web.bilingual || !web.bilingual ? ', Nepali and English' : ''}`;
     once.push({
       key: 'web', label: web.label, from: web.from,
-      detail: `${pages} page${pages > 1 ? 's' : ''}${state.web.bilingual || !web.bilingual ? ', Nepali and English' : ''}`,
-      amount: websitePrice(state.web),
+      detail: bundled ? `${base} · ${pct}% off with ${plan.name}` : base,
+      amount: bundled ? Math.round(full * (1 - planWebsiteDiscount)) : full,
+      ...(bundled && { was: full }),
     });
     if (plan?.freeWebsite && state.term === 12) {
-      const credit = Math.min(websitePrice(state.web), plan.freeWebsite.value);
+      const credit = Math.min(full, plan.freeWebsite.value);
       once.push({ key: 'web-credit', label: `${plan.freeWebsite.label} included`, detail: 'With a 12-month commitment', amount: -credit, credit: true });
     }
   }

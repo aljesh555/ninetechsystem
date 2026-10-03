@@ -325,7 +325,7 @@ const sections = [
                   {Object.entries(websites).map(([k, w]) => (
                     <button type="button" class="card" data-path="web.type" data-v={k}>
                       <span class="card-name">{w.label}</span>
-                      <span class="card-price">{w.from ? 'From ' : ''}{rs(w.base)}</span>
+                      <span class="card-price" data-web-price={k}>{w.from ? 'From ' : ''}{rs(w.base)}</span>
                     </button>
                   ))}
                 </div>
@@ -546,7 +546,7 @@ const sections = [
 
     <script>
       import { initialState, price, included, betterPlan, npr } from '../lib/package-price.js';
-      import { units, websites, discounts } from '../data/packages.js';
+      import { units, websites, discounts, planWebsiteDiscount } from '../data/packages.js';
 
       const WA = '9779843325804';
       const STAFF = new URLSearchParams(location.search).has('staff');
@@ -841,7 +841,8 @@ const sections = [
         if (l.was) {
           const s = document.createElement('s');
           s.textContent = rs(l.was);
-          amt.append(s, document.createElement('br'), 'Waived');
+          const now = l.amount === 0 ? 'Waived' : (l.from ? 'from ' : '') + rs(l.amount);
+          amt.append(s, document.createElement('br'), now);
         } else {
           amt.textContent = (l.amount < 0 ? '− ' : '') + (l.from ? 'from ' : '') + rs(Math.abs(l.amount));
         }
@@ -981,7 +982,7 @@ const sections = [
             else if (plan && inc[k] > 0) { text = `Included in ${plan.name}`; quiet = true; }
           } else if (k === 'web') {
             const l = byKey.web;
-            text = l ? `${rs(l.amount)}${byKey['web-credit'] ? ` · ${rs(-byKey['web-credit'].amount)} included with 12 months` : ''}` : '';
+            text = l ? `${l.from ? 'from ' : ''}${rs(l.amount)}${l.was ? ` · ${Math.round(planWebsiteDiscount * 100)}% off with ${plan.name}` : ''}${byKey['web-credit'] ? ` · ${rs(-byKey['web-credit'].amount)} included with 12 months` : ''}` : '';
           } else if (k === 'web-pages') {
             const w = websites[state.web.type];
             if (w) text = `${w.pages} included · ${rs(w.extraPage)} each after`;
@@ -1004,6 +1005,24 @@ const sections = [
         for (const w of $$('[data-when]')) {
           const k = w.dataset.when;
           w.hidden = !(k === 'web' ? state.web.type !== 'none' : k === 'landing' ? state.web.type === 'landing' : k === 'app' ? hasApp(state) : true);
+        }
+
+        // Website cards: with a plan, show the bundled price, original struck through.
+        const webPct = Math.round(planWebsiteDiscount * 100);
+        const webBundled = !!plan && !(plan.freeWebsite && state.term === 12);
+        for (const el of $$('[data-web-price]')) {
+          const w = websites[el.dataset.webPrice];
+          const prefix = w.from ? 'From ' : '';
+          if (webBundled) {
+            const s = document.createElement('s');
+            s.textContent = rs(w.base);
+            const now = document.createElement('span');
+            now.className = 'card-price-now';
+            now.textContent = prefix + rs(Math.round(w.base * (1 - planWebsiteDiscount)));
+            el.replaceChildren(s, ' ', now);
+          } else {
+            el.textContent = prefix + rs(w.base);
+          }
         }
 
         // review: the plan block, or a nudge towards one
@@ -1081,7 +1100,9 @@ const sections = [
           a.append(n);
           if (l.detail) { const dd = document.createElement('span'); dd.className = 'pt-detail'; dd.textContent = l.detail; a.append(dd); }
           const b = document.createElement('td');
-          b.textContent = l.was ? 'Waived' : (l.amount < 0 ? '− ' : '') + (l.from ? 'from ' : '') + rs(Math.abs(l.amount));
+          b.textContent = l.was
+            ? (l.amount === 0 ? 'Waived' : (l.from ? 'from ' : '') + rs(l.amount))
+            : (l.amount < 0 ? '− ' : '') + (l.from ? 'from ' : '') + rs(Math.abs(l.amount));
           tr.append(a, b);
           tbody.append(tr);
         }
@@ -1424,11 +1445,15 @@ const sections = [
   .level-name, .card-name { font-weight: 500; font-size: 0.95rem; line-height: 1.3; }
   .level-body, .card-body { font-size: 0.8rem; color: var(--grey); line-height: 1.4; }
   .level-price, .card-price { font-size: 0.82rem; font-weight: 500; margin-top: auto; padding-top: 6px; font-variant-numeric: tabular-nums; }
+  .card-price s { color: var(--grey); font-weight: 400; }
+  .card-price-now { color: #1d7a4a; }
   .level-tag { display: none; order: -1; align-self: flex-start; font-size: 0.68rem; font-weight: 500; padding: 1px 6px; margin-bottom: 2px; background: var(--amber); color: var(--navy); border-radius: 2px; }
   .level.is-inc .level-tag { display: block; }
   .level:disabled { cursor: default; opacity: 0.45; }
   .level[aria-pressed='true'], .card[aria-pressed='true'] { background: var(--navy); border-color: var(--navy); color: var(--white); }
   .level[aria-pressed='true'] .level-body, .card[aria-pressed='true'] .card-body { color: rgba(255, 255, 255, 0.72); }
+  .card[aria-pressed='true'] .card-price s { color: rgba(255, 255, 255, 0.55); }
+  .card[aria-pressed='true'] .card-price-now { color: #7ee0a6; }
   .level.is-inc:not([aria-pressed='true']) { background: var(--off-white); }
   .cards { display: grid; gap: 8px; margin-top: var(--s2); }
   .cards-3 { grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); }
