@@ -112,11 +112,11 @@ const sections = [
           <header class="scr-head">
             <button type="button" class="back-link" data-go="start"><span aria-hidden="true">←</span> Back</button>
             <h1 id="h-plans">Ready-made plans<span class="stop" aria-hidden="true"></span></h1>
-            <p>One team and one bill: filming, ads, an AI assistant and website care in one monthly price. Pick one, then add anything else on the next screen.</p>
+            <p>One team and one bill: filming, ads, an AI assistant and website care in one monthly price. Pick one, then add a website or search below — they cost less inside a package.</p>
           </header>
           <div class="plans plans-full">
             {plans.map((p) => (
-              <button type="button" class:list={['plan', p.recommended && 'plan-rec']} data-plan={p.id} data-plan-go>
+              <button type="button" class:list={['plan', p.recommended && 'plan-rec']} data-plan={p.id}>
                 {p.recommended && <span class="plan-flag">Most chosen</span>}
                 <span class="plan-name">{p.name}</span>
                 <span class="plan-promise">{p.promise}</span>
@@ -124,10 +124,49 @@ const sections = [
                 <span class="plan-sep">Bought separately <s>{rs(alaCarte(p))}</s></span>
                 <span class="plan-for">{p.bestFor}</span>
                 <ul class="plan-feat">{p.features.map((f) => <li>{f}</li>)}</ul>
-                <span class="plan-pick">Choose {p.name} <span aria-hidden="true">→</span></span>
+                <span class="plan-add" data-plan-added hidden></span>
+                <span class="plan-pick" data-plan-pick={p.name}>Choose {p.name} <span aria-hidden="true">→</span></span>
               </button>
             ))}
           </div>
+          <section class="bld-sec plan-extras" data-plan-extras aria-labelledby="h-plan-extras">
+            <header class="bld-sec-head">
+              <span class="bld-num" aria-hidden="true">+</span>
+              <div>
+                <h2 id="h-plan-extras">Add a website or search to your package</h2>
+                <p data-extras-note></p>
+              </div>
+            </header>
+            <div class="qs">
+              <div class="q q-block">
+                <div class="q-text"><p class="q-ask">Website</p><p class="q-cost" data-cost="web"></p></div>
+                <div class="cards cards-4" role="group" aria-label="Website">
+                  <button type="button" class="card" data-path="web.type" data-v="none"><span class="card-name">None</span><span class="card-body">Not now.</span></button>
+                  {Object.entries(websites).map(([k, w]) => (
+                    <button type="button" class="card" data-path="web.type" data-v={k}>
+                      <span class="card-name">{w.label}</span>
+                      <span class="card-body">{w.blurb}</span>
+                      <span class="card-price" data-web-price={k}>{w.from ? 'From ' : ''}{rs(w.base)}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div class="q q-block">
+                <div class="q-text"><p class="q-ask">SEO / AEO / GEO</p><p class="q-cost" data-cost="seo"></p></div>
+                <div class="cards cards-4" role="group" aria-label="SEO, AEO and GEO">
+                  {levels.seo.options.map((o, i) => (
+                    <button type="button" class="card" data-path="seo" data-v={i}>
+                      <span class="card-name">{i === 0 ? 'None' : o.name}</span>
+                      <span class="card-body">{o.body}</span>
+                      {o.price ? <span class="card-price">{mo(o.price)}</span> : null}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+            <p class="plan-extras-cta"><button type="button" class="btn btn-primary" data-go="review">See my package <span aria-hidden="true">→</span></button></p>
+          </section>
+
           <p class="plans-alt">Prefer to choose piece by piece? <button type="button" class="link-btn" data-act="custom">Build my own instead</button></p>
         </section>
 
@@ -703,6 +742,11 @@ const sections = [
           choosePlan(d.plan);
           if (t.hasAttribute('data-plan-go')) return show('review');
           commit();
+          // On the plans screen the package stays put and the website and search
+          // options below become its own, so bring them into view.
+          if (state.ui.screen === 'plans' && d.plan) {
+            $('[data-plan-extras]')?.scrollIntoView({ behavior: reduce ? 'instant' : 'smooth', block: 'start' });
+          }
         } else if (d.path) {
           const path = d.path;
           let v = parse(d.v);
@@ -1025,6 +1069,25 @@ const sections = [
           }
         }
 
+        // plans screen: the chosen package, and what has been added into it
+        for (const el of $$('[data-plan-pick]')) {
+          const id = el.closest('[data-plan]')?.dataset.plan;
+          el.textContent = id && id === state.plan ? 'Selected ✓' : `Choose ${el.dataset.planPick} →`;
+        }
+        const webLine = byKey.web;
+        const seoLine = byKey['l-seo'];
+        for (const el of $$('[data-plan-added]')) {
+          const id = el.closest('[data-plan]')?.dataset.plan;
+          const bits = id && id === state.plan
+            ? [webLine && webLine.label, seoLine && seoLine.label.replace(/^.*?: /, '')].filter(Boolean)
+            : [];
+          el.textContent = bits.length ? `Added: ${bits.join(' · ')}` : '';
+          el.hidden = !bits.length;
+        }
+        $('[data-extras-note]').textContent = plan
+          ? `A website is ${webPct}% off inside ${plan.name}. Pick one and the package price updates.`
+          : `Choose a package above first — a website then costs ${webPct}% less inside it.`;
+
         // review: the plan block, or a nudge towards one
         $('[data-review-plan]').hidden = !plan;
         $('[data-review-noplan]').hidden = !!plan;
@@ -1292,6 +1355,10 @@ const sections = [
   .plan-feat li::before { content: ''; position: absolute; left: 0; top: 0.5em; width: 6px; height: 6px; background: var(--amber); }
   .plan-pick { margin-top: auto; padding-top: var(--s4); font-weight: 500; }
   .plan-rec .plan-pick { align-self: stretch; text-align: center; background: var(--amber); padding: 10px; border-radius: var(--radius); margin-top: var(--s4); }
+  .plan[aria-pressed='true'] { border-color: var(--navy); outline: 2px solid var(--navy); }
+  .plan-add { font-size: 0.8rem; font-weight: 500; color: #1d7a4a; margin-top: var(--s2); }
+  .plan-extras { margin-top: var(--s4); }
+  .plan-extras-cta { margin-top: var(--s4); text-align: center; }
   .plans-alt { margin: var(--s5) auto 0; text-align: center; color: var(--grey); max-width: none; }
 
   /* ---- wizard -------------------------------------------------------------- */
