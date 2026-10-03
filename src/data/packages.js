@@ -199,9 +199,9 @@ export const plans = [
 
 /** Websites: a base price that covers `pages`, then a price per extra page. */
 export const websites = {
-  landing: { label: 'Landing page', blurb: 'One focused page with WhatsApp and a form, fast on 4G.', base: 25000, pages: 1, extraPage: 6000, maxPages: 4, bilingual: 5000 },
+  landing: { label: 'Landing page', blurb: 'One focused page with WhatsApp and a form, fast on 4G.', base: 20000, pages: 1, extraPage: 6000, maxPages: 4, bilingual: 5000 },
   business: { label: 'Business website', blurb: '5–8 pages, you edit it yourself, Nepali and English, SEO set up.', base: 60000, pages: 8, minPages: 5, extraPage: 5000, maxPages: 30, bilingual: 0 },
-  store: { label: 'Online store', blurb: 'Catalogue, cart and checkout with eSewa, Khalti and Fonepay.', base: 120000, pages: 10, minPages: 5, extraPage: 5000, maxPages: 40, bilingual: 0, from: true },
+  store: { label: 'Online store', blurb: 'Catalogue, cart and checkout with eSewa, Khalti and Fonepay.', base: 100000, pages: 10, minPages: 5, extraPage: 5000, maxPages: 40, bilingual: 0, from: true },
 };
 
 /** Mobile apps. The first platform carries the base; the second adds a share. */
