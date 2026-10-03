@@ -60,13 +60,14 @@ export const platforms = [
 /** Tiered monthly services. Level 0 is "none". */
 export const levels = {
   seo: {
-    label: 'Google & AI search',
+    label: 'SEO / AEO / GEO',
+    // Google Business Profile set-up is part of every plan already, so it is not
+    // a tier here. Without a plan, the Light tier includes GBP set-up.
     options: [
       { name: 'None', body: 'No search work this month.', price: 0 },
-      { name: 'Profile set up', body: 'Google Business Profile set up and kept accurate.', price: 3000 },
-      { name: 'Profile care', body: 'Monthly profile posts, review replies and photo updates.', price: 6000 },
-      { name: 'Search growth', body: 'Plus one article a month, on-page fixes, and schema so AI answers cite you.', price: 15000 },
-      { name: 'Search authority', body: 'Plus two articles, backlinks, and a monthly AI-search visibility check.', price: 25000 },
+      { name: 'Light', body: 'One article a month, on-page SEO, AEO schema so AI answers can quote you, and ranking tracking. GBP set-up included if you have no plan.', price: 15000 },
+      { name: 'Standard', body: 'Two articles, featured-snippet work, GEO monitoring across ChatGPT, Gemini and Perplexity, a few quality backlinks and local citations.', price: 30000 },
+      { name: 'Full', body: 'Four articles, full technical SEO, GEO off-site citations and digital PR, aggressive Nepali backlinks, competitor tracking and a strategy call.', price: 50000 },
     ],
   },
   ai: {
@@ -105,7 +106,7 @@ export const plans = [
     adBudget: 'Rs 3,000–6,000',
     includes: {
       reels: 2, graphics: 8, photos: 0, campaigns: 0, boosts: 2, halfDays: 0, creators: 0,
-      platforms: ['facebook', 'instagram'], seo: 1, ai: 1, care: 1,
+      platforms: ['facebook', 'instagram'], seo: 0, ai: 1, care: 1,
     },
     features: [
       'No filming: we work from your photos and clips',
@@ -130,7 +131,7 @@ export const plans = [
     freeWebsite: { label: 'Landing page', value: 25000 },
     includes: {
       reels: 4, graphics: 8, photos: 10, campaigns: 1, boosts: 0, halfDays: 1, creators: 0,
-      platforms: ['facebook', 'instagram', 'tiktok'], seo: 2, ai: 2, care: 2,
+      platforms: ['facebook', 'instagram', 'tiktok'], seo: 0, ai: 2, care: 2,
     },
     features: [
       'Half a day of filming on location, every month',
@@ -155,7 +156,7 @@ export const plans = [
     freeWebsite: { label: 'Business website', value: 60000 },
     includes: {
       reels: 8, graphics: 10, photos: 20, campaigns: 2, boosts: 0, halfDays: 2, creators: 0,
-      platforms: ['facebook', 'instagram', 'tiktok'], seo: 3, ai: 3, care: 3,
+      platforms: ['facebook', 'instagram', 'tiktok'], seo: 1, ai: 3, care: 3,
     },
     features: [
       'A full day of filming every month',
@@ -180,7 +181,7 @@ export const plans = [
     freeWebsite: { label: 'Business website', value: 60000 },
     includes: {
       reels: 12, graphics: 14, photos: 30, campaigns: 4, boosts: 0, halfDays: 4, creators: 1,
-      platforms: ['facebook', 'instagram', 'tiktok', 'youtube', 'linkedin'], seo: 4, ai: 4, care: 4,
+      platforms: ['facebook', 'instagram', 'tiktok', 'youtube', 'linkedin'], seo: 2, ai: 4, care: 4,
     },
     features: [
       'Two days of filming a month, and an ad film every 6 months',
