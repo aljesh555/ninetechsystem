@@ -62,13 +62,16 @@ export const platforms = [
 export const levels = {
   seo: {
     label: 'SEO / AEO / GEO',
+    // Also read by services.js: /services/seo shows these names, prices and
+    // counts, so the service page and the builder always quote the same tier.
     // Google Business Profile set-up is part of every plan already, so it is not
     // a tier here. Without a plan, the Light tier includes GBP set-up.
     options: [
       { name: 'None', body: 'No search work this month.', price: 0 },
-      { name: 'Light', body: 'One article a month, on-page SEO, AEO schema so AI answers can quote you, and ranking tracking. GBP set-up included if you have no plan.', price: 15000 },
-      { name: 'Standard', body: 'Two articles, featured-snippet work, GEO monitoring across ChatGPT, Gemini and Perplexity, a few quality backlinks and local citations.', price: 30000 },
-      { name: 'Full', body: 'Four articles, full technical SEO, GEO off-site citations and digital PR, aggressive Nepali backlinks, competitor tracking and a strategy call.', price: 50000 },
+      { name: 'Light', keywords: 5, articles: 1, body: '5 keywords and one article a month, on-page and technical SEO, AEO schema so AI answers can quote you, and local SEO. GBP set-up included if you have no plan.', price: 18000 },
+      { name: 'Standard', keywords: 10, articles: 2, body: '10 keywords and two articles a month, GEO monitoring across ChatGPT, Gemini and Perplexity, and quality backlinks.', price: 30000 },
+      { name: 'Growth', keywords: 20, articles: 4, body: '20 keywords and four articles a month, GEO off-site citations and digital PR, Nepali backlink building, competitor tracking and a strategy call.', price: 49000 },
+      { name: 'Full', keywords: 40, articles: 6, body: '40 keywords and six articles a month, and an infographic every month.', price: 77000 },
     ],
   },
   ai: {

@@ -8,6 +8,7 @@ import Base from '../../layouts/Base.astro';
 import BuildHero from '../../components/services/BuildHero.astro';
 import FallHeading from '../../components/services/FallHeading.astro';
 import Tiles from '../../components/services/Tiles.astro';
+import Groups from '../../components/services/Groups.astro';
 import TermList from '../../components/services/TermList.astro';
 import Flow from '../../components/services/Flow.astro';
 import Faq from '../../components/services/Faq.astro';
@@ -48,7 +49,7 @@ const flowHeading = {
 }[s.id];
 
 // Sections in page order; backgrounds alternate white / grey through them.
-const order = ['what', s.pillars && 'pillars', s.tiers && 'tiers', s.money && 'money', 'flow', 'standards', 'related', 'faq'].filter(Boolean);
+const order = ['what', s.pillars && 'pillars', s.tiers && 'tiers', s.included && 'included', s.money && 'money', 'flow', 'standards', 'related', 'faq'].filter(Boolean);
 const bg = (key) => (order.indexOf(key) % 2 ? ' section-tint' : '');
 
 const schema = [
@@ -63,7 +64,7 @@ const schema = [
         offers: s.tiers.map((t) => ({
           ...offer(t.price, path),
           name: t.name,
-          ...(t.features && { description: [t.lead, t.features.join('; ')].filter(Boolean).join(' ') }),
+          ...(t.features && { description: [t.stats?.join(', ').concat('.'), t.lead, t.features.join('; ')].filter(Boolean).join(' ') }),
         })),
       }
     : service({ name: s.name, description: s.intro, path, price: s.price, serviceType: 'Digital marketing' }),
@@ -137,6 +138,7 @@ const schema = [
             <div class="tier-card">
               <h3>{t.name}</h3>
               <p class="format-tier-price">{priceLabel(t.price)}</p>
+              {t.stats && <p class="tier-stats">{t.stats.join(' · ')}</p>}
               {t.body && <p>{t.body}</p>}
               {t.lead && <p class="tier-lead">{t.lead}</p>}
               {t.features && <ul class="checks">{t.features.map((f) => <li>{f}</li>)}</ul>}
@@ -144,6 +146,18 @@ const schema = [
           ))}
         </div>
         {s.tiersHead.note && <p class="vat-note">{s.tiersHead.note} {VAT_NOTE}</p>}
+      </div>
+    </section>
+  )}
+
+  {s.included && (
+    <section class={`section${bg('included')}`} id="included">
+      <div class="wrap">
+        <div class="section-head">
+          <FallHeading text={s.included.heading} />
+          <p class="lead">{s.included.lead}</p>
+        </div>
+        <div class="section-body"><Groups groups={s.included.groups} /></div>
       </div>
     </section>
   )}

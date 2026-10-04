@@ -44,38 +44,39 @@ export function priceLabel(price, note = 'Quoted') {
    figures. The wording here is the service page's own.
    -------------------------------------------------------------------------- */
 
-// Each tier builds on the one before it: `lead` says so, `features` lists
-// only what the tier adds. A tier with no entry here falls back to the
+// Each tier builds on the one before it: `lead` says so, and `features` lists
+// only what the tier adds. The keyword and article counts come from
+// packages.js with the price. A tier with no entry here falls back to the
 // builder's one-line description.
 const seoTierDetail = {
   Light: {
     features: [
-      'One article a month',
-      'On-page SEO',
-      'AEO schema, so AI answers can quote you',
-      'Ranking tracking',
-      'Google Business Profile set-up',
+      'On-page and technical SEO',
+      'AEO: answer-first content, FAQs and schema',
+      'Local SEO and Google Business Profile',
+      'Ranking tracking and a monthly report',
     ],
   },
   Standard: {
     lead: 'Everything in Light, and:',
     features: [
-      'Two articles a month instead of one',
-      'Featured-snippet work',
-      'GEO monitoring across ChatGPT, Gemini and Perplexity',
+      'GEO monitoring: how ChatGPT, Gemini and Perplexity describe your business, checked every month',
       'Quality backlinks',
-      'Local citations',
     ],
   },
-  Full: {
+  Growth: {
     lead: 'Everything in Standard, and:',
     features: [
-      'Four articles a month instead of two',
-      'Full technical SEO',
       'GEO off-site citations and digital PR',
       'Nepali backlink building',
       'Competitor tracking',
       'A strategy call',
+    ],
+  },
+  Full: {
+    lead: 'Everything in Growth, and:',
+    features: [
+      'One infographic a month',
     ],
   },
 };
@@ -83,8 +84,52 @@ const seoTierDetail = {
 const seoTiers = levels.seo.options.filter((o) => o.price > 0).map((o) => ({
   name: o.name,
   price: { from: o.price, per: 'month', exact: true },
+  keywords: o.keywords,
+  articles: o.articles,
+  stats: [`${o.keywords} keywords`, `${o.articles} article${o.articles > 1 ? 's' : ''} a month`],
   ...(seoTierDetail[o.name] ?? { body: o.body }),
 }));
+const seoCount = ['no', 'one', 'two', 'three', 'four', 'five', 'six'][seoTiers.length] ?? String(seoTiers.length);
+
+/** The checklist that runs in every tier, whatever its size. */
+const seoIncluded = [
+  { name: 'Audit and set-up', icon: 'search', items: [
+    'Site audit and competitor analysis',
+    'Keyword research and keyword mapping',
+    'Google Analytics and Search Console, set up in your name',
+    'Sitemap and robots.txt',
+    'Conversion tracking, so every enquiry is measured',
+  ] },
+  { name: 'On-page SEO', icon: 'website', items: [
+    'Titles, meta descriptions and headings on your main pages',
+    'URLs and images optimised',
+    'Existing content improved',
+    'Articles written for the keywords we agree',
+  ] },
+  { name: 'Technical SEO', icon: 'gauge', items: [
+    'Page speed and mobile friendliness',
+    'Broken links, redirects and a custom 404 page',
+    'Canonical URLs and site architecture',
+    'Hreflang tags where the site is bilingual',
+  ] },
+  { name: 'AEO', icon: 'chat', items: [
+    'Answer-first sections and FAQs on your main pages',
+    'FAQ, local business and article schema',
+    'Featured-snippet targeting',
+  ] },
+  { name: 'Local SEO', icon: 'store', items: [
+    'Google Business Profile set-up and optimisation',
+    'Monthly profile posts',
+    'Map listing',
+    'Local citations',
+  ] },
+  { name: 'Monthly report', icon: 'sheet', items: [
+    'The work done that month',
+    'Keyword positions, clicks and impressions',
+    'Traffic and your top pages',
+    'Enquiries and cost per lead',
+  ] },
+];
 const seoFrom = seoTiers[0].price.from;
 /** "a, b and c" */
 const listOf = (items) => [items.slice(0, -1).join(', '), items.at(-1)].filter(Boolean).join(' and ');
@@ -808,14 +853,16 @@ export const grow = {
       faqs: [
         { q: 'Do you guarantee Google rankings?', a: 'No, and neither can anyone else. Google does not sell or promise positions, so any company that guarantees a number one ranking is either guessing or misleading you. What we commit to is the work — technical fixes, on-page optimisation, content, Google Business Profile — and a monthly report showing rankings and, more importantly, how many enquiries came in.' },
         { q: 'What are AEO and GEO?', a: 'AEO (answer engine optimisation) structures your content, FAQs and schema so you are the direct answer in featured snippets and voice search. GEO (generative engine optimisation) makes your business readable and trustworthy to AI tools such as ChatGPT, Perplexity and Gemini, so they recommend you. Both sit alongside ordinary SEO, not instead of it.' },
-        { q: 'How much does SEO cost in Nepal?', a: `There are three monthly tiers: ${listOf(seoTiers.map((t) => `${t.name} at NPR ${npr(t.price.from)}`))}, all excluding 13% VAT. The right tier depends on your competition. A local restaurant needs a different scope than a national store, so we recommend one in a written proposal after an AI-search audit.` },
+        { q: 'How much does SEO cost in Nepal?', a: `There are ${seoCount} monthly tiers: ${listOf(seoTiers.map((t) => `${t.name} at NPR ${npr(t.price.from)}`))}, all excluding 13% VAT. The right tier depends on your competition. A local restaurant needs a different scope than a national store, so we recommend one in a written proposal after an AI-search audit.` },
+        { q: 'What is the difference between the SEO tiers?', a: `The same audit, on-page, technical, AEO and local SEO checklist runs in every tier. The tiers differ in how much they cover each month: ${listOf(seoTiers.map((t) => `${t.name} covers ${t.keywords} keywords and ${t.articles} article${t.articles > 1 ? 's' : ''}`))}. GEO monitoring and link building start at Standard.` },
+        { q: 'Is there a minimum contract for SEO?', a: 'Three months. After that the work continues month to month, with 30 days’ notice to stop.' },
         { q: 'What does the AI-search audit cover?', a: 'How your business appears today on Google and in AI tools such as ChatGPT and Perplexity, what your competitors are doing, and what would change your visibility. It carries no cost, and a written proposal follows.' },
         { q: 'Do you buy backlinks?', a: 'No. We work white-hat only: no spam directories, no fake backlinks and no AI-spam content. Off-page authority is built through genuine mentions and listings, because shortcuts can get a business penalised.' },
       ],
       icon: 'search',
       name: 'Search & AI visibility',
       price: { from: seoFrom, per: 'month' },
-      priceSuffix: `Three tiers: ${listOf(seoTiers.map((t) => t.name))}`,
+      priceSuffix: `${seoCount[0].toUpperCase()}${seoCount.slice(1)} tiers: ${listOf(seoTiers.map((t) => t.name))}`,
       intro: 'Found on Google — and inside AI tools like ChatGPT and Perplexity, where people now ask for recommendations.',
       highlights: ['SEO, AEO and GEO', 'Local SEO and Google Business Profile', 'Reported in enquiries'],
       features: [
@@ -829,9 +876,14 @@ export const grow = {
       ],
       tiers: seoTiers,
       tiersHead: {
-        heading: 'Three monthly tiers',
-        lead: 'Each tier is a fixed monthly scope, listed in full below. We recommend the one that fits your competition in the written proposal, after the AI-search audit.',
-        note: 'Every tier is reported monthly in enquiries and cost per lead, with Analytics and Search Console registered in your name.',
+        heading: `${seoCount[0].toUpperCase()}${seoCount.slice(1)} monthly tiers`,
+        lead: 'Each tier is a fixed monthly scope. We recommend the one that fits your competition in the written proposal, after the AI-search audit.',
+        note: 'The minimum term is three months, then month to month with 30 days’ notice.',
+      },
+      included: {
+        heading: 'In every tier',
+        lead: `The same checklist runs in all ${seoCount} tiers. They differ in how many keywords and articles they cover each month, and in the off-site work added from Standard upward.`,
+        groups: seoIncluded,
       },
       note: 'The right tier depends on your competition: a local restaurant needs a different scope than a national store. We assess it and recommend a tier in a written proposal after a consultation. We do not guarantee rankings; anyone who does is misleading you.',
       cta: { label: 'Request an AI-search audit', need: 'seo' },
