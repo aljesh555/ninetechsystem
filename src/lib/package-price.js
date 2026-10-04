@@ -135,11 +135,14 @@ export function price(state) {
   // ---- one-time -----------------------------------------------------------
   const setupWaived = plan && state.term === 12;
   if (plan) {
-    once.push({
-      key: 'setup', label: 'Setup fee', setup: true,
-      detail: setupWaived ? 'Waived with a 12-month commitment' : 'Assistant trained, tracking, Google profile, 3-month content plan',
-      amount: setupWaived ? 0 : plan.setup, was: setupWaived ? plan.setup : undefined,
-    });
+    // Only a plan that carries a setup fee shows the line at all.
+    if (plan.setup > 0) {
+      once.push({
+        key: 'setup', label: 'Setup fee', setup: true,
+        detail: setupWaived ? 'Waived with a 12-month commitment' : 'Assistant trained, tracking, Google profile, 3-month content plan',
+        amount: setupWaived ? 0 : plan.setup, was: setupWaived ? plan.setup : undefined,
+      });
+    }
   } else if (state.ai > 0) {
     once.push({ key: 'ai-setup', label: 'AI assistant setup', detail: 'Built and trained on your FAQs', amount: aiSetup, setup: true });
   }

@@ -104,13 +104,16 @@ export const levels = {
 /** One-off charge to build and train the assistant when bought without a plan. */
 export const aiSetup = 15000;
 
+/** `setup` is a one-time fee charged when a plan starts. It is 0 on every plan
+ *  for now: no setup line is shown or charged. Set a figure here to bring it
+ *  back; a 12-month commitment then waives it again. */
 export const plans = [
   {
     id: 'pahichan',
     name: 'Pahichan',
     promise: 'Be seen',
     price: 14999,
-    setup: 7500,
+    setup: 0,
     bestFor: 'A shop or clinic with no marketing yet',
     adBudget: 'Rs 3,000–6,000',
     includes: {
@@ -134,7 +137,7 @@ export const plans = [
     name: 'Suruwat',
     promise: 'Get customers',
     price: 29999,
-    setup: 15000,
+    setup: 0,
     bestFor: 'A local business ready to advertise',
     adBudget: 'Rs 6,000–12,000',
     freeWebsite: { label: 'Landing page', value: 25000 },
@@ -158,7 +161,7 @@ export const plans = [
     name: 'Pragati',
     promise: 'Grow faster',
     price: 49999,
-    setup: 15000,
+    setup: 0,
     recommended: true,
     bestFor: 'A business with steady sales that wants more',
     adBudget: 'Rs 12,000–25,000',
@@ -184,7 +187,7 @@ export const plans = [
     name: 'Shikhar',
     promise: 'Lead your market',
     price: 99999,
-    setup: 15000,
+    setup: 0,
     bestFor: 'Multi-branch, brand or e-commerce',
     adBudget: 'Rs 25,000 and up',
     freeWebsite: { label: 'Business website', value: 60000 },
@@ -243,7 +246,7 @@ export const oneTime = {
 export const terms = [
   { months: 3, name: '3 months', body: 'The minimum. Then month to month with 30 days’ notice.' },
   { months: 6, name: '6 months, paid up front', body: '5% off the monthly fee.' },
-  { months: 12, name: '12 months', body: 'Setup fee waived, and a free website on Suruwat and above.' },
+  { months: 12, name: '12 months', body: plans.some((p) => p.setup > 0) ? 'Setup fee waived, and a free website on Suruwat and above.' : 'A free website on Suruwat and above.' },
 ];
 
 /** What every plan includes, and the terms, as the client reads them. */
