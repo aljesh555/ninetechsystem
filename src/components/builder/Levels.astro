@@ -14,7 +14,7 @@ const { path, ask, options } = Astro.props;
       <button type="button" class="level" data-path={path} data-v={i}>
         <span class="level-name">{o.name}</span>
         <span class="level-body">{o.body}</span>
-        <span class="level-price">{o.price ? `Rs ${npr(o.price)}/mo` : 'No charge'}</span>
+        <span class="level-price" data-seo-price={path === 'seo' && i > 0 ? i : undefined}>{o.price ? `Rs ${npr(o.price)}/mo` : 'No charge'}</span>
         <span class="level-tag" data-level-tag>Included</span>
       </button>
     ))}

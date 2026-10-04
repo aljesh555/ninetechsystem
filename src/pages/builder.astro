@@ -60,6 +60,15 @@ const sections = [
     <title>Build your package — Nine Technology</title>
     <meta name="description" content="Price your website, app, marketing and AI automation in two minutes: pick a monthly plan or answer a few questions. Every price in writing, in NPR." />
     <link rel="canonical" href={`${site.url}/builder`} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content="Build your package — Nine Technology" />
+    <meta property="og:description" content="Price your website, app, marketing and AI automation in two minutes: pick a monthly plan or answer a few questions. Every price in writing, in NPR." />
+    <meta property="og:url" content={`${site.url}/builder`} />
+    <meta property="og:image" content={`${site.url}/og.png`} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="theme-color" content="#123566" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="preload" href="/fonts/inter-400-500.woff2" as="font" type="font/woff2" crossorigin />
@@ -1609,15 +1618,15 @@ const sections = [
   .level-name, .card-name { font-weight: 500; font-size: 0.95rem; line-height: 1.3; }
   .level-body, .card-body { font-size: 0.8rem; color: var(--grey); line-height: 1.4; }
   .level-price, .card-price { font-size: 0.82rem; font-weight: 500; margin-top: auto; padding-top: 6px; font-variant-numeric: tabular-nums; }
-  .card-price s { color: var(--grey); font-weight: 400; }
+  .card-price s, .level-price s { color: var(--grey); font-weight: 400; }
   .card-price-now { color: #1d7a4a; }
   .level-tag { display: none; order: -1; align-self: flex-start; font-size: 0.68rem; font-weight: 500; padding: 1px 6px; margin-bottom: 2px; background: var(--amber); color: var(--navy); border-radius: 2px; }
   .level.is-inc .level-tag { display: block; }
   .level:disabled { cursor: default; opacity: 0.45; }
   .level[aria-pressed='true'], .card[aria-pressed='true'] { background: var(--navy); border-color: var(--navy); color: var(--white); }
   .level[aria-pressed='true'] .level-body, .card[aria-pressed='true'] .card-body { color: rgba(255, 255, 255, 0.72); }
-  .card[aria-pressed='true'] .card-price s { color: rgba(255, 255, 255, 0.55); }
-  .card[aria-pressed='true'] .card-price-now { color: #7ee0a6; }
+  .card[aria-pressed='true'] .card-price s, .level[aria-pressed='true'] .level-price s { color: rgba(255, 255, 255, 0.55); }
+  .card[aria-pressed='true'] .card-price-now, .level[aria-pressed='true'] .card-price-now { color: #7ee0a6; }
   .level.is-inc:not([aria-pressed='true']) { background: var(--off-white); }
   .cards { display: grid; gap: 8px; margin-top: var(--s2); }
   .cards-3 { grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); }
@@ -1767,6 +1776,17 @@ const sections = [
     .prop { padding: 0; }
     .prop-doc { max-width: none; border-radius: 0; animation: none; }
     .prop-head, .prop-fig-due, .prop-save { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-    .prop-sec, .prop-plan { break-inside: avoid; }
+    .prop-head { padding: var(--s5); }
+    .prop-client { font-size: 2.4rem; }
+    .prop-figs > div, .prop-figs > div:first-child { padding: var(--s3) var(--s5); }
+    .prop-plan, .prop-sec { padding: var(--s4) var(--s5); }
+    .prop-plan { grid-template-columns: 1fr 1.3fr; }
+    .prop-save { grid-column: 1 / -1; }
+    .prop-cols { grid-template-columns: 1fr 1.2fr; }
+    .prop-foot { padding: var(--s3) var(--s5); }
+    /* Sections may run on to the next page; a row, a list item or a heading
+       with what follows it may not be split. */
+    .prop-table tr, .prop-feat li, .prop-list li, .prop-save, .prop-figs, .prop-foot, .prop-plan-head, .prop-cols { break-inside: avoid; }
+    .prop-sec h3, .prop-plan-head { break-after: avoid; }
   }
 </style>
