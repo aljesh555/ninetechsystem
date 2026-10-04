@@ -36,6 +36,11 @@ export const prepayRate = 0.05;
  *  credit (plan.freeWebsite) is unchanged and takes precedence on a 12-month term. */
 export const planWebsiteDiscount = 0.2;
 
+/** Search and AI visibility costs less inside a monthly plan as well: this much
+ *  off the tier, or off the upgrade when the plan already includes a lower one.
+ *  /services/seo shows the full price, which is what SEO costs on its own. */
+export const planSeoDiscount = 0.2;
+
 /** Monthly, per unit. `max` bounds the stepper. */
 export const units = {
   reels: { label: 'Short videos (reels)', unit: 2500, max: 40 },

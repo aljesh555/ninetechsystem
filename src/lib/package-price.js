@@ -4,7 +4,7 @@
  * read the same numbers.
  */
 import {
-  VAT, discounts, prepayRate, planWebsiteDiscount, units, social, platforms, levels, aiSetup, plans,
+  VAT, discounts, prepayRate, planWebsiteDiscount, planSeoDiscount, units, social, platforms, levels, aiSetup, plans,
   websites, apps, oneTime,
 } from '../data/packages.js';
 
@@ -107,12 +107,20 @@ export function price(state) {
     if (state[k] <= inc[k]) continue;
     const opts = levels[k].options;
     const opt = opts[state[k]];
-    const amount = opt.price - opts[inc[k]].price;
+    if (!opt) continue; // a level this price list no longer has
+    const full = opt.price - opts[inc[k]].price;
+    // Search work costs less inside a plan, the way a website does.
+    const rate = plan && k === 'seo' ? planSeoDiscount : 0;
+    const notes = [
+      inc[k] > 0 && `Upgrade from ${opts[inc[k]].name}`,
+      rate > 0 && `${Math.round(rate * 100)}% off with ${plan.name}`,
+    ].filter(Boolean);
     monthly.push({
       key: `l-${k}`,
       label: `${levels[k].label}: ${opt.name.replace(/^\+ /, '')}`,
-      detail: plan ? `Upgrade from ${opts[inc[k]].name}` : opt.body,
-      amount,
+      detail: plan ? notes.join(' · ') : opt.body,
+      amount: Math.round(full * (1 - rate)),
+      ...(rate > 0 && { was: full }),
     });
   }
 

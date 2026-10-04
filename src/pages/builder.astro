@@ -112,9 +112,16 @@ const sections = [
           <header class="scr-head">
             <button type="button" class="back-link" data-go="start"><span aria-hidden="true">←</span> Back</button>
             <h1 id="h-plans">Ready-made plans<span class="stop" aria-hidden="true"></span></h1>
-            <p>One team and one bill: filming, ads, an AI assistant and website care in one monthly price. Pick one, then add a website or search below — they cost less inside a package.</p>
+            <p>One team and one bill: filming, ads, an AI assistant and website care in one monthly price. Choose a package, add a website and search to it at 20% less, and see the total at the bottom.</p>
           </header>
-          <div class="plans plans-full">
+          <header class="bld-sec-head plans-step">
+            <span class="bld-num" aria-hidden="true">1</span>
+            <div>
+              <h2 id="h-plan-pick">Choose your package</h2>
+              <p>Everything listed on a card is included in its monthly price.</p>
+            </div>
+          </header>
+          <div class="plans plans-full" role="group" aria-labelledby="h-plan-pick">
             {plans.map((p) => (
               <button type="button" class:list={['plan', p.recommended && 'plan-rec']} data-plan={p.id}>
                 {p.recommended && <span class="plan-flag">Most chosen</span>}
@@ -129,39 +136,76 @@ const sections = [
               </button>
             ))}
           </div>
+
           <section class="bld-sec plan-extras" data-plan-extras aria-labelledby="h-plan-extras">
             <header class="bld-sec-head">
-              <span class="bld-num" aria-hidden="true">+</span>
+              <span class="bld-num" aria-hidden="true">2</span>
               <div>
-                <h2 id="h-plan-extras">Add a website or search to your package</h2>
+                <h2 id="h-plan-extras">Add a website</h2>
                 <p data-extras-note></p>
               </div>
             </header>
-            <div class="qs">
-              <div class="q q-block">
-                <div class="q-text"><p class="q-ask">Website</p><p class="q-cost" data-cost="web"></p></div>
-                <div class="cards cards-4" role="group" aria-label="Website">
-                  <button type="button" class="card" data-path="web.type" data-v="none"><span class="card-name">None</span><span class="card-body">Not now.</span></button>
-                  {Object.entries(websites).map(([k, w]) => (
-                    <button type="button" class="card" data-path="web.type" data-v={k}>
-                      <span class="card-name">{w.label}</span>
-                      <span class="card-body">{w.blurb}</span>
-                      <span class="card-price" data-web-price={k}>{w.from ? 'From ' : ''}{rs(w.base)}</span>
-                    </button>
-                  ))}
-                </div>
+            <div class="q q-block">
+              <div class="q-text"><p class="q-ask">Website</p><p class="q-cost" data-cost="web"></p></div>
+              <div class="cards cards-4" role="group" aria-label="Website">
+                <button type="button" class="card" data-path="web.type" data-v="none"><span class="card-name">None</span><span class="card-body">Not now.</span></button>
+                {Object.entries(websites).map(([k, w]) => (
+                  <button type="button" class="card" data-path="web.type" data-v={k}>
+                    <span class="card-name">{w.label}</span>
+                    <span class="card-body">{w.blurb}</span>
+                    <span class="card-price" data-web-price={k}>{w.from ? 'From ' : ''}{rs(w.base)}</span>
+                  </button>
+                ))}
               </div>
-              <div class="q q-block">
-                <div class="q-text"><p class="q-ask">SEO / AEO / GEO</p><p class="q-cost" data-cost="seo"></p></div>
-                <div class="cards cards-4" role="group" aria-label="SEO, AEO and GEO">
-                  {levels.seo.options.map((o, i) => (
-                    <button type="button" class="card" data-path="seo" data-v={i}>
-                      <span class="card-name">{i === 0 ? 'None' : o.name}</span>
-                      <span class="card-body">{o.body}</span>
-                      {o.price ? <span class="card-price">{mo(o.price)}</span> : null}
-                    </button>
-                  ))}
-                </div>
+            </div>
+          </section>
+
+          <section class="bld-sec" aria-labelledby="h-plan-seo">
+            <header class="bld-sec-head">
+              <span class="bld-num" aria-hidden="true">3</span>
+              <div>
+                <h2 id="h-plan-seo">Add search and AI visibility</h2>
+                <p><span data-seo-note></span> <a class="link" href="/services/seo#tiers" target="_blank" rel="noopener">See what each tier includes</a></p>
+              </div>
+            </header>
+            <div class="q q-block">
+              <div class="q-text"><p class="q-ask">SEO / AEO / GEO</p><p class="q-cost" data-cost="seo"></p></div>
+              <div class="cards cards-4" role="group" aria-label="SEO, AEO and GEO">
+                {levels.seo.options.map((o, i) => (
+                  <button type="button" class="card" data-path="seo" data-v={i}>
+                    <span class="card-name">{i === 0 ? 'None' : o.name}</span>
+                    <span class="card-body">{o.body}</span>
+                    {o.price ? <span class="card-price" data-seo-price={i}>{mo(o.price)}</span> : null}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          <section class="bld-sec plan-total" aria-labelledby="h-plan-total">
+            <header class="bld-sec-head">
+              <span class="bld-num" aria-hidden="true">4</span>
+              <div>
+                <h2 id="h-plan-total">Your package total</h2>
+                <p>It adds up as you choose. Monthly work and one-time work are totalled separately.</p>
+              </div>
+            </header>
+            <p class="cart-empty" data-tot-empty>Choose a package, a website or a search tier above and the total appears here.</p>
+            <div class="tot" data-tot-body hidden>
+              <div class="tot-group" data-tot-group="monthly">
+                <p class="cart-label">Every month</p>
+                <ul class="lines" data-tot-lines="monthly"></ul>
+                <dl class="sums" data-tot-sums="m"></dl>
+              </div>
+              <div class="tot-group" data-tot-group="once">
+                <p class="cart-label">One time</p>
+                <ul class="lines" data-tot-lines="once"></ul>
+                <dl class="sums" data-tot-sums="o"></dl>
+              </div>
+              <div class="tot-due">
+                <span class="tot-due-k">Due to start</span>
+                <span class="tot-due-v" data-tot-due></span>
+                <span class="tot-due-s" data-tot-due-s></span>
               </div>
             </div>
             <p class="plan-extras-cta"><button type="button" class="btn btn-primary" data-go="review">See my package <span aria-hidden="true">→</span></button></p>
@@ -585,7 +629,7 @@ const sections = [
 
     <script>
       import { initialState, price, included, betterPlan, npr } from '../lib/package-price.js';
-      import { units, websites, discounts, planWebsiteDiscount } from '../data/packages.js';
+      import { units, websites, levels, discounts, planWebsiteDiscount, planSeoDiscount } from '../data/packages.js';
 
       const WA = '9779843325804';
       const STAFF = new URLSearchParams(location.search).has('staff');
@@ -1022,7 +1066,7 @@ const sections = [
             quiet = !n && !!plan;
           } else if (['seo', 'ai', 'care'].includes(k)) {
             const l = byKey[`l-${k}`];
-            if (l) text = `+ ${rs(l.amount)} a month`;
+            if (l) text = `+ ${rs(l.amount)} a month${l.was ? ` · ${Math.round(planSeoDiscount * 100)}% off with ${plan.name}` : ''}`;
             else if (plan && inc[k] > 0) { text = `Included in ${plan.name}`; quiet = true; }
           } else if (k === 'web') {
             const l = byKey.web;
@@ -1069,6 +1113,27 @@ const sections = [
           }
         }
 
+        // Search tiers: with a plan, the tier or the upgrade at its bundled
+        // price; a tier the plan already covers says so.
+        const seoPct = Math.round(planSeoDiscount * 100);
+        const seoOpts = levels.seo.options;
+        for (const el of $$('[data-seo-price]')) {
+          const lv = Number(el.dataset.seoPrice);
+          if (plan && lv <= inc.seo) {
+            el.textContent = `Included in ${plan.name}`;
+          } else if (plan) {
+            const full = seoOpts[lv].price - seoOpts[inc.seo].price;
+            const was = document.createElement('s');
+            was.textContent = rs(full);
+            const now = document.createElement('span');
+            now.className = 'card-price-now';
+            now.textContent = `${inc.seo ? '+ ' : ''}${rs(Math.round(full * (1 - planSeoDiscount)))} a month`;
+            el.replaceChildren(was, ' ', now);
+          } else {
+            el.textContent = `${rs(seoOpts[lv].price)} a month`;
+          }
+        }
+
         // plans screen: the chosen package, and what has been added into it
         for (const el of $$('[data-plan-pick]')) {
           const id = el.closest('[data-plan]')?.dataset.plan;
@@ -1085,8 +1150,13 @@ const sections = [
           el.hidden = !bits.length;
         }
         $('[data-extras-note]').textContent = plan
-          ? `A website is ${webPct}% off inside ${plan.name}. Pick one and the package price updates.`
-          : `Choose a package above first — a website then costs ${webPct}% less inside it.`;
+          ? `A website is ${webPct}% off inside ${plan.name}. Pick one and the total below updates.`
+          : `Choose a package in step 1 first. A website then costs ${webPct}% less inside it.`;
+        $('[data-seo-note]').textContent = !plan
+          ? `Choose a package in step 1 first. Search then costs ${seoPct}% less inside it.`
+          : inc.seo
+            ? `${plan.name} already includes ${seoOpts[inc.seo].name}. A higher tier is ${seoPct}% off the difference.`
+            : `Search and AI visibility is ${seoPct}% off inside ${plan.name}.`;
 
         // review: the plan block, or a nudge towards one
         $('[data-review-plan]').hidden = !plan;
@@ -1122,8 +1192,9 @@ const sections = [
         if (r.m.disc || r.m.prepay) mRows.push(['Subtotal', rs(r.m.sub)]);
         if (r.m.disc) mRows.push([`Volume discount ${Math.round(r.m.tier.rate * 100)}%`, `− ${rs(r.m.disc)}`, 'is-save']);
         if (r.m.prepay) mRows.push(['6 months paid up front, 5%', `− ${rs(r.m.prepay)}`, 'is-save']);
+        const oRows = r.o.disc ? [['Subtotal', rs(r.o.sub)], [`Volume discount ${Math.round(r.o.tier.rate * 100)}%`, `− ${rs(r.o.disc)}`, 'is-save']] : [];
         sums($('[data-sums="m"]'), mRows);
-        sums($('[data-sums="o"]'), r.o.disc ? [['Subtotal', rs(r.o.sub)], [`Volume discount ${Math.round(r.o.tier.rate * 100)}%`, `− ${rs(r.o.disc)}`, 'is-save']] : []);
+        sums($('[data-sums="o"]'), oRows);
 
         tween($('[data-fig="m"]'), r.m.total);
         tween($('[data-fig="o"]'), r.o.total);
@@ -1137,6 +1208,21 @@ const sections = [
           ? [r.due.months === 6 ? '6 months up front' : r.due.months ? 'first month' : '', r.once.some((l) => l.setup && l.amount) ? 'setup' : '', hasProjects ? '50% of one-time work' : '']
               .filter(Boolean).join(' + ') + ', incl. VAT'
           : '';
+        const dueNote = $('[data-fig-s="due"]').textContent;
+
+        // plans screen: the same lines and totals, set out under step 4
+        const any = r.monthly.length + r.once.length > 0;
+        $('[data-tot-empty]').hidden = any;
+        $('[data-tot-body]').hidden = !any;
+        for (const [which, lines] of [['monthly', r.monthly], ['once', r.once]]) {
+          $(`[data-tot-lines="${which}"]`).replaceChildren(...lines.map((l) => lineEl(l, false)));
+          $(`[data-tot-group="${which}"]`).hidden = !lines.length;
+        }
+        sums($('[data-tot-sums="m"]'), [...mRows, ['Monthly total', `${rs(r.m.total)} + VAT`, 'is-total']]);
+        sums($('[data-tot-sums="o"]'), [...oRows, ['One-time total', `${rs(r.o.total)} + VAT`, 'is-total']]);
+        $('[data-tot-due]').textContent = rs(r.due.exVat + r.due.vat);
+        $('[data-tot-due-s]').textContent = dueNote;
+
         $('[data-client-echo]').textContent = state.client || (plan ? `${plan.name} plan` : 'Built by you');
         $('[data-cart-cta]').textContent = state.ui.screen === 'review' ? 'See my proposal' : 'See my package';
 
@@ -1358,7 +1444,18 @@ const sections = [
   .plan[aria-pressed='true'] { border-color: var(--navy); outline: 2px solid var(--navy); }
   .plan-add { font-size: 0.8rem; font-weight: 500; color: #1d7a4a; margin-top: var(--s2); }
   .plan-extras { margin-top: var(--s4); }
-  .plan-extras-cta { margin-top: var(--s4); text-align: center; }
+  .plans-step { margin-bottom: var(--s3); }
+  .plan-total .cart-empty { padding: 0; }
+  .tot { display: grid; gap: var(--s4); }
+  @media (min-width: 900px) { .tot { grid-template-columns: 1fr 1fr; align-items: start; column-gap: var(--s6); } .tot-due { grid-column: 1 / -1; } }
+  .tot .sums { column-gap: 0; }
+  .tot .sums dd { padding-left: var(--s3); }
+  .tot .sums .is-total { font-weight: 600; font-size: 1rem; padding-top: 8px; border-top: 1px solid var(--rule); margin-top: 4px; }
+  .tot-due { display: grid; gap: 2px; padding: var(--s3) var(--s4); background: var(--navy); color: var(--white); border-radius: var(--radius); }
+  .tot-due-k { font-size: 0.8rem; color: rgba(255, 255, 255, 0.65); }
+  .tot-due-v { font-family: var(--display); font-weight: 700; font-size: 1.75rem; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+  .tot-due-s { font-size: 0.78rem; color: rgba(255, 255, 255, 0.65); }
+  .plan-extras-cta { margin-top: var(--s4); text-align: center; max-width: none; }
   .plans-alt { margin: var(--s5) auto 0; text-align: center; color: var(--grey); max-width: none; }
 
   /* ---- wizard -------------------------------------------------------------- */
