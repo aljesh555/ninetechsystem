@@ -39,7 +39,7 @@ const each = (k) => `${rs(units[k].unit)} each a month`;
 const pct = (r) => `${Math.round(r * 100)}%`;
 const lowest = Math.min(...plans.map((p) => p.price));
 const discountLine = [
-  `${pct(discounts.monthly.at(-1).rate)} off monthly fees from ${rs(discounts.monthly.at(-1).min)} a month, ${pct(discounts.monthly[0].rate)} from ${rs(discounts.monthly[0].min)}`,
+  `${pct(discounts.monthly.at(-1).rate)} off monthly work added on top of a plan from ${rs(discounts.monthly.at(-1).min)} a month, ${pct(discounts.monthly[0].rate)} from ${rs(discounts.monthly[0].min)}`,
   `${pct(discounts.oneTime.at(-1).rate)} off one-time work from ${rs(discounts.oneTime.at(-1).min)}, ${pct(discounts.oneTime[0].rate)} from ${rs(discounts.oneTime[0].min)}`,
 ];
 const sections = [
@@ -964,13 +964,14 @@ const sections = [
         const text = $(`[data-disc-text="${which}"]`);
         const fill = $(`[data-meter="${which}"]`);
         const rate = r.tier?.rate ?? 0;
-        box.hidden = !r.sub;
-        if (!r.sub) { prevRate[which] = 0; return; }
+        // Measured on what counts towards the discount: with a plan, its extras.
+        box.hidden = !r.base;
+        if (!r.base) { prevRate[which] = 0; return; }
         if (r.next) {
           const b = document.createElement('strong');
-          b.textContent = rs(r.next.min - r.sub);
+          b.textContent = rs(r.next.min - r.base);
           text.replaceChildren('Add ', b, ` more${per} to unlock ${Math.round(r.next.rate * 100)}% off`);
-          scaleX(fill, Math.min(1, r.sub / r.next.min));
+          scaleX(fill, Math.min(1, r.base / r.next.min));
         } else {
           text.textContent = `${Math.round(table[0].rate * 100)}% off unlocked, the highest tier`;
           scaleX(fill, 1);
@@ -980,7 +981,7 @@ const sections = [
           box.classList.remove('is-pop');
           void box.offsetWidth;
           box.classList.add('is-pop');
-          toast(`${Math.round(rate * 100)}% off ${which === 'm' ? 'the monthly fee' : 'one-time work'}, unlocked`);
+          toast(`${Math.round(rate * 100)}% off ${which === 'm' ? (state.plan ? 'your monthly extras' : 'the monthly fee') : 'one-time work'}, unlocked`);
         }
         prevRate[which] = rate;
       }
@@ -1194,12 +1195,12 @@ const sections = [
         }
         prevKeys = keys;
 
-        discount('m', r.m, discounts.monthly, ' a month');
+        discount('m', r.m, discounts.monthly, plan ? ' a month in extras' : ' a month');
         discount('o', r.o, discounts.oneTime, '');
 
         const mRows = [];
         if (r.m.disc || r.m.prepay) mRows.push(['Subtotal', rs(r.m.sub)]);
-        if (r.m.disc) mRows.push([`Volume discount ${Math.round(r.m.tier.rate * 100)}%`, `− ${rs(r.m.disc)}`, 'is-save']);
+        if (r.m.disc) mRows.push([`Volume discount ${plan ? 'on extras ' : ''}${Math.round(r.m.tier.rate * 100)}%`, `− ${rs(r.m.disc)}`, 'is-save']);
         if (r.m.prepay) mRows.push(['6 months paid up front, 5%', `− ${rs(r.m.prepay)}`, 'is-save']);
         const oRows = r.o.disc ? [['Subtotal', rs(r.o.sub)], [`Volume discount ${Math.round(r.o.tier.rate * 100)}%`, `− ${rs(r.o.disc)}`, 'is-save']] : [];
         sums($('[data-sums="m"]'), mRows);
@@ -1310,7 +1311,7 @@ const sections = [
 
         $('[data-p-m]').hidden = !r.monthly.length;
         const mt = [];
-        if (r.m.disc) mt.push([`Volume discount, ${Math.round(r.m.tier.rate * 100)}%`, `− ${rs(r.m.disc)}`, 'is-save']);
+        if (r.m.disc) mt.push([`Volume discount${r.plan ? ' on extras' : ''}, ${Math.round(r.m.tier.rate * 100)}%`, `− ${rs(r.m.disc)}`, 'is-save']);
         if (r.m.prepay) mt.push(['Six months paid up front, 5%', `− ${rs(r.m.prepay)}`, 'is-save']);
         mt.push(['Monthly total', rs(r.m.total), 'is-total'], ['VAT 13%', rs(r.m.vat), 'is-vat']);
         rows(p('m-lines'), r.monthly, mt);

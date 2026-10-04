@@ -15,7 +15,9 @@
 export const VAT = 0.13;
 
 /** Volume discounts, applied separately to the monthly and one-time totals.
- *  The highest threshold reached wins; they do not stack with each other. */
+ *  The highest threshold reached wins; they do not stack with each other.
+ *  A plan's own price is never discounted and does not count towards a
+ *  threshold: the monthly discount is on what is added on top of the plan. */
 export const discounts = {
   monthly: [
     { min: 100000, rate: 0.1 },

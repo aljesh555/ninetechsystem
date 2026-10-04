@@ -192,8 +192,11 @@ export function price(state) {
   const sum = (lines) => lines.reduce((a, l) => a + l.amount, 0);
 
   const mSub = sum(monthly);
-  const mTier = tierFor(discounts.monthly, mSub);
-  const mDisc = mTier ? Math.round(mSub * mTier.rate) : 0;
+  // A plan always costs its own price. The volume discount is counted on, and
+  // taken from, what is added on top of it; with no plan, that is everything.
+  const mBase = sum(monthly.filter((l) => !l.plan));
+  const mTier = tierFor(discounts.monthly, mBase);
+  const mDisc = mTier ? Math.round(mBase * mTier.rate) : 0;
   const prepay = state.term === 6 && mSub > 0 ? Math.round((mSub - mDisc) * prepayRate) : 0;
   const mTotal = mSub - mDisc - prepay;
 
@@ -216,8 +219,8 @@ export function price(state) {
 
   return {
     plan, monthly, once,
-    m: { sub: mSub, tier: mTier, disc: mDisc, prepay, total: mTotal, vat: Math.round(mTotal * VAT), next: nextTier(discounts.monthly, mSub) },
-    o: { sub: oSub, tier: oTier, disc: oDisc, total: oTotal, vat: Math.round(oTotal * VAT), next: nextTier(discounts.oneTime, oSub), hasFrom: once.some((l) => l.from) },
+    m: { sub: mSub, base: mBase, tier: mTier, disc: mDisc, prepay, total: mTotal, vat: Math.round(mTotal * VAT), next: nextTier(discounts.monthly, mBase) },
+    o: { sub: oSub, base: oSub, tier: oTier, disc: oDisc, total: oTotal, vat: Math.round(oTotal * VAT), next: nextTier(discounts.oneTime, oSub), hasFrom: once.some((l) => l.from) },
     due: { exVat: dueNow, vat: Math.round(dueNow * VAT), months, onDelivery: projectsNet - Math.round(projectsNet / 2) },
     separate,
     firstYear: mTotal * 12 + oTotal,
