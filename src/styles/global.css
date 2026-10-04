@@ -711,6 +711,12 @@ h1 + .lead, h2 + .lead { margin-top: var(--s3); }
 .svc-card:hover .svc-icon::after, .svc-card:focus-within .svc-icon::after { transform: scale(0.75); opacity: 0.06; }
 .svc-card h3 { font-size: 1.1875rem; }
 .svc-card p { color: var(--grey); font-size: 0.9375rem; margin-top: var(--s2); }
+.svc-tiers { margin-top: var(--s3); border-top: 1px solid var(--rule); }
+.svc-tiers li { display: grid; grid-template-columns: 1fr auto; column-gap: var(--s2); padding-block: 8px; border-bottom: 1px solid var(--rule); font-size: 0.9375rem; }
+.svc-tier-name, .svc-tier-price { font-weight: 500; color: var(--navy); }
+.svc-tier-price { font-variant-numeric: tabular-nums; }
+.svc-tier-stats { grid-column: 1 / -1; font-size: 0.8125rem; color: var(--grey); }
+.svc-card .svc-tiers-note { font-size: 0.8125rem; }
 .svc-link { text-decoration: none; }
 .svc-link::after { content: ''; position: absolute; inset: 0; border-radius: var(--radius); }
 .svc-link:focus-visible { outline: none; }

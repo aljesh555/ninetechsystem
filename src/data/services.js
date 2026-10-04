@@ -169,6 +169,7 @@ export const services = {
     name: 'Search & AI visibility',
     short: 'Found on Google — and inside AI tools like ChatGPT and Perplexity, where people now ask for recommendations.',
     price: { from: seoFrom, per: 'month' },
+    tiers: seoTiers,
     href: '/services/seo',
     icon: 'search',
   },
@@ -866,9 +867,9 @@ export const grow = {
       intro: 'Found on Google — and inside AI tools like ChatGPT and Perplexity, where people now ask for recommendations.',
       highlights: ['SEO, AEO and GEO', 'Local SEO and Google Business Profile', 'Reported in enquiries'],
       features: [
-        'Search engine optimization (SEO) — keyword research, on-page optimization, technical SEO, off-page authority building',
+        'Search engine optimization (SEO) — keyword research, on-page optimization and technical SEO, with off-page authority building from the Standard tier',
         "Answer Engine Optimization (AEO) — structured content, FAQs and schema, so you're the direct answer in featured snippets and voice search",
-        'Generative Engine Optimization (GEO) — so ChatGPT, Perplexity and Gemini recommend your business',
+        'Generative Engine Optimization (GEO) — so ChatGPT, Perplexity and Gemini recommend your business, monitored every month from the Standard tier',
         'Local SEO — Google Business Profile and local search',
         'Monthly reporting — in enquiries and cost per lead, not vanity rankings',
         'Everything in your name — your Analytics, your Search Console, your data',
@@ -879,6 +880,7 @@ export const grow = {
         heading: `${seoCount[0].toUpperCase()}${seoCount.slice(1)} monthly tiers`,
         lead: 'Each tier is a fixed monthly scope. We recommend the one that fits your competition in the written proposal, after the AI-search audit.',
         note: 'The minimum term is three months, then month to month with 30 days’ notice.',
+        jump: 'See what each tier includes',
       },
       included: {
         heading: 'In every tier',

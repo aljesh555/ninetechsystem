@@ -93,6 +93,7 @@ const schema = [
         <FallHeading text={s.makes ? 'What we make' : 'What you get'} />
         <p class="offer-price">{priceLabel(s.price)}</p>
         {s.priceSuffix && <p class="offer-time">{s.priceSuffix}</p>}
+        {s.tiersHead?.jump && <p class="offer-time"><a class="link" href="#tiers">{s.tiersHead.jump}</a></p>}
         {monthly && <p class="offer-time">One-time, or from NPR {npr(monthly.price.from)}/mo monthly</p>}
         <a class="btn btn-primary section-body" href={cta.href}>{cta.label}</a>
         {s.ctaNote && <p class="cta-note">{s.ctaNote}</p>}
