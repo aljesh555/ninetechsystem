@@ -1031,6 +1031,7 @@ h1 + .lead, h2 + .lead { margin-top: var(--s3); }
 .format-wide .kicker { margin-bottom: var(--s1); }
 .format-tiers, .tier-cards { display: grid; gap: var(--s3); }
 @media (min-width: 640px) { .format-tiers, .tier-cards { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 900px) { .tier-cards-3 { grid-template-columns: repeat(3, 1fr); } }
 .format-tiers > div, .tier-card { padding: var(--s3); border: 1px solid var(--rule); border-radius: var(--radius); background: var(--off-white); }
 .tier-card { background: var(--white); }
 .format-tiers h4, .tier-card h3 { font-family: var(--display); font-weight: 600; font-size: 1.0625rem; color: var(--navy); margin: 0; letter-spacing: -0.01em; }

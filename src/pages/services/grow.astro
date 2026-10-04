@@ -13,7 +13,7 @@ import Faq from '../../components/services/Faq.astro';
 import CtaStrip from '../../components/services/CtaStrip.astro';
 import Arrow from '../../components/services/Arrow.astro';
 import { icon } from '../../lib/icons.js';
-import { grow, priceLabel, npr, VAT_NOTE } from '../../data/services.js';
+import { grow, priceLabel, npr, monthlyOption, VAT_NOTE } from '../../data/services.js';
 import { breadcrumbList, faqPage, service, abs } from '../../lib/schema.js';
 
 const path = '/services/grow';
@@ -71,7 +71,7 @@ const schema = [
             <Fragment set:html={icon(s.icon, 52)} />
             <h3>{s.name}</h3>
             <p class="format-price">{priceLabel(s.price)}</p>
-            <p class="format-time">{s.priceSuffix ?? (s.tiers ? `or NPR ${npr(s.tiers[1].price.from)}/mo monthly` : 'Scoped to your goals')}</p>
+            <p class="format-time">{s.priceSuffix ?? (monthlyOption(s) ? `or NPR ${npr(monthlyOption(s).price.from)}/mo monthly` : 'Scoped to your goals')}</p>
             <ul>{s.highlights.map((h) => <li>{h}</li>)}</ul>
             <a class="svc-view" href={`/services/${s.slug}`}>View the service <Arrow /></a>
           </article>

@@ -14,7 +14,7 @@ import Faq from '../../components/services/Faq.astro';
 import CtaStrip from '../../components/services/CtaStrip.astro';
 import Arrow from '../../components/services/Arrow.astro';
 import { icon } from '../../lib/icons.js';
-import { grow, services, priceLabel, npr, contactHref, VAT_NOTE } from '../../data/services.js';
+import { grow, services, priceLabel, npr, contactHref, monthlyOption, VAT_NOTE } from '../../data/services.js';
 import { breadcrumbList, faqPage, service, offer, orgRef, abs } from '../../lib/schema.js';
 
 export function getStaticPaths() {
@@ -31,6 +31,7 @@ const crumbs = [
 ];
 const cta = { label: s.cta.label, href: contactHref(s.cta.need) };
 const related = s.related.map((id) => services[id]);
+const monthly = monthlyOption(s);
 
 const ctaHeading = {
   seo: 'Find out how visible you are today',
@@ -87,7 +88,7 @@ const schema = [
         <FallHeading text={s.makes ? 'What we make' : 'What you get'} />
         <p class="offer-price">{priceLabel(s.price)}</p>
         {s.priceSuffix && <p class="offer-time">{s.priceSuffix}</p>}
-        {s.tiers && <p class="offer-time">One-time, or from NPR {npr(s.tiers[1].price.from)}/mo monthly</p>}
+        {monthly && <p class="offer-time">One-time, or from NPR {npr(monthly.price.from)}/mo monthly</p>}
         <a class="btn btn-primary section-body" href={cta.href}>{cta.label}</a>
         {s.ctaNote && <p class="cta-note">{s.ctaNote}</p>}
       </div>
@@ -121,13 +122,13 @@ const schema = [
   )}
 
   {s.tiers && (
-    <section class={`section${bg('tiers')}`}>
+    <section class={`section${bg('tiers')}`} id="tiers">
       <div class="wrap">
         <div class="section-head">
-          <FallHeading text="Two ways to work with us" />
-          <p class="lead">A single production when you need a specific video, or regular content every month.</p>
+          <FallHeading text={s.tiersHead.heading} />
+          <p class="lead">{s.tiersHead.lead}</p>
         </div>
-        <div class="tier-cards section-body">
+        <div class={`tier-cards tier-cards-${s.tiers.length} section-body`}>
           {s.tiers.map((t) => (
             <div class="tier-card">
               <h3>{t.name}</h3>

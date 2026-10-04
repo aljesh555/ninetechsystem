@@ -1,7 +1,8 @@
 /**
  * The package builder's price list: the four monthly growth plans, every unit
  * that can be added to them, and the one-time work sold alongside. Read by
- * /builder only. Every figure is NPR, excluding 13% VAT.
+ * /builder, and by services.js for the SEO / AEO / GEO tiers on /services/seo.
+ * Every figure is NPR, excluding 13% VAT.
  *
  * This file ships to the browser. It holds prices a client may see and nothing
  * else: no delivery costs, margins or salaries.

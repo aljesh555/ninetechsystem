@@ -9,9 +9,12 @@
  *   { from: 20000 }                    -> "From NPR 20,000"
  *   { from: 20000, to: 35000 }         -> "NPR 20,000 – 35,000"
  *   { from: 20000, per: 'month' }      -> "From NPR 20,000/mo"
+ *   { from: 20000, exact: true }       -> "NPR 20,000"
  * with `per` one of 'month', 'year', 'shoot' or 'setup'. A service with no
  * published price has `price: null` and a `priceNote` instead.
  */
+
+import { levels } from './packages.js';
 
 export const VAT_NOTE = 'Prices exclude 13% VAT.';
 
@@ -34,6 +37,30 @@ export function priceLabel(price, note = 'Quoted') {
    software page.
    -------------------------------------------------------------------------- */
 
+
+/* --------------------------------------------------------------------------
+   The SEO / AEO / GEO tiers. Names and prices come from the builder's list in
+   packages.js, so /services/seo and /builder can never quote different
+   figures. The wording here is the service page's own.
+   -------------------------------------------------------------------------- */
+
+const seoTierBody = {
+  Light: 'One article a month, on-page SEO, AEO schema so AI answers can quote you, and ranking tracking. Google Business Profile set-up is included.',
+  Standard: 'Two articles a month, featured-snippet work, GEO monitoring across ChatGPT, Gemini and Perplexity, quality backlinks and local citations.',
+  Full: 'Four articles a month, full technical SEO, GEO off-site citations and digital PR, Nepali backlink building, competitor tracking and a strategy call.',
+};
+
+const seoTiers = levels.seo.options.filter((o) => o.price > 0).map((o) => ({
+  name: o.name,
+  price: { from: o.price, per: 'month', exact: true },
+  body: seoTierBody[o.name] ?? o.body,
+}));
+const seoFrom = seoTiers[0].price.from;
+/** "a, b and c" */
+const listOf = (items) => [items.slice(0, -1).join(', '), items.at(-1)].filter(Boolean).join(' and ');
+
+/** The monthly option of a service whose headline price is one-time. */
+export const monthlyOption = (s) => (s.price && !s.price.per ? s.tiers?.find((t) => t.price.per === 'month') : undefined);
 
 /* --------------------------------------------------------------------------
    The thirteen services. `id` is also the contact form's ?need= value.
@@ -66,7 +93,7 @@ export const services = {
   seo: {
     name: 'Search & AI visibility',
     short: 'Found on Google — and inside AI tools like ChatGPT and Perplexity, where people now ask for recommendations.',
-    price: { from: 30000, per: 'month' },
+    price: { from: seoFrom, per: 'month' },
     href: '/services/seo',
     icon: 'search',
   },
@@ -722,8 +749,8 @@ export const grow = {
       kicker: 'Grow — Search & AI visibility',
       h1: 'SEO and AI search visibility in Kathmandu',
       title: 'SEO & AI Search Visibility in Kathmandu — Nine Technology',
-      description: 'SEO, AEO and GEO for businesses in Nepal: found on Google and recommended by ChatGPT and Perplexity. From NPR 30,000/month, reported in enquiries.',
-      answer: 'Nine Technology makes businesses in Nepal easy to find on Google and inside AI tools such as ChatGPT, Perplexity and Gemini — through SEO, AEO, GEO and local SEO — from NPR 30,000 a month. Every plan is scoped to your competition, run white-hat only, and reported in enquiries and cost per lead.',
+      description: `SEO, AEO and GEO for businesses in Nepal: found on Google and recommended by ChatGPT and Perplexity. From NPR ${npr(seoFrom)}/month, reported in enquiries.`,
+      answer: `Nine Technology makes businesses in Nepal easy to find on Google and inside AI tools such as ChatGPT, Perplexity and Gemini — through SEO, AEO, GEO and local SEO — from NPR ${npr(seoFrom)} a month. Every engagement is matched to your competition, run white-hat only, and reported in enquiries and cost per lead.`,
       facts: [
         { icon: 'search', value: 'SEO, AEO and GEO', label: 'Google and AI search' },
         { icon: 'store', value: 'Local SEO', label: 'Google Business Profile' },
@@ -742,7 +769,7 @@ export const grow = {
       },
       flow: [
         { name: 'AI-search audit', body: 'How you appear on Google and in AI tools today, and what competitors do.' },
-        { name: 'Proposal', body: 'Scope, targets and monthly price, scoped to your competition.' },
+        { name: 'Proposal', body: 'Scope, targets and the tier we recommend for your competition.' },
         { name: 'Technical and on-page', body: 'Fixes, structure, content and schema on your site.' },
         { name: 'Authority and local', body: 'Off-page authority building and Google Business Profile.' },
         { name: 'Monthly report', body: 'Enquiries and cost per lead first, then the next month planned.' },
@@ -751,13 +778,14 @@ export const grow = {
       faqs: [
         { q: 'Do you guarantee Google rankings?', a: 'No, and neither can anyone else. Google does not sell or promise positions, so any company that guarantees a number one ranking is either guessing or misleading you. What we commit to is the work — technical fixes, on-page optimisation, content, Google Business Profile — and a monthly report showing rankings and, more importantly, how many enquiries came in.' },
         { q: 'What are AEO and GEO?', a: 'AEO (answer engine optimisation) structures your content, FAQs and schema so you are the direct answer in featured snippets and voice search. GEO (generative engine optimisation) makes your business readable and trustworthy to AI tools such as ChatGPT, Perplexity and Gemini, so they recommend you. Both sit alongside ordinary SEO, not instead of it.' },
-        { q: 'How much does SEO cost in Nepal?', a: 'With us, from NPR 30,000 a month, excluding 13% VAT. SEO is scoped to your competition rather than sold as a fixed package — a local restaurant needs a different scope than a national store — so the price follows an AI-search audit and a written proposal.' },
+        { q: 'How much does SEO cost in Nepal?', a: `There are three monthly tiers: ${listOf(seoTiers.map((t) => `${t.name} at NPR ${npr(t.price.from)}`))}, all excluding 13% VAT. The right tier depends on your competition. A local restaurant needs a different scope than a national store, so we recommend one in a written proposal after an AI-search audit.` },
         { q: 'What does the AI-search audit cover?', a: 'How your business appears today on Google and in AI tools such as ChatGPT and Perplexity, what your competitors are doing, and what would change your visibility. It carries no cost, and a written proposal follows.' },
         { q: 'Do you buy backlinks?', a: 'No. We work white-hat only: no spam directories, no fake backlinks and no AI-spam content. Off-page authority is built through genuine mentions and listings, because shortcuts can get a business penalised.' },
       ],
       icon: 'search',
       name: 'Search & AI visibility',
-      price: { from: 30000, per: 'month' },
+      price: { from: seoFrom, per: 'month' },
+      priceSuffix: `Three tiers: ${listOf(seoTiers.map((t) => t.name))}`,
       intro: 'Found on Google — and inside AI tools like ChatGPT and Perplexity, where people now ask for recommendations.',
       highlights: ['SEO, AEO and GEO', 'Local SEO and Google Business Profile', 'Reported in enquiries'],
       features: [
@@ -769,7 +797,12 @@ export const grow = {
         'Everything in your name — your Analytics, your Search Console, your data',
         'White-hat only — no spam directories, no fake backlinks, no AI-spam content',
       ],
-      note: 'SEO is scoped to your competition, not sold as a fixed box — a local restaurant needs a different scope than a national store. We assess it and send a written proposal after a consultation. We do not guarantee rankings; anyone who does is misleading you.',
+      tiers: seoTiers,
+      tiersHead: {
+        heading: 'Three monthly tiers',
+        lead: 'Each tier is a fixed monthly scope. We recommend the one that fits your competition in the written proposal, after the AI-search audit.',
+      },
+      note: 'The right tier depends on your competition: a local restaurant needs a different scope than a national store. We assess it and recommend a tier in a written proposal after a consultation. We do not guarantee rankings; anyone who does is misleading you.',
       cta: { label: 'Request an AI-search audit', need: 'seo' },
       ctaNote: 'The audit carries no cost.',
     },
@@ -865,6 +898,10 @@ export const grow = {
         { name: 'One-time production', price: { from: 25000 }, body: 'A specific video or a single shoot.' },
         { name: 'Monthly content', price: { from: 35000, per: 'month' }, body: 'Regular reels and videos, every month.' },
       ],
+      tiersHead: {
+        heading: 'Two ways to work with us',
+        lead: 'A single production when you need a specific video, or regular content every month.',
+      },
       note: 'We scope video to what you actually need. It starts with a consultation: you tell us the goal, we plan the shoot, produce it, and deliver ready-to-use content.',
       cta: { label: 'Request a proposal', need: 'video' },
     },
