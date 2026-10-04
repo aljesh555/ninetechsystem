@@ -60,7 +60,11 @@ const schema = [
         description: s.intro,
         provider: orgRef,
         url: abs(path),
-        offers: s.tiers.map((t) => ({ ...offer(t.price, path), name: t.name })),
+        offers: s.tiers.map((t) => ({
+          ...offer(t.price, path),
+          name: t.name,
+          ...(t.features && { description: [t.lead, t.features.join('; ')].filter(Boolean).join(' ') }),
+        })),
       }
     : service({ name: s.name, description: s.intro, path, price: s.price, serviceType: 'Digital marketing' }),
   faqPage(path, s.faqs),
@@ -133,10 +137,13 @@ const schema = [
             <div class="tier-card">
               <h3>{t.name}</h3>
               <p class="format-tier-price">{priceLabel(t.price)}</p>
-              <p>{t.body}</p>
+              {t.body && <p>{t.body}</p>}
+              {t.lead && <p class="tier-lead">{t.lead}</p>}
+              {t.features && <ul class="checks">{t.features.map((f) => <li>{f}</li>)}</ul>}
             </div>
           ))}
         </div>
+        {s.tiersHead.note && <p class="vat-note">{s.tiersHead.note} {VAT_NOTE}</p>}
       </div>
     </section>
   )}

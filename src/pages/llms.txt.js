@@ -28,6 +28,11 @@ export async function GET() {
     .join('\n');
 
 
+  const seo = grow.services.find((s) => s.id === 'seo');
+  const seoTiers = seo.tiers
+    .map((t) => `- ${t.name}: ${priceLabel(t.price)}. ${[t.lead, t.features?.join('; ') ?? t.body].filter(Boolean).join(' ')}.`)
+    .join('\n');
+
   const models = Object.values(deliveryModels)
     .map((m) => `- ${m.name}: ${m.short} Phases: ${m.phases.join(', ')}. Best suited to: ${m.bestFor} Pricing: ${m.pricing}`)
     .join('\n');
@@ -67,6 +72,10 @@ ${hub}
 
 ### Website types in detail (${url('/services/website')})
 ${websiteTypes}
+
+### Search and AI visibility tiers (${url('/services/seo')})
+${seoTiers}
+${seo.tiersHead.note}
 
 ### Support and maintenance (${url('/services/support')})
 ${support.intro} ${support.trust} Care plans are scoped per client; no prices are published yet.

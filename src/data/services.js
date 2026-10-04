@@ -44,16 +44,46 @@ export function priceLabel(price, note = 'Quoted') {
    figures. The wording here is the service page's own.
    -------------------------------------------------------------------------- */
 
-const seoTierBody = {
-  Light: 'One article a month, on-page SEO, AEO schema so AI answers can quote you, and ranking tracking. Google Business Profile set-up is included.',
-  Standard: 'Two articles a month, featured-snippet work, GEO monitoring across ChatGPT, Gemini and Perplexity, quality backlinks and local citations.',
-  Full: 'Four articles a month, full technical SEO, GEO off-site citations and digital PR, Nepali backlink building, competitor tracking and a strategy call.',
+// Each tier builds on the one before it: `lead` says so, `features` lists
+// only what the tier adds. A tier with no entry here falls back to the
+// builder's one-line description.
+const seoTierDetail = {
+  Light: {
+    features: [
+      'One article a month',
+      'On-page SEO',
+      'AEO schema, so AI answers can quote you',
+      'Ranking tracking',
+      'Google Business Profile set-up',
+    ],
+  },
+  Standard: {
+    lead: 'Everything in Light, and:',
+    features: [
+      'Two articles a month instead of one',
+      'Featured-snippet work',
+      'GEO monitoring across ChatGPT, Gemini and Perplexity',
+      'Quality backlinks',
+      'Local citations',
+    ],
+  },
+  Full: {
+    lead: 'Everything in Standard, and:',
+    features: [
+      'Four articles a month instead of two',
+      'Full technical SEO',
+      'GEO off-site citations and digital PR',
+      'Nepali backlink building',
+      'Competitor tracking',
+      'A strategy call',
+    ],
+  },
 };
 
 const seoTiers = levels.seo.options.filter((o) => o.price > 0).map((o) => ({
   name: o.name,
   price: { from: o.price, per: 'month', exact: true },
-  body: seoTierBody[o.name] ?? o.body,
+  ...(seoTierDetail[o.name] ?? { body: o.body }),
 }));
 const seoFrom = seoTiers[0].price.from;
 /** "a, b and c" */
@@ -800,7 +830,8 @@ export const grow = {
       tiers: seoTiers,
       tiersHead: {
         heading: 'Three monthly tiers',
-        lead: 'Each tier is a fixed monthly scope. We recommend the one that fits your competition in the written proposal, after the AI-search audit.',
+        lead: 'Each tier is a fixed monthly scope, listed in full below. We recommend the one that fits your competition in the written proposal, after the AI-search audit.',
+        note: 'Every tier is reported monthly in enquiries and cost per lead, with Analytics and Search Console registered in your name.',
       },
       note: 'The right tier depends on your competition: a local restaurant needs a different scope than a national store. We assess it and recommend a tier in a written proposal after a consultation. We do not guarantee rankings; anyone who does is misleading you.',
       cta: { label: 'Request an AI-search audit', need: 'seo' },
