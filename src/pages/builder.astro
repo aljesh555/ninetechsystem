@@ -14,10 +14,12 @@
  *
  * Prices live in src/data/packages.js; the arithmetic in
  * src/lib/package-price.js. The whole package, and the screen and question it
- * is on, are kept in the URL hash, so a refresh never loses it and a copied
- * link reopens the same quote.
+ * is on, are kept in the URL hash as a short readable link
+ * (#plan=suruwat&web=landing&seo=light, see src/lib/package-link.js), so a
+ * refresh never loses it and a copied link reopens the same quote.
  */
 import '../styles/global.css';
+import Header from '../components/Header.astro';
 import Stepper from '../components/builder/Stepper.astro';
 import YesNo from '../components/builder/YesNo.astro';
 import Levels from '../components/builder/Levels.astro';
@@ -76,9 +78,9 @@ const sections = [
     <link rel="preload" href="/fonts/poppins-700.woff2" as="font" type="font/woff2" crossorigin />
   </head>
   <body class="bld scr-start">
-    <header class="bld-top">
+    <Header path="/builder" />
+    <div class="bld-top">
       <div class="bld-top-in">
-        <a href="/" class="bld-logo" aria-label="Nine Technology — home"><Fragment set:html={logoWhite} /></a>
         <span class="bld-title">Build your package</span>
         <label class="bld-client bld-staff" data-staff-only hidden>
           <span>Prepared by</span>
@@ -88,7 +90,7 @@ const sections = [
           <button type="button" class="bld-ghost" data-reset>Start over</button>
         </div>
       </div>
-    </header>
+    </div>
 
     <!-- start ------------------------------------------------------------- -->
     <section class="start" data-screen="start" aria-labelledby="h-start">
@@ -638,7 +640,18 @@ const sections = [
 
     <script>
       import { initialState, price, included, betterPlan, npr } from '../lib/package-price.js';
+      import { baseState, encodeState, decodeState } from '../lib/package-link.js';
       import { units, websites, levels, discounts, planWebsiteDiscount, planSeoDiscount } from '../data/packages.js';
+
+      // The site header's menu button. The class also tells the stylesheet
+      // that scripts are running, as the inline script does on other pages.
+      document.documentElement.classList.add('js');
+      const menuToggle = document.querySelector('[data-menu-toggle]');
+      menuToggle?.addEventListener('click', () => {
+        const open = document.getElementById('menu').classList.toggle('is-open');
+        menuToggle.setAttribute('aria-expanded', String(open));
+        menuToggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+      });
 
       const WA = '9779843325804';
       const STAFF = new URLSearchParams(location.search).has('staff');
@@ -664,29 +677,16 @@ const sections = [
       const secOf = (id) => $(`.wiz-step[data-step="${id}"]`).dataset.sec;
 
       // ---- state, kept in the URL hash --------------------------------------
-      const enc = (o) => {
-        const bytes = new TextEncoder().encode(JSON.stringify(o));
-        return btoa(String.fromCharCode(...bytes)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+      // A short readable link, checked against the price list when it is read.
+      const blank = () => { const s = baseState(null); s.ui.step = STEPS[0]; return s; };
+      let state = decodeState(location.hash);
+      if (!STEPS.includes(state.ui.step)) state.ui.step = STEPS[0];
+      const save = () => {
+        const link = encodeState(state);
+        history.replaceState(null, '', `${location.pathname}${location.search}${link ? `#${link}` : ''}`);
       };
-      const dec = (s) => {
-        const bin = atob(s.replace(/-/g, '+').replace(/_/g, '/'));
-        return JSON.parse(new TextDecoder().decode(Uint8Array.from(bin, (c) => c.charCodeAt(0))));
-      };
-      const blank = () => ({ ...initialState(null), mkt: null, ui: { screen: 'start', step: STEPS[0], from: 'start' } });
-      let state = blank();
-      try {
-        const m = location.hash.match(/q=([\w-]+)/);
-        if (m) {
-          const saved = dec(m[1]);
-          const base = blank();
-          state = {
-            ...base, ...saved,
-            qty: { ...base.qty, ...saved.qty }, web: { ...base.web, ...saved.web },
-            app: { ...base.app, ...saved.app }, ui: { ...base.ui, ...saved.ui },
-          };
-        }
-      } catch { state = blank(); }
-      const save = () => history.replaceState(null, '', `${location.search}#q=${enc(state)}`);
+      // What is sent or copied: the package, never the ?staff view of it.
+      const shareLink = () => `${location.origin}${location.pathname}${location.hash}`;
 
       const get = (path) => path.split('.').reduce((o, k) => o[k], state);
       const set = (path, v) => {
@@ -849,7 +849,7 @@ const sections = [
         } else if (t.hasAttribute('data-print')) {
           return window.print();
         } else if (t.hasAttribute('data-copy')) {
-          navigator.clipboard?.writeText(location.href).then(() => toast('Link copied. It opens this proposal.'));
+          navigator.clipboard?.writeText(shareLink()).then(() => toast('Link copied. It opens this proposal.'));
           return;
         } else if (t.hasAttribute('data-cart-toggle')) {
           const open = $('[data-cart]').classList.toggle('is-open');
@@ -992,6 +992,7 @@ const sections = [
         $('[data-app]').hidden = !['plans', 'wizard', 'review'].includes(scr);
         document.body.className = `bld scr-${scr}`;
         $('.bld-top').hidden = scr === 'proposal';
+        $('.header').hidden = scr === 'proposal';
         $('[data-reset]').hidden = scr === 'start';
       }
 
@@ -1327,7 +1328,7 @@ const sections = [
           : 'Ad budgets are paid by you directly to Meta, Google or TikTok, never through us.';
 
         const text = summary(r);
-        const link = `${location.origin}${location.pathname}${location.hash}`;
+        const link = shareLink();
         const hello = STAFF ? 'Hi Nine Technology, we accept this proposal.' : 'Hi Nine Technology, I built this package on your website.';
         $('[data-accept]').href = `https://wa.me/${WA}?text=${encodeURIComponent(`${hello}\n\n${text}\n\n${link}`)}`;
         $('[data-accept]').textContent = STAFF ? 'Accept on WhatsApp' : 'Send to Nine Technology';
@@ -1336,7 +1337,10 @@ const sections = [
 
       function commit() { save(); render(); }
 
-      render();
+      // The address is rewritten first, so the links the proposal builds from
+      // it are already in the short form; then once more, in case rendering
+      // moved the question on.
+      commit();
       save();
     </script>
   </body>
@@ -1351,10 +1355,15 @@ const sections = [
 
   .bld-top { position: relative; z-index: 20; background: var(--navy); color: var(--white); border-bottom: 1px solid var(--rule-navy); }
   .scr-start .bld-top { border-bottom-color: transparent; }
-  @media (min-width: 1080px) { .scr-wizard .bld-top, .scr-review .bld-top, .scr-plans .bld-top { position: sticky; top: 0; } }
+  /* The start screen opens with the same words as its own heading. */
+  .scr-start .bld-title { display: none; }
+  /* The site header above is the sticky one. Its menu stays closed until the
+     button opens it, without waiting for the script to say so. */
+  .bld .nav-mobile { display: none; }
+  .bld .nav-mobile.is-open { display: block; }
   .bld-top-in { max-width: 1440px; margin: 0 auto; padding: 12px var(--gutter); display: flex; align-items: center; gap: var(--s4); flex-wrap: wrap; }
   .bld-logo svg { height: 38px; width: auto; }
-  .bld-title { font-family: var(--display); font-weight: 600; font-size: 0.95rem; padding-left: var(--s4); border-left: 1px solid var(--rule-navy); color: rgba(255, 255, 255, 0.8); }
+  .bld-title { font-family: var(--display); font-weight: 600; font-size: 0.95rem; color: rgba(255, 255, 255, 0.8); }
   .bld-client { display: flex; align-items: center; gap: 10px; flex: 0 1 260px; }
   .bld-client span { font-size: 0.8rem; color: rgba(255, 255, 255, 0.6); white-space: nowrap; }
   .bld-client input { width: 100%; min-height: 40px; padding: 0 12px; border-radius: var(--radius); background: rgba(255, 255, 255, 0.06); border: 1px solid var(--rule-navy); color: var(--white); }
@@ -1370,12 +1379,11 @@ const sections = [
   .bld-ghost-dark { color: var(--navy); border-color: var(--rule); background: var(--white); }
   .bld-ghost-dark:hover { border-color: var(--navy); background: var(--white); }
   @media (max-width: 719px) {
-    .bld-title { display: none; }
     .bld-client { flex: 1 1 100%; order: 3; }
   }
 
   /* ---- start ------------------------------------------------------------- */
-  .start { background: var(--navy); color: var(--white); min-height: calc(100vh - 63px); display: grid; align-items: center; position: relative; overflow: hidden; }
+  .start { background: var(--navy); color: var(--white); min-height: calc(100vh - 132px); display: grid; align-items: center; position: relative; overflow: hidden; }
   .start::before {
     content: ''; position: absolute; inset: 0; pointer-events: none; opacity: 0.5;
     background-image: radial-gradient(rgba(255, 255, 255, 0.16) 1px, transparent 1.4px);
@@ -1644,8 +1652,8 @@ const sections = [
   .finish-note { margin-top: var(--s2); font-size: 0.86rem; color: rgba(255, 255, 255, 0.65); }
 
   /* ---- cart --------------------------------------------------------------- */
-  .cart { position: sticky; top: 84px; }
-  .cart-in { background: var(--white); border: 1px solid var(--rule); border-radius: var(--radius); max-height: calc(100vh - 104px); overflow-y: auto; overscroll-behavior: contain; }
+  .cart { position: sticky; top: 113px; }
+  .cart-in { background: var(--white); border: 1px solid var(--rule); border-radius: var(--radius); max-height: calc(100vh - 133px); overflow-y: auto; overscroll-behavior: contain; }
   .cart-bar { display: none; }
   .cart-head { padding: var(--s4) var(--s4) var(--s3); border-bottom: 1px solid var(--rule); }
   .cart-kicker { font-size: 0.8rem; color: var(--grey); }
