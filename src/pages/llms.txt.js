@@ -76,7 +76,7 @@ ${websiteTypes}
 ### Search and AI visibility tiers (${url('/services/seo')})
 ${seoTiers}
 ${seo.tiersHead.note}
-In every tier: ${seo.included.groups.map((g) => `${g.name} (${g.items.join('; ')})`).join('. ')}.
+In every tier: ${seo.tiersHead.everyTier.map((g) => `${g.name} (${g.items.join('; ')})`).join('. ')}.
 
 ### Support and maintenance (${url('/services/support')})
 ${support.intro} ${support.trust} Care plans are scoped per client; no prices are published yet.

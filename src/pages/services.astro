@@ -8,12 +8,13 @@ import Base from '../layouts/Base.astro';
 import BuildHero from '../components/services/BuildHero.astro';
 import FallHeading from '../components/services/FallHeading.astro';
 import ServiceCard from '../components/services/ServiceCard.astro';
+import TierCards from '../components/services/TierCards.astro';
 import Tiles from '../components/services/Tiles.astro';
 import CtaStrip from '../components/services/CtaStrip.astro';
 import Arrow from '../components/services/Arrow.astro';
 import { icon, scene } from '../lib/icons.js';
 import { site, commitments } from '../data/site.js';
-import { services, groups, popularRequests, howToChoose } from '../data/services.js';
+import { services, groups, popularRequests, howToChoose, VAT_NOTE } from '../data/services.js';
 import HowWeWork from '../components/HowWeWork.astro';
 import { breadcrumbList, service, abs } from '../lib/schema.js';
 
@@ -104,6 +105,14 @@ const schema = [
         <div class="svc-grid stagger reveal">
           {g.services.map((id) => <ServiceCard service={services[id]} />)}
         </div>
+        {/* A service sold in tiers shows every tier in full, under its group. */}
+        {g.services.map((id) => services[id]).filter((s) => s.tiers).map((s) => (
+          <div class="tier-block">
+            <h3>{s.name}: what each tier includes</h3>
+            <TierCards tiers={s.tiers} h="h4" />
+            <p class="vat-note">{VAT_NOTE} <a class="link" href={s.href}>View the service</a></p>
+          </div>
+        ))}
       </div>
     </section>
   ))}

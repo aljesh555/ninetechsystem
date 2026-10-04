@@ -1,0 +1,25 @@
+---
+/**
+ * Priced tiers, side by side. A tier with `groups` shows its complete feature
+ * list under small group labels; otherwise it shows its one-line `body`.
+ * `h` sets the heading level of the tier names to suit the page around them.
+ */
+import { priceLabel } from '../../data/services.js';
+const { tiers, h = 'h3' } = Astro.props;
+const H = h;
+---
+<div class={`tier-cards tier-cards-${tiers.length} section-body`}>
+  {tiers.map((t) => (
+    <div class="tier-card">
+      <H class="tier-name">{t.name}</H>
+      <p class="format-tier-price">{priceLabel(t.price)}</p>
+      {t.body && <p>{t.body}</p>}
+      {t.groups?.map((g) => (
+        <>
+          <p class="tier-group">{g.name}</p>
+          <ul class="checks">{g.items.map((f) => <li>{f}</li>)}</ul>
+        </>
+      ))}
+    </div>
+  ))}
+</div>

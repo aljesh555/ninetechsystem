@@ -44,92 +44,99 @@ export function priceLabel(price, note = 'Quoted') {
    figures. The wording here is the service page's own.
    -------------------------------------------------------------------------- */
 
-// Each tier builds on the one before it: `lead` says so, and `features` lists
-// only what the tier adds. The keyword and article counts come from
-// packages.js with the price. A tier with no entry here falls back to the
-// builder's one-line description.
-const seoTierDetail = {
-  Light: {
-    features: [
-      'On-page and technical SEO',
-      'AEO: answer-first content, FAQs and schema',
-      'Local SEO and Google Business Profile',
-      'Ranking tracking and a monthly report',
-    ],
-  },
-  Standard: {
-    lead: 'Everything in Light, and:',
-    features: [
-      'GEO monitoring: how ChatGPT, Gemini and Perplexity describe your business, checked every month',
-      'Quality backlinks',
-    ],
-  },
-  Growth: {
-    lead: 'Everything in Standard, and:',
-    features: [
-      'GEO off-site citations and digital PR',
-      'Nepali backlink building',
-      'Competitor tracking',
-      'A strategy call',
-    ],
-  },
-  Full: {
-    lead: 'Everything in Growth, and:',
-    features: [
-      'One infographic a month',
-    ],
-  },
-};
-
-const seoTiers = levels.seo.options.filter((o) => o.price > 0).map((o) => ({
-  name: o.name,
-  price: { from: o.price, per: 'month', exact: true },
-  keywords: o.keywords,
-  articles: o.articles,
-  stats: [`${o.keywords} keywords`, `${o.articles} article${o.articles > 1 ? 's' : ''} a month`],
-  ...(seoTierDetail[o.name] ?? { body: o.body }),
-}));
-const seoCount = ['no', 'one', 'two', 'three', 'four', 'five', 'six'][seoTiers.length] ?? String(seoTiers.length);
-
 /** The checklist that runs in every tier, whatever its size. */
 const seoIncluded = [
-  { name: 'Audit and set-up', icon: 'search', items: [
+  { name: 'Audit and set-up', items: [
     'Site audit and competitor analysis',
     'Keyword research and keyword mapping',
     'Google Analytics and Search Console, set up in your name',
     'Sitemap and robots.txt',
     'Conversion tracking, so every enquiry is measured',
   ] },
-  { name: 'On-page SEO', icon: 'website', items: [
+  { name: 'On-page SEO', items: [
     'Titles, meta descriptions and headings on your main pages',
     'URLs and images optimised',
     'Existing content improved',
     'Articles written for the keywords we agree',
   ] },
-  { name: 'Technical SEO', icon: 'gauge', items: [
+  { name: 'Technical SEO', items: [
     'Page speed and mobile friendliness',
     'Broken links, redirects and a custom 404 page',
     'Canonical URLs and site architecture',
     'Hreflang tags where the site is bilingual',
   ] },
-  { name: 'AEO', icon: 'chat', items: [
+  { name: 'AEO', items: [
     'Answer-first sections and FAQs on your main pages',
     'FAQ, local business and article schema',
     'Featured-snippet targeting',
   ] },
-  { name: 'Local SEO', icon: 'store', items: [
+  { name: 'Local SEO', items: [
     'Google Business Profile set-up and optimisation',
     'Monthly profile posts',
     'Map listing',
     'Local citations',
   ] },
-  { name: 'Monthly report', icon: 'sheet', items: [
+  { name: 'Monthly report', items: [
     'The work done that month',
     'Keyword positions, clicks and impressions',
     'Traffic and your top pages',
     'Enquiries and cost per lead',
   ] },
 ];
+
+// What each tier adds to the one before it, as [group, item]. A tier keeps
+// everything the tiers below it have.
+const seoTierAdds = {
+  Light: [],
+  Standard: [
+    ['GEO', 'GEO monitoring: how ChatGPT, Gemini and Perplexity describe your business, checked every month'],
+    ['Off-page SEO', 'Quality backlinks'],
+  ],
+  Growth: [
+    ['GEO', 'GEO off-site citations and digital PR'],
+    ['Off-page SEO', 'Nepali backlink building'],
+    ['Strategy', 'Competitor tracking'],
+    ['Strategy', 'A strategy call'],
+  ],
+  Full: [
+    ['Off-page SEO', 'One infographic a month'],
+  ],
+};
+// One line per area, for where the Light tier is summarised rather than listed.
+const seoLightSummary = [
+  'On-page and technical SEO',
+  'AEO: answer-first content, FAQs and schema',
+  'Local SEO and Google Business Profile',
+  'Ranking tracking and a monthly report',
+];
+const seoGroupOrder = ['Scope', 'Audit and set-up', 'On-page SEO', 'Technical SEO', 'AEO', 'GEO', 'Off-page SEO', 'Local SEO', 'Strategy', 'Monthly report'];
+
+/**
+ * Each tier, with `groups`: its complete feature list, nothing left to
+ * "everything in the tier below". `lead` and `features` are the short form,
+ * what the tier adds, used in the structured data and llms.txt. Keyword and
+ * article counts come from packages.js with the price.
+ */
+const seoTiers = levels.seo.options.filter((o) => o.price > 0).map((o, i, all) => {
+  const adds = all.slice(0, i + 1).flatMap((t) => seoTierAdds[t.name] ?? []);
+  const groups = new Map([
+    ['Scope', [`${o.keywords} keywords tracked and worked on`, `${o.articles} article${o.articles > 1 ? 's' : ''} a month`]],
+    ...seoIncluded.map((g) => [g.name, [...g.items]]),
+  ]);
+  for (const [group, item] of adds) groups.set(group, [...(groups.get(group) ?? []), item]);
+  const own = (seoTierAdds[o.name] ?? []).map(([, item]) => item);
+  return {
+    name: o.name,
+    price: { from: o.price, per: 'month', exact: true },
+    keywords: o.keywords,
+    articles: o.articles,
+    stats: [`${o.keywords} keywords`, `${o.articles} article${o.articles > 1 ? 's' : ''} a month`],
+    ...(i > 0 && { lead: `Everything in ${all[i - 1].name}, and:` }),
+    features: i > 0 ? own : seoLightSummary,
+    groups: seoGroupOrder.filter((name) => groups.has(name)).map((name) => ({ name, items: groups.get(name) })),
+  };
+});
+const seoCount = ['no', 'one', 'two', 'three', 'four', 'five', 'six'][seoTiers.length] ?? String(seoTiers.length);
 const seoFrom = seoTiers[0].price.from;
 /** "a, b and c" */
 const listOf = (items) => [items.slice(0, -1).join(', '), items.at(-1)].filter(Boolean).join(' and ');
@@ -878,14 +885,10 @@ export const grow = {
       tiers: seoTiers,
       tiersHead: {
         heading: `${seoCount[0].toUpperCase()}${seoCount.slice(1)} monthly tiers`,
-        lead: 'Each tier is a fixed monthly scope. We recommend the one that fits your competition in the written proposal, after the AI-search audit.',
+        lead: 'Each tier is a fixed monthly scope, listed here in full. We recommend the one that fits your competition in the written proposal, after the AI-search audit.',
         note: 'The minimum term is three months, then month to month with 30 days’ notice.',
         jump: 'See what each tier includes',
-      },
-      included: {
-        heading: 'In every tier',
-        lead: `The same checklist runs in all ${seoCount} tiers. They differ in how many keywords and articles they cover each month, and in the off-site work added from Standard upward.`,
-        groups: seoIncluded,
+        everyTier: seoIncluded,
       },
       note: 'The right tier depends on your competition: a local restaurant needs a different scope than a national store. We assess it and recommend a tier in a written proposal after a consultation. We do not guarantee rankings; anyone who does is misleading you.',
       cta: { label: 'Request an AI-search audit', need: 'seo' },

@@ -1,11 +1,9 @@
 ---
 /**
  * A hub card. The whole card is one link (the heading's link is stretched
- * over it), so it is a single tab stop with a clear accessible name. A service
- * sold in tiers lists them, each with its price.
+ * over it), so it is a single tab stop with a clear accessible name.
  */
 import { icon } from '../../lib/icons.js';
-import { priceLabel, VAT_NOTE } from '../../data/services.js';
 import Arrow from './Arrow.astro';
 const { service: s } = Astro.props;
 ---
@@ -13,17 +11,5 @@ const { service: s } = Astro.props;
   <div class="svc-icon"><Fragment set:html={icon(s.icon)} /></div>
   <h3><a class="svc-link" href={s.href}>{s.name}</a></h3>
   <p>{s.short}</p>
-  {s.tiers && (
-    <ul class="svc-tiers">
-      {s.tiers.map((t) => (
-        <li>
-          <span class="svc-tier-name">{t.name}</span>
-          <span class="svc-tier-price">{priceLabel(t.price)}</span>
-          {t.keywords && <span class="svc-tier-stats">{t.keywords} keywords · {t.articles} {t.articles > 1 ? 'articles' : 'article'}</span>}
-        </li>
-      ))}
-    </ul>
-  )}
-  {s.tiers && <p class="svc-tiers-note">{VAT_NOTE}</p>}
   <span class="svc-view" aria-hidden="true">View <Arrow /></span>
 </article>
