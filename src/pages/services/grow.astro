@@ -8,6 +8,7 @@ import Base from '../../layouts/Base.astro';
 import BuildHero from '../../components/services/BuildHero.astro';
 import FallHeading from '../../components/services/FallHeading.astro';
 import Tiles from '../../components/services/Tiles.astro';
+import TierCards from '../../components/services/TierCards.astro';
 import Flow from '../../components/services/Flow.astro';
 import Faq from '../../components/services/Faq.astro';
 import CtaStrip from '../../components/services/CtaStrip.astro';
@@ -78,6 +79,14 @@ const schema = [
         ))}
       </div>
       <p class="vat-note">{VAT_NOTE} Ad budgets are separate and paid directly to the platform.</p>
+      {/* A service sold in tiers shows every tier in full. */}
+      {grow.services.filter((s) => s.tiers?.some((t) => t.groups)).map((s) => (
+        <div class="tier-block" id={`${s.id}-tiers`}>
+          <h3>{s.name}: what each tier includes</h3>
+          <TierCards tiers={s.tiers} h="h4" />
+          <p class="vat-note">{VAT_NOTE} <a class="link" href={`/services/${s.slug}`}>View the service</a></p>
+        </div>
+      ))}
     </div>
   </section>
 

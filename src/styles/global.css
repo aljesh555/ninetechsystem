@@ -895,7 +895,7 @@ h1 + .lead, h2 + .lead { margin-top: var(--s3); }
 /* Format cards (website pricing). */
 .formats { display: grid; gap: var(--s4); margin-top: var(--s5); }
 @media (min-width: 640px) { .formats { grid-template-columns: repeat(2, 1fr); } }
-@media (min-width: 1040px) { .formats { grid-template-columns: repeat(4, 1fr); } }
+@media (min-width: 1040px) { .formats { grid-template-columns: repeat(4, 1fr); } .formats-3 { grid-template-columns: repeat(3, 1fr); } }
 .format { display: flex; flex-direction: column; padding: var(--s4); background: var(--white); border: 1px solid var(--rule); border-radius: var(--radius); transition: border-color 0.15s ease; }
 .format:hover { border-color: var(--navy); }
 .format h3 { font-size: 1.125rem; }
@@ -1090,6 +1090,8 @@ h1 + .lead, h2 + .lead { margin-top: var(--s3); }
 .group-tile-name { font-family: var(--display); font-weight: 600; font-size: 1.375rem; letter-spacing: -0.02em; }
 .group-tile-summary { color: var(--grey); font-size: 0.9375rem; line-height: 1.5; }
 .group-tile .svc-view { margin-top: auto; padding-top: var(--s2); }
+.group-tile-list { margin-top: var(--s1); font-size: 0.875rem; color: var(--navy); }
+.group-tile-list li { padding-block: 5px; border-top: 1px solid var(--rule); }
 
 /* The hub's group heading. Scoped, so it does not restyle the small
    .group-head above the grouped deliverables on the detail pages. */

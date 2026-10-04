@@ -1,0 +1,119 @@
+---
+/**
+ * The Build group overview: websites, software and apps. Each has its own
+ * page; this one introduces the three, lists the website formats with their
+ * prices, and says what every project includes. Old links to /services#build
+ * are sent here from the hub's Build tile.
+ */
+import Base from '../../layouts/Base.astro';
+import BuildHero from '../../components/services/BuildHero.astro';
+import FallHeading from '../../components/services/FallHeading.astro';
+import Tiles from '../../components/services/Tiles.astro';
+import CtaStrip from '../../components/services/CtaStrip.astro';
+import Arrow from '../../components/services/Arrow.astro';
+import HowWeWork from '../../components/HowWeWork.astro';
+import { icon } from '../../lib/icons.js';
+import { commitments } from '../../data/site.js';
+import { build, groups, services, website, priceLabel, npr, VAT_NOTE } from '../../data/services.js';
+import { breadcrumbList, service, abs } from '../../lib/schema.js';
+
+const path = '/services/build';
+const group = groups.find((g) => g.id === 'build');
+const crumbs = [
+  { name: 'Home', path: '/' },
+  { name: 'Services', path: '/services' },
+  { name: 'Build', path },
+];
+const items = group.services.map((id) => ({ id, ...services[id], highlights: build.highlights[id] }));
+const proposal = { label: 'Request a proposal', href: '/contact' };
+
+const commitmentIcons = ['sheet', 'lock', 'maintenance', 'users'];
+const included = commitments.map((c, i) => ({ icon: commitmentIcons[i], name: c.title, body: c.body }));
+
+const schema = [
+  {
+    '@type': 'ItemList',
+    '@id': `${abs(path)}#services`,
+    name: 'Websites, software and apps from Nine Technology',
+    itemListElement: items.map((s, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      item: service({ name: s.name, description: s.short, path: s.href, price: s.price, serviceType: 'Build' }),
+    })),
+  },
+  breadcrumbList(crumbs),
+];
+---
+
+<Base
+  title="Websites, Software & Apps in Kathmandu — Nine Technology"
+  description={`Websites from NPR ${npr(services.website.price.from)}, custom software and mobile apps for businesses in Nepal. Documented before work begins, registered in your name, supported after launch.`}
+  path={path}
+  schema={schema}
+>
+  <BuildHero
+    crumbs={crumbs}
+    kicker="Build — Websites, software and apps"
+    h1="Websites, software and apps in Kathmandu"
+    sceneName="website"
+    primary={proposal}
+    secondary={{ label: 'The three services', href: '#services' }}
+    facts={build.facts}
+  >
+    Nine Technology builds websites, custom software and mobile apps for businesses in Nepal. Websites start from NPR {npr(services.website.price.from)}; software and apps are priced in a written proposal after a consultation. Every project is documented before work begins, registered in your name and supported after launch.
+  </BuildHero>
+
+  <section class="section" id="services">
+    <div class="wrap">
+      <div class="section-head">
+        <FallHeading text="Three services, one team" />
+        <p class="lead">{group.tagline}</p>
+      </div>
+      <div class="formats formats-3 stagger reveal">
+        {items.map((s) => (
+          <article class="format" id={s.id}>
+            <Fragment set:html={icon(s.icon, 52)} />
+            <h3>{s.name}</h3>
+            <p class="format-price">{priceLabel(s.price, s.priceNote)}</p>
+            <p class="format-time">{s.short}</p>
+            <ul>{s.highlights.map((h) => <li>{h}</li>)}</ul>
+            <a class="svc-view" href={s.href}>View the service <Arrow /></a>
+          </article>
+        ))}
+      </div>
+      <p class="vat-note">{VAT_NOTE}</p>
+    </div>
+  </section>
+
+  <section class="section section-tint" id="websites">
+    <div class="wrap split">
+      <div class="split-head">
+        <FallHeading text="Website formats" />
+        <p>Five formats, each with its price and delivery time. Each links to its full specification.</p>
+      </div>
+      <ul class="request-list">
+        {website.offers.map((o) => (
+          <li><a href={`/services/website#${o.id}`}><span><strong>{o.name}</strong><br />{priceLabel(o.price, o.priceNote)} · {o.time}</span><Arrow /></a></li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <HowWeWork />
+
+  <section class="section section-tint">
+    <div class="wrap">
+      <div class="section-head">
+        <FallHeading text="What every project includes" />
+        <p class="lead">In every contract we write, not just on this page.</p>
+      </div>
+      <Tiles items={included} cols={2} />
+    </div>
+  </section>
+
+  <CtaStrip
+    heading="Discuss your project with our team"
+    body="Tell us what the business does and what you need built. We will recommend the format that fits, and send a written proposal."
+    primary={proposal}
+  />
+</Base>

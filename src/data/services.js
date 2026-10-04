@@ -261,12 +261,13 @@ export const services = {
   },
 };
 
-/** The four groups on the hub (and the Home overview). */
+/** The four groups on the hub (and the Home overview). Each has its own page. */
 export const groups = [
   {
     id: 'build',
     icon: 'website',
     scene: 'website',
+    page: { href: '/services/build', label: 'Explore websites, software and apps' },
     name: 'Build',
     tagline: 'Websites, software and apps — built properly, handed over fully.',
     summary: 'Websites, online stores, custom software and mobile apps.',
@@ -303,6 +304,27 @@ export const groups = [
     services: ['hosting', 'maintenance', 'care-plan'],
   },
 ];
+
+/* --------------------------------------------------------------------------
+   /services/build  — the Build group: websites, software and apps. Each has
+   its own page; this one introduces the three. Prices and delivery times are
+   read from the services themselves, never repeated here.
+   -------------------------------------------------------------------------- */
+
+export const build = {
+  facts: [
+    { icon: 'sheet', value: 'Documented scope', label: 'Problem, solution and timeline' },
+    { icon: 'workflow', value: 'Delivered in stages', label: 'You approve each one' },
+    { icon: 'lock', value: 'In your name', label: 'Domain, hosting, code and logins' },
+    { icon: 'maintenance', value: '14 to 60 days', label: 'Post-launch support' },
+  ],
+  // What each card on the page says, by service id.
+  highlights: {
+    website: ['Landing pages, business websites and online stores', 'Booking systems, and redesigns of an existing site', '14 to 30 days of support after launch'],
+    software: ['Portals, dashboards, billing and inventory', 'Delivered in stages, with working software at each one', '60 days of support after launch'],
+    'mobile-app': ['Android and iPhone, one app for both stores', 'Tested on mid-range phones and weak networks', 'Store submission and approval handled'],
+  },
+};
 
 /** Plain-list SEO block on the hub. */
 export const popularRequests = [
@@ -1284,6 +1306,7 @@ export const contactHref = (need) => `/contact?need=${need}`;
 /** The seven services URLs, for the sitemap and llms.txt. */
 export const servicePages = [
   { path: '/services', name: 'Services and prices (hub)' },
+  { path: '/services/build', name: 'Build overview: websites, custom software and mobile apps' },
   { path: '/services/website', name: 'Websites: landing pages, business websites, online stores, booking systems' },
   { path: '/services/software', name: 'Custom software' },
   { path: '/services/app', name: 'Mobile apps' },

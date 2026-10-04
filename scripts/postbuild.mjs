@@ -30,10 +30,16 @@ const scriptHashes = new Set();
 const styleHashes = new Set();
 const sha = (s) => `'sha256-${createHash('sha256').update(s, 'utf8').digest('base64')}'`;
 
+// A <script type="application/ld+json"> is a data block: the browser never runs
+// it, so script-src does not apply and it needs no hash. Hashing every page's
+// JSON-LD had the policy at 1,997 characters, against the 2,000 a line of
+// _headers may hold; one more page would have dropped the whole header.
+const DATA_BLOCK = /\stype=["']?application\/ld\+json/i;
+
 for (const page of pages) {
   const html = await readFile(page, 'utf8');
-  for (const m of html.matchAll(/<script(?![^>]*\ssrc=)[^>]*>([\s\S]*?)<\/script>/gi)) {
-    if (m[1].length) scriptHashes.add(sha(m[1]));
+  for (const m of html.matchAll(/<script(?![^>]*\ssrc=)([^>]*)>([\s\S]*?)<\/script>/gi)) {
+    if (m[2].length && !DATA_BLOCK.test(m[1])) scriptHashes.add(sha(m[2]));
   }
   for (const m of html.matchAll(/<style[^>]*>([\s\S]*?)<\/style>/gi)) {
     if (m[1].length) styleHashes.add(sha(m[1]));

@@ -1,20 +1,19 @@
 ---
 /**
- * The services hub. It routes; the service pages explain. Old links to
- * /services#build, #grow, #automate and #support still land on the matching
- * group here, because each group section keeps that id.
+ * The services hub. It routes; the group pages and the service pages explain.
+ * Each of the four groups has its own page (/services/build, /grow, /automate,
+ * /support). Old links to /services#build, #grow, #automate and #support
+ * still land on the matching tile, because each tile keeps that id.
  */
 import Base from '../layouts/Base.astro';
 import BuildHero from '../components/services/BuildHero.astro';
 import FallHeading from '../components/services/FallHeading.astro';
-import ServiceCard from '../components/services/ServiceCard.astro';
-import TierCards from '../components/services/TierCards.astro';
 import Tiles from '../components/services/Tiles.astro';
 import CtaStrip from '../components/services/CtaStrip.astro';
 import Arrow from '../components/services/Arrow.astro';
-import { icon, scene } from '../lib/icons.js';
+import { icon } from '../lib/icons.js';
 import { site, commitments } from '../data/site.js';
-import { services, groups, popularRequests, howToChoose, VAT_NOTE } from '../data/services.js';
+import { services, groups, popularRequests, howToChoose } from '../data/services.js';
 import HowWeWork from '../components/HowWeWork.astro';
 import { breadcrumbList, service, abs } from '../lib/schema.js';
 
@@ -76,48 +75,23 @@ const schema = [
     <div class="wrap">
       <div class="section-head">
         <FallHeading text="Four groups, one team" />
-        <p class="lead">We build the thing, bring customers to it, automate the work behind it, and keep it running. Take one group or all four.</p>
+        <p class="lead">We build the thing, bring customers to it, automate the work behind it, and keep it running. Take one group or all four. Each has its own page.</p>
       </div>
       <div class="group-map stagger reveal">
         {groups.map((g) => (
-          <a class="group-tile" href={`#${g.id}`}>
+          <a class="group-tile" id={g.id} href={g.page.href}>
             <Fragment set:html={icon(g.icon, 52)} />
             <span class="group-tile-name">{g.name}</span>
             <span class="group-tile-summary">{g.summary}</span>
-            <span class="svc-view">{g.services.length} services <Arrow /></span>
+            <ul class="group-tile-list">{g.services.map((id) => <li>{services[id].name}</li>)}</ul>
+            <span class="svc-view">View {g.name} <Arrow /></span>
           </a>
         ))}
       </div>
     </div>
   </section>
 
-  {groups.map((g, i) => (
-    <section class={`section svc-group${bg(i + 1)}`} id={g.id}>
-      <div class="wrap">
-        <div class="group-head">
-          <div class="section-head">
-            <FallHeading text={g.name} stop />
-            <p class="lead">{g.tagline}</p>
-            {g.page && <p class="section-body"><a class="svc-view" href={g.page.href}>{g.page.label} <Arrow /></a></p>}
-          </div>
-          <div class="group-art reveal"><Fragment set:html={scene(g.scene)} /></div>
-        </div>
-        <div class="svc-grid stagger reveal">
-          {g.services.map((id) => <ServiceCard service={services[id]} />)}
-        </div>
-        {/* A service sold in tiers shows every tier in full, under its group. */}
-        {g.services.map((id) => services[id]).filter((s) => s.tiers).map((s) => (
-          <div class="tier-block">
-            <h3>{s.name}: what each tier includes</h3>
-            <TierCards tiers={s.tiers} h="h4" />
-            <p class="vat-note">{VAT_NOTE} <a class="link" href={s.href}>View the service</a></p>
-          </div>
-        ))}
-      </div>
-    </section>
-  ))}
-
-  <section class={`section${bg(groups.length + 1)}`}>
+  <section class={`section${bg(1)}`}>
     <div class="wrap">
       <div class="section-head">
         <FallHeading text="Where to start" />
@@ -136,7 +110,7 @@ const schema = [
     </div>
   </section>
 
-  <section class={`section${bg(groups.length + 2)}`}>
+  <section class={`section${bg(2)}`}>
     <div class="wrap split">
       <div class="split-head">
         <FallHeading text="Popular requests in Nepal" />
@@ -150,9 +124,9 @@ const schema = [
     </div>
   </section>
 
-  <HowWeWork tint={bg(groups.length + 3) !== ''} />
+  <HowWeWork tint={bg(3) !== ''} />
 
-  <section class={`section${bg(groups.length + 4)}`}>
+  <section class={`section${bg(4)}`}>
     <div class="wrap">
       <div class="section-head">
         <FallHeading text="What every project includes" />
@@ -163,26 +137,4 @@ const schema = [
   </section>
 
   <CtaStrip primary={proposal} />
-
-  <script is:inline>
-    // Cards tilt a few degrees toward the pointer. Mouse and trackpad only, and
-    // never under reduced motion. Transform only, so it costs no layout.
-    (() => {
-      if (!matchMedia('(hover: hover) and (pointer: fine)').matches) return;
-      if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-      for (const card of document.querySelectorAll('.svc-card')) {
-        card.addEventListener('pointermove', (e) => {
-          const r = card.getBoundingClientRect();
-          const x = (e.clientX - r.left) / r.width - 0.5;
-          const y = (e.clientY - r.top) / r.height - 0.5;
-          card.style.setProperty('--ry', (x * 12).toFixed(2) + 'deg');
-          card.style.setProperty('--rx', (y * -12).toFixed(2) + 'deg');
-        });
-        card.addEventListener('pointerleave', () => {
-          card.style.removeProperty('--rx');
-          card.style.removeProperty('--ry');
-        });
-      }
-    })();
-  </script>
 </Base>
